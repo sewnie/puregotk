@@ -44,16 +44,14 @@ var convList = map[string]string{
 	"GType":    "types.GType",
 
 	// these are probably not correct but needed to compile
-	"_Value__data__union": "uint64",
-	"long double":         "float64",
-	"va_list":             "[]interface{}",
-	"gpointer":            "uintptr",
-	"const char*":         "string",
-	"const char**":        "[]string",
-	"char**":              "[]string",
+	"long double":  "float64",
+	"va_list":      "[]interface{}",
+	"gpointer":     "uintptr",
+	"const char*":  "string",
+	"const char**": "[]string",
+	"char**":       "[]string",
 	// not exported
-	"HarfBuzz.feature_t": "uintptr",
-	"HarfBuzz.font_t":    "uintptr",
+	"HarfBuzz.font_t": "uintptr",
 	//"GLib.Quark": "byte",
 	//"Allocation": "uintptr",
 }
@@ -91,7 +89,7 @@ func (a *Alias) Template(ns string, kinds KindMap) string {
 	if v, ok := convList[a.CType]; ok {
 		return util.NormalizeNamespace(ns, v, true)
 	}
-	return a.Type.Template(ns, kinds, false)
+	return a.Type.Template(ns, kinds)
 }
 
 type AnyType struct {
@@ -107,12 +105,14 @@ func (a *AnyType) Translate(ns string, kinds KindMap) string {
 	t := a.Type
 	if t == nil {
 		if a.Array == nil {
-			// no type information available
 			return ""
 		}
-		return a.Array.Template(ns, kinds)
+		if v, ok := convList[a.Array.CType]; ok {
+			return v
+		}
+		return "uintptr"
 	}
-	return a.Type.Template(ns, kinds, false)
+	return a.Type.Template(ns, kinds)
 }
 
 type Annotation struct {
@@ -131,48 +131,6 @@ type Array struct {
 	Introspectable bool     `xml:"introspectable,attr"`
 	// Type is the array's inner type.
 	Type *Type `xml:"http://www.gtk.org/introspection/core/1.0 type"`
-}
-
-func (a *Array) Size() int {
-	// there is a Length property
-	// but it seems that GTK doesn't really use this
-	// see e.g. gtk_css_provider_load_from_data
-	//if a.Length != nil {
-	//	return *a.Length
-	//}
-	return a.FixedSize
-}
-
-func ReplaceSize(str string, n int) string {
-	trimmed := strings.TrimPrefix(str, "*")
-	if trimmed == str {
-		trimmed = strings.TrimPrefix(str, "[]")
-	}
-	return fmt.Sprintf("[%d]%s", n, trimmed)
-}
-
-func (a *Array) Template(ns string, kinds KindMap) string {
-	// Does the c type exist in our little hacky conversion rule?
-	if v, ok := convList[a.CType]; ok {
-		return v
-	}
-	// default case of an array is just a pointer
-	ret := "uintptr"
-
-	if a.Type != nil {
-		t := a.Type.Template(ns, kinds, true)
-		if strings.Count(t, "*") > 0 {
-			return "uintptr"
-		}
-		ret = "[]" + t
-	}
-
-	// Check if there is a fixed size
-	n := a.Size()
-	if n > 0 {
-		return ReplaceSize(ret, n)
-	}
-	return ret
 }
 
 // IsZeroTerminated returns true if the Array is zero-terminated. It accounts
@@ -266,7 +224,7 @@ func (typ *Type) IsIntrospectable() bool {
 	return typ.Introspectable == nil || *typ.Introspectable
 }
 
-func (t *Type) Template(ns string, kinds KindMap, array bool) string {
+func (t *Type) Template(ns string, kinds KindMap) string {
 	if v, ok := convList[t.Name]; ok {
 		return v
 	}
@@ -284,9 +242,6 @@ func (t *Type) Template(ns string, kinds KindMap, array bool) string {
 	if count > 0 && kind != CallbackType {
 		_type = strings.Repeat("*", count) + _type
 	} else if kind == RecordsType {
-		if array {
-			return _type
-		}
 		// if it's not a pointer
 		// then purego doesn't support it (struct by value is not supported
 		// so return uintptr
@@ -388,7 +343,7 @@ type Constant struct {
 }
 
 func (c *Constant) Template(ns string, kinds KindMap) ConstantTemplate {
-	t := c.Type.Template(ns, kinds, false)
+	t := c.Type.Template(ns, kinds)
 	v := c.Value
 
 	switch t {
@@ -745,22 +700,18 @@ func (r *ReturnValue) Template(ns string, ins string, kinds KindMap, throws bool
 	}
 	kind := kinds.Kind(lns, raw)
 	stars := strings.Count(val, "*")
-
-	if kind != OtherType && kind != UnknownType && kind != SliceType {
-		val = util.AddNamespace(val, ins)
+	if kind != OtherType && kind != UnknownType {
+		if ins != "" && strings.Count(val, ".") < 1 {
+			val = ins + "." + val
+		}
 	}
 	if stars > 0 {
-		val = util.StarsInFront(strings.ReplaceAll(val, "*", ""), stars)
+		val = strings.Repeat("*", stars) + strings.ReplaceAll(val, "*", "")
 	}
 	switch kind {
 	case ClassesType:
 		raw = "uintptr"
 		class = true
-		// TODO: why does this happen?
-		if strings.HasPrefix(val, "[]") {
-			class = false
-			val = "uintptr"
-		}
 	case InterfacesType:
 		raw = "uintptr"
 		val += "Base"
