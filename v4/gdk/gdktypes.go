@@ -97,25 +97,25 @@ func (x *ContentFormats) ContainMimeType(MimeTypeVar string) bool {
 	return cret
 }
 
-var xContentFormatsGetGtypes func(uintptr, uint) []types.GType
+var xContentFormatsGetGtypes func(uintptr, uint) uintptr
 
 // Gets the `GType`s included in @formats.
 //
 // Note that @formats may not contain any `GType`s, in particular when
 // they are empty. In that case %NULL will be returned.
-func (x *ContentFormats) GetGtypes(NGtypesVar uint) []types.GType {
+func (x *ContentFormats) GetGtypes(NGtypesVar uint) uintptr {
 
 	cret := xContentFormatsGetGtypes(x.GoPointer(), NGtypesVar)
 	return cret
 }
 
-var xContentFormatsGetMimeTypes func(uintptr, uint) []string
+var xContentFormatsGetMimeTypes func(uintptr, uint) uintptr
 
 // Gets the mime types included in @formats.
 //
 // Note that @formats may not contain any mime types, in particular
 // when they are empty. In that case %NULL will be returned.
-func (x *ContentFormats) GetMimeTypes(NMimeTypesVar uint) []string {
+func (x *ContentFormats) GetMimeTypes(NMimeTypesVar uint) uintptr {
 
 	cret := xContentFormatsGetMimeTypes(x.GoPointer(), NMimeTypesVar)
 	return cret

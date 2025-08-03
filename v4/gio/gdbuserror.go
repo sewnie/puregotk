@@ -113,13 +113,13 @@ func DbusErrorRegisterError(ErrorDomainVar glib.Quark, ErrorCodeVar int, DbusErr
 	return cret
 }
 
-var xDbusErrorRegisterErrorDomain func(string, uint, []DBusErrorEntry, uint)
+var xDbusErrorRegisterErrorDomain func(string, uint, uintptr, uint)
 
 // Helper function for associating a #GError error domain with D-Bus error names.
 //
 // While @quark_volatile has a `volatile` qualifier, this is a historical
 // artifact and the argument passed to it should not be `volatile`.
-func DbusErrorRegisterErrorDomain(ErrorDomainQuarkNameVar string, QuarkVolatileVar uint, EntriesVar []DBusErrorEntry, NumEntriesVar uint) {
+func DbusErrorRegisterErrorDomain(ErrorDomainQuarkNameVar string, QuarkVolatileVar uint, EntriesVar uintptr, NumEntriesVar uint) {
 
 	xDbusErrorRegisterErrorDomain(ErrorDomainQuarkNameVar, QuarkVolatileVar, EntriesVar, NumEntriesVar)
 

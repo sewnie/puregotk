@@ -212,7 +212,7 @@ func NewTextureFromResource(ResourcePathVar string) *Texture {
 	return cls
 }
 
-var xTextureDownload func(uintptr, []byte, uint)
+var xTextureDownload func(uintptr, uintptr, uint)
 
 // Downloads the @texture into local memory.
 //
@@ -237,7 +237,7 @@ var xTextureDownload func(uintptr, []byte, uint)
 //
 // cairo_surface_mark_dirty (surface);
 // ```
-func (x *Texture) Download(DataVar []byte, StrideVar uint) {
+func (x *Texture) Download(DataVar uintptr, StrideVar uint) {
 
 	xTextureDownload(x.GoPointer(), DataVar, StrideVar)
 

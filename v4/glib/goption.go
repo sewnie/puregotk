@@ -42,11 +42,11 @@ func (x *OptionContext) AddGroup(GroupVar *OptionGroup) {
 
 }
 
-var xOptionContextAddMainEntries func(uintptr, []OptionEntry, string)
+var xOptionContextAddMainEntries func(uintptr, uintptr, string)
 
 // A convenience function which creates a main group if it doesn't
 // exist, adds the @entries to it and sets the translation domain.
-func (x *OptionContext) AddMainEntries(EntriesVar []OptionEntry, TranslationDomainVar string) {
+func (x *OptionContext) AddMainEntries(EntriesVar uintptr, TranslationDomainVar string) {
 
 	xOptionContextAddMainEntries(x.GoPointer(), EntriesVar, TranslationDomainVar)
 
@@ -138,7 +138,7 @@ func (x *OptionContext) GetSummary() string {
 	return cret
 }
 
-var xOptionContextParse func(uintptr, int, []string, **Error) bool
+var xOptionContextParse func(uintptr, int, uintptr, **Error) bool
 
 // Parses the command line arguments, recognizing options
 // which have been added to @context. A side-effect of
@@ -161,7 +161,7 @@ var xOptionContextParse func(uintptr, int, []string, **Error) bool
 // Note that function depends on the [current locale][setlocale] for
 // automatic character set conversion of string and filename
 // arguments.
-func (x *OptionContext) Parse(ArgcVar int, ArgvVar []string) (bool, error) {
+func (x *OptionContext) Parse(ArgcVar int, ArgvVar uintptr) (bool, error) {
 	var cerr *Error
 
 	cret := xOptionContextParse(x.GoPointer(), ArgcVar, ArgvVar, &cerr)
@@ -172,7 +172,7 @@ func (x *OptionContext) Parse(ArgcVar int, ArgvVar []string) (bool, error) {
 
 }
 
-var xOptionContextParseStrv func(uintptr, []string, **Error) bool
+var xOptionContextParseStrv func(uintptr, uintptr, **Error) bool
 
 // Parses the command line arguments.
 //
@@ -190,7 +190,7 @@ var xOptionContextParseStrv func(uintptr, []string, **Error) bool
 //
 // This function is useful if you are trying to use #GOptionContext with
 // #GApplication.
-func (x *OptionContext) ParseStrv(ArgumentsVar []string) (bool, error) {
+func (x *OptionContext) ParseStrv(ArgumentsVar uintptr) (bool, error) {
 	var cerr *Error
 
 	cret := xOptionContextParseStrv(x.GoPointer(), ArgumentsVar, &cerr)
@@ -383,10 +383,10 @@ func NewOptionGroup(NameVar string, DescriptionVar string, HelpDescriptionVar st
 	return cret
 }
 
-var xOptionGroupAddEntries func(uintptr, []OptionEntry)
+var xOptionGroupAddEntries func(uintptr, uintptr)
 
 // Adds the options specified in @entries to @group.
-func (x *OptionGroup) AddEntries(EntriesVar []OptionEntry) {
+func (x *OptionGroup) AddEntries(EntriesVar uintptr) {
 
 	xOptionGroupAddEntries(x.GoPointer(), EntriesVar)
 

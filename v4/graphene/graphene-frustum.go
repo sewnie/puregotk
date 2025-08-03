@@ -17,7 +17,7 @@ import (
 type Frustum struct {
 	_ structs.HostLayout
 
-	Planes [6]Plane
+	Planes uintptr
 }
 
 var xFrustumGLibType func() types.GType
@@ -69,10 +69,10 @@ func (x *Frustum) Free() {
 
 }
 
-var xFrustumGetPlanes func(uintptr, [6]Plane)
+var xFrustumGetPlanes func(uintptr, uintptr)
 
 // Retrieves the planes that define the given #graphene_frustum_t.
-func (x *Frustum) GetPlanes(PlanesVar [6]Plane) {
+func (x *Frustum) GetPlanes(PlanesVar uintptr) {
 
 	xFrustumGetPlanes(x.GoPointer(), PlanesVar)
 

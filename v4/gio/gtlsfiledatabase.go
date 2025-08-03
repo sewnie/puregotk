@@ -17,7 +17,7 @@ type TlsFileDatabaseInterface struct {
 
 	GIface uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *TlsFileDatabaseInterface) GoPointer() uintptr {

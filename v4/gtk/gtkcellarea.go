@@ -27,7 +27,7 @@ type CellAreaClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *CellAreaClass) GoPointer() uintptr {

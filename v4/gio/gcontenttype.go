@@ -73,11 +73,11 @@ func ContentTypeGetIcon(TypeVar string) *IconBase {
 	return cls
 }
 
-var xContentTypeGetMimeDirs func() []string
+var xContentTypeGetMimeDirs func() uintptr
 
 // Get the list of directories which MIME data is loaded from. See
 // g_content_type_set_mime_dirs() for details.
-func ContentTypeGetMimeDirs() []string {
+func ContentTypeGetMimeDirs() uintptr {
 
 	cret := xContentTypeGetMimeDirs()
 	return cret
@@ -108,19 +108,19 @@ func ContentTypeGetSymbolicIcon(TypeVar string) *IconBase {
 	return cls
 }
 
-var xContentTypeGuess func(string, []byte, uint, bool) string
+var xContentTypeGuess func(string, uintptr, uint, bool) string
 
 // Guesses the content type based on example data. If the function is
 // uncertain, @result_uncertain will be set to %TRUE. Either @filename
 // or @data may be %NULL, in which case the guess will be based solely
 // on the other argument.
-func ContentTypeGuess(FilenameVar string, DataVar []byte, DataSizeVar uint, ResultUncertainVar bool) string {
+func ContentTypeGuess(FilenameVar string, DataVar uintptr, DataSizeVar uint, ResultUncertainVar bool) string {
 
 	cret := xContentTypeGuess(FilenameVar, DataVar, DataSizeVar, ResultUncertainVar)
 	return cret
 }
 
-var xContentTypeGuessForTree func(uintptr) []string
+var xContentTypeGuessForTree func(uintptr) uintptr
 
 // Tries to guess the type of the tree with root @root, by
 // looking at the files it contains. The result is an array
@@ -134,7 +134,7 @@ var xContentTypeGuessForTree func(uintptr) []string
 //
 // This function is useful in the implementation of
 // g_mount_guess_content_type().
-func ContentTypeGuessForTree(RootVar File) []string {
+func ContentTypeGuessForTree(RootVar File) uintptr {
 
 	cret := xContentTypeGuessForTree(RootVar.GoPointer())
 	return cret
@@ -171,7 +171,7 @@ func ContentTypeIsUnknown(TypeVar string) bool {
 	return cret
 }
 
-var xContentTypeSetMimeDirs func([]string)
+var xContentTypeSetMimeDirs func(uintptr)
 
 // Set the list of directories used by GIO to load the MIME database.
 // If @dirs is %NULL, the directories used are the default:
@@ -198,7 +198,7 @@ var xContentTypeSetMimeDirs func([]string)
 //	return g_test_run ();
 //
 // ]|
-func ContentTypeSetMimeDirs(DirsVar []string) {
+func ContentTypeSetMimeDirs(DirsVar uintptr) {
 
 	xContentTypeSetMimeDirs(DirsVar)
 

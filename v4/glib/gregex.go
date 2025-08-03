@@ -86,7 +86,7 @@ func (x *MatchInfo) Fetch(MatchNumVar int) string {
 	return cret
 }
 
-var xMatchInfoFetchAll func(uintptr) []string
+var xMatchInfoFetchAll func(uintptr) uintptr
 
 // Bundles up pointers to each of the matching substrings from a match
 // and stores them in an array of gchar pointers. The first element in
@@ -104,7 +104,7 @@ var xMatchInfoFetchAll func(uintptr) []string
 //
 // The strings are fetched from the string passed to the match function,
 // so you cannot call this function after freeing the string.
-func (x *MatchInfo) FetchAll() []string {
+func (x *MatchInfo) FetchAll() uintptr {
 
 	cret := xMatchInfoFetchAll(x.GoPointer())
 	return cret
@@ -543,7 +543,7 @@ func (x *Regex) MatchAll(StringVar string, MatchOptionsVar RegexMatchFlags, Matc
 	return cret
 }
 
-var xRegexMatchAllFull func(uintptr, []string, int, int, RegexMatchFlags, **MatchInfo, **Error) bool
+var xRegexMatchAllFull func(uintptr, uintptr, int, int, RegexMatchFlags, **MatchInfo, **Error) bool
 
 // Using the standard algorithm for regular expression matching only
 // the longest match in the @string is retrieved, it is not possible
@@ -583,7 +583,7 @@ var xRegexMatchAllFull func(uintptr, []string, int, int, RegexMatchFlags, **Matc
 // @string is not copied and is used in #GMatchInfo internally. If
 // you use any #GMatchInfo method (except g_match_info_free()) after
 // freeing or modifying @string then the behaviour is undefined.
-func (x *Regex) MatchAllFull(StringVar []string, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, MatchInfoVar **MatchInfo) (bool, error) {
+func (x *Regex) MatchAllFull(StringVar uintptr, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, MatchInfoVar **MatchInfo) (bool, error) {
 	var cerr *Error
 
 	cret := xRegexMatchAllFull(x.GoPointer(), StringVar, StringLenVar, StartPositionVar, MatchOptionsVar, MatchInfoVar, &cerr)
@@ -594,7 +594,7 @@ func (x *Regex) MatchAllFull(StringVar []string, StringLenVar int, StartPosition
 
 }
 
-var xRegexMatchFull func(uintptr, []string, int, int, RegexMatchFlags, **MatchInfo, **Error) bool
+var xRegexMatchFull func(uintptr, uintptr, int, int, RegexMatchFlags, **MatchInfo, **Error) bool
 
 // Scans for a match in @string for the pattern in @regex.
 // The @match_options are combined with the match options specified
@@ -649,7 +649,7 @@ var xRegexMatchFull func(uintptr, []string, int, int, RegexMatchFlags, **MatchIn
 //	}
 //
 // ]|
-func (x *Regex) MatchFull(StringVar []string, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, MatchInfoVar **MatchInfo) (bool, error) {
+func (x *Regex) MatchFull(StringVar uintptr, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, MatchInfoVar **MatchInfo) (bool, error) {
 	var cerr *Error
 
 	cret := xRegexMatchFull(x.GoPointer(), StringVar, StringLenVar, StartPositionVar, MatchOptionsVar, MatchInfoVar, &cerr)
@@ -669,7 +669,7 @@ func (x *Regex) Ref() *Regex {
 	return cret
 }
 
-var xRegexReplace func(uintptr, []string, int, int, string, RegexMatchFlags, **Error) string
+var xRegexReplace func(uintptr, uintptr, int, int, string, RegexMatchFlags, **Error) string
 
 // Replaces all occurrences of the pattern in @regex with the
 // replacement text. Backreferences of the form '\number' or
@@ -697,7 +697,7 @@ var xRegexReplace func(uintptr, []string, int, int, string, RegexMatchFlags, **E
 // Setting @start_position differs from just passing over a shortened
 // string and setting %G_REGEX_MATCH_NOTBOL in the case of a pattern that
 // begins with any kind of lookbehind assertion, such as "\b".
-func (x *Regex) Replace(StringVar []string, StringLenVar int, StartPositionVar int, ReplacementVar string, MatchOptionsVar RegexMatchFlags) (string, error) {
+func (x *Regex) Replace(StringVar uintptr, StringLenVar int, StartPositionVar int, ReplacementVar string, MatchOptionsVar RegexMatchFlags) (string, error) {
 	var cerr *Error
 
 	cret := xRegexReplace(x.GoPointer(), StringVar, StringLenVar, StartPositionVar, ReplacementVar, MatchOptionsVar, &cerr)
@@ -708,7 +708,7 @@ func (x *Regex) Replace(StringVar []string, StringLenVar int, StartPositionVar i
 
 }
 
-var xRegexReplaceEval func(uintptr, []string, int, int, RegexMatchFlags, uintptr, uintptr, **Error) string
+var xRegexReplaceEval func(uintptr, uintptr, int, int, RegexMatchFlags, uintptr, uintptr, **Error) string
 
 // Replaces occurrences of the pattern in regex with the output of
 // @eval for that occurrence.
@@ -757,7 +757,7 @@ var xRegexReplaceEval func(uintptr, []string, int, int, RegexMatchFlags, uintptr
 //
 // ...
 // ]|
-func (x *Regex) ReplaceEval(StringVar []string, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, EvalVar *RegexEvalCallback, UserDataVar uintptr) (string, error) {
+func (x *Regex) ReplaceEval(StringVar uintptr, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, EvalVar *RegexEvalCallback, UserDataVar uintptr) (string, error) {
 	var cerr *Error
 
 	cret := xRegexReplaceEval(x.GoPointer(), StringVar, StringLenVar, StartPositionVar, MatchOptionsVar, NewCallback(EvalVar), UserDataVar, &cerr)
@@ -768,7 +768,7 @@ func (x *Regex) ReplaceEval(StringVar []string, StringLenVar int, StartPositionV
 
 }
 
-var xRegexReplaceLiteral func(uintptr, []string, int, int, string, RegexMatchFlags, **Error) string
+var xRegexReplaceLiteral func(uintptr, uintptr, int, int, string, RegexMatchFlags, **Error) string
 
 // Replaces all occurrences of the pattern in @regex with the
 // replacement text. @replacement is replaced literally, to
@@ -778,7 +778,7 @@ var xRegexReplaceLiteral func(uintptr, []string, int, int, string, RegexMatchFla
 // shortened string and setting %G_REGEX_MATCH_NOTBOL in the
 // case of a pattern that begins with any kind of lookbehind
 // assertion, such as "\b".
-func (x *Regex) ReplaceLiteral(StringVar []string, StringLenVar int, StartPositionVar int, ReplacementVar string, MatchOptionsVar RegexMatchFlags) (string, error) {
+func (x *Regex) ReplaceLiteral(StringVar uintptr, StringLenVar int, StartPositionVar int, ReplacementVar string, MatchOptionsVar RegexMatchFlags) (string, error) {
 	var cerr *Error
 
 	cret := xRegexReplaceLiteral(x.GoPointer(), StringVar, StringLenVar, StartPositionVar, ReplacementVar, MatchOptionsVar, &cerr)
@@ -789,7 +789,7 @@ func (x *Regex) ReplaceLiteral(StringVar []string, StringLenVar int, StartPositi
 
 }
 
-var xRegexSplit func(uintptr, string, RegexMatchFlags) []string
+var xRegexSplit func(uintptr, string, RegexMatchFlags) uintptr
 
 // Breaks the string on the pattern, and returns an array of the tokens.
 // If the pattern contains capturing parentheses, then the text for each
@@ -808,13 +808,13 @@ var xRegexSplit func(uintptr, string, RegexMatchFlags) []string
 // characters wherever it matches the empty string between characters.
 // For example splitting "ab c" using as a separator "\s*", you will get
 // "a", "b" and "c".
-func (x *Regex) Split(StringVar string, MatchOptionsVar RegexMatchFlags) []string {
+func (x *Regex) Split(StringVar string, MatchOptionsVar RegexMatchFlags) uintptr {
 
 	cret := xRegexSplit(x.GoPointer(), StringVar, MatchOptionsVar)
 	return cret
 }
 
-var xRegexSplitFull func(uintptr, []string, int, int, RegexMatchFlags, int, **Error) []string
+var xRegexSplitFull func(uintptr, uintptr, int, int, RegexMatchFlags, int, **Error) uintptr
 
 // Breaks the string on the pattern, and returns an array of the tokens.
 // If the pattern contains capturing parentheses, then the text for each
@@ -837,7 +837,7 @@ var xRegexSplitFull func(uintptr, []string, int, int, RegexMatchFlags, int, **Er
 // Setting @start_position differs from just passing over a shortened
 // string and setting %G_REGEX_MATCH_NOTBOL in the case of a pattern
 // that begins with any kind of lookbehind assertion, such as "\b".
-func (x *Regex) SplitFull(StringVar []string, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, MaxTokensVar int) ([]string, error) {
+func (x *Regex) SplitFull(StringVar uintptr, StringLenVar int, StartPositionVar int, MatchOptionsVar RegexMatchFlags, MaxTokensVar int) (uintptr, error) {
 	var cerr *Error
 
 	cret := xRegexSplitFull(x.GoPointer(), StringVar, StringLenVar, StartPositionVar, MatchOptionsVar, MaxTokensVar, &cerr)
@@ -1232,7 +1232,7 @@ func RegexEscapeNul(StringVar string, LengthVar int) string {
 	return cret
 }
 
-var xRegexEscapeString func([]string, int) string
+var xRegexEscapeString func(uintptr, int) string
 
 // Escapes the special characters used for regular expressions
 // in @string, for instance "a.b*c" becomes "a\.b\*c". This
@@ -1241,7 +1241,7 @@ var xRegexEscapeString func([]string, int) string
 // @string can contain nul characters that are replaced with "\0",
 // in this case remember to specify the correct length of @string
 // in @length.
-func RegexEscapeString(StringVar []string, LengthVar int) string {
+func RegexEscapeString(StringVar uintptr, LengthVar int) string {
 
 	cret := xRegexEscapeString(StringVar, LengthVar)
 	return cret
@@ -1265,7 +1265,7 @@ func RegexMatchSimple(PatternVar string, StringVar string, CompileOptionsVar Reg
 	return cret
 }
 
-var xRegexSplitSimple func(string, string, RegexCompileFlags, RegexMatchFlags) []string
+var xRegexSplitSimple func(string, string, RegexCompileFlags, RegexMatchFlags) uintptr
 
 // Breaks the string on the pattern, and returns an array of
 // the tokens. If the pattern contains capturing parentheses,
@@ -1294,7 +1294,7 @@ var xRegexSplitSimple func(string, string, RegexCompileFlags, RegexMatchFlags) [
 // separate characters wherever it matches the empty string between
 // characters. For example splitting "ab c" using as a separator
 // "\s*", you will get "a", "b" and "c".
-func RegexSplitSimple(PatternVar string, StringVar string, CompileOptionsVar RegexCompileFlags, MatchOptionsVar RegexMatchFlags) []string {
+func RegexSplitSimple(PatternVar string, StringVar string, CompileOptionsVar RegexCompileFlags, MatchOptionsVar RegexMatchFlags) uintptr {
 
 	cret := xRegexSplitSimple(PatternVar, StringVar, CompileOptionsVar, MatchOptionsVar)
 	return cret

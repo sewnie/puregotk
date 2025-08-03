@@ -18,7 +18,7 @@ type SettingsBackendClass struct {
 
 	ParentClass uintptr
 
-	Padding [23]uintptr
+	Padding uintptr
 }
 
 func (x *SettingsBackendClass) GoPointer() uintptr {
@@ -226,7 +226,7 @@ func (x *SettingsBackend) ChangedTree(TreeVar *glib.Tree, OriginTagVar uintptr) 
 
 }
 
-var xSettingsBackendKeysChanged func(uintptr, string, []string, uintptr)
+var xSettingsBackendKeysChanged func(uintptr, string, uintptr, uintptr)
 
 // Signals that a list of keys have possibly changed.  Backend
 // implementations should call this if keys have possibly changed their
@@ -249,7 +249,7 @@ var xSettingsBackendKeysChanged func(uintptr, string, []string, uintptr)
 // For efficiency reasons, the implementation should strive for @path to
 // be as long as possible (ie: the longest common prefix of all of the
 // keys that were changed) but this is not strictly required.
-func (x *SettingsBackend) KeysChanged(PathVar string, ItemsVar []string, OriginTagVar uintptr) {
+func (x *SettingsBackend) KeysChanged(PathVar string, ItemsVar uintptr, OriginTagVar uintptr) {
 
 	xSettingsBackendKeysChanged(x.GoPointer(), PathVar, ItemsVar, OriginTagVar)
 
@@ -317,7 +317,7 @@ func (c *SettingsBackend) SetGoPointer(ptr uintptr) {
 	c.Ptr = ptr
 }
 
-var xSettingsBackendFlattenTree func(*glib.Tree, string, []string, uintptr)
+var xSettingsBackendFlattenTree func(*glib.Tree, string, uintptr, uintptr)
 
 // Calculate the longest common prefix of all keys in a tree and write
 // out an array of the key names relative to that prefix and,
@@ -326,7 +326,7 @@ var xSettingsBackendFlattenTree func(*glib.Tree, string, []string, uintptr)
 // You must free the value returned in @path, @keys and @values using
 // g_free().  You should not attempt to free or unref the contents of
 // @keys or @values.
-func SettingsBackendFlattenTree(TreeVar *glib.Tree, PathVar string, KeysVar []string, ValuesVar uintptr) {
+func SettingsBackendFlattenTree(TreeVar *glib.Tree, PathVar string, KeysVar uintptr, ValuesVar uintptr) {
 
 	xSettingsBackendFlattenTree(TreeVar, PathVar, KeysVar, ValuesVar)
 

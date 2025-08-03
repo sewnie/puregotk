@@ -115,14 +115,14 @@ func (x *TabArray) GetTab(TabIndexVar int, AlignmentVar *TabAlign, LocationVar i
 
 }
 
-var xTabArrayGetTabs func(uintptr, **TabAlign, []int)
+var xTabArrayGetTabs func(uintptr, **TabAlign, uintptr)
 
 // If non-%NULL, @alignments and @locations are filled with allocated
 // arrays.
 //
 // The arrays are of length [method@Pango.TabArray.get_size].
 // You must free the returned array.
-func (x *TabArray) GetTabs(AlignmentsVar **TabAlign, LocationsVar []int) {
+func (x *TabArray) GetTabs(AlignmentsVar **TabAlign, LocationsVar uintptr) {
 
 	xTabArrayGetTabs(x.GoPointer(), AlignmentsVar, LocationsVar)
 

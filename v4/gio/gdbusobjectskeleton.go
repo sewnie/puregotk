@@ -18,7 +18,7 @@ type DBusObjectSkeletonClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *DBusObjectSkeletonClass) GoPointer() uintptr {

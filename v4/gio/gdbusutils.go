@@ -17,7 +17,7 @@ func DbusEscapeObjectPath(SVar string) string {
 	return cret
 }
 
-var xDbusEscapeObjectPathBytestring func([]byte) string
+var xDbusEscapeObjectPathBytestring func(uintptr) string
 
 // Escapes @bytes for use in a D-Bus object path component.
 // @bytes is an array of zero or more nonzero bytes in an
@@ -35,7 +35,7 @@ var xDbusEscapeObjectPathBytestring func([]byte) string
 // D-Bus object paths.
 //
 // This can be reversed with g_dbus_unescape_object_path().
-func DbusEscapeObjectPathBytestring(BytesVar []byte) string {
+func DbusEscapeObjectPathBytestring(BytesVar uintptr) string {
 
 	cret := xDbusEscapeObjectPathBytestring(BytesVar)
 	return cret
@@ -176,7 +176,7 @@ func DbusIsUniqueName(StringVar string) bool {
 	return cret
 }
 
-var xDbusUnescapeObjectPath func(string) []byte
+var xDbusUnescapeObjectPath func(string) uintptr
 
 // Unescapes an string that was previously escaped with
 // g_dbus_escape_object_path(). If the string is in a format that could
@@ -186,7 +186,7 @@ var xDbusUnescapeObjectPath func(string) []byte
 // Encoding alphanumeric characters which do not need to be
 // encoded is not allowed (e.g `_63` is not valid, the string
 // should contain `c` instead).
-func DbusUnescapeObjectPath(SVar string) []byte {
+func DbusUnescapeObjectPath(SVar string) uintptr {
 
 	cret := xDbusUnescapeObjectPath(SVar)
 	return cret

@@ -22,7 +22,7 @@ import (
 type Callback func()
 
 // The type used for marshaller functions.
-type ClosureMarshal func(*Closure, *Value, uint, []Value, uintptr, uintptr)
+type ClosureMarshal func(*Closure, *Value, uint, uintptr, uintptr, uintptr)
 
 // The type used for the various notification callbacks which can be registered
 // on closures.
@@ -31,7 +31,7 @@ type ClosureNotify func(uintptr, *Closure)
 // This is the signature of va_list marshaller functions, an optional
 // marshaller that can be used in some situations to avoid
 // marshalling the signal argument into GValues.
-type VaClosureMarshal func(*Closure, *Value, *TypeInstance, []interface{}, uintptr, int, []types.GType)
+type VaClosureMarshal func(*Closure, *Value, *TypeInstance, []interface{}, uintptr, int, uintptr)
 
 // A #GCClosure is a specialization of #GClosure for C function callbacks.
 type CClosure struct {
@@ -255,10 +255,10 @@ func (x *Closure) Invalidate() {
 
 }
 
-var xClosureInvoke func(uintptr, *Value, uint, []Value, uintptr)
+var xClosureInvoke func(uintptr, *Value, uint, uintptr, uintptr)
 
 // Invokes the closure, i.e. executes the callback represented by the @closure.
-func (x *Closure) Invoke(ReturnValueVar *Value, NParamValuesVar uint, ParamValuesVar []Value, InvocationHintVar uintptr) {
+func (x *Closure) Invoke(ReturnValueVar *Value, NParamValuesVar uint, ParamValuesVar uintptr, InvocationHintVar uintptr) {
 
 	xClosureInvoke(x.GoPointer(), ReturnValueVar, NParamValuesVar, ParamValuesVar, InvocationHintVar)
 

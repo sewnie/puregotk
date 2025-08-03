@@ -21,7 +21,7 @@ type LayoutManagerClass struct {
 
 	LayoutChildType types.GType
 
-	Padding [16]uintptr
+	Padding uintptr
 }
 
 func (x *LayoutManagerClass) GoPointer() uintptr {

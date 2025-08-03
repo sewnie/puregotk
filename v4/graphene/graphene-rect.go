@@ -149,10 +149,10 @@ func (x *Rect) GetTopRight(PVar *Point) {
 
 }
 
-var xRectGetVertices func(uintptr, [4]Vec2)
+var xRectGetVertices func(uintptr, uintptr)
 
 // Computes the four vertices of a #graphene_rect_t.
-func (x *Rect) GetVertices(VerticesVar [4]Vec2) {
+func (x *Rect) GetVertices(VerticesVar uintptr) {
 
 	xRectGetVertices(x.GoPointer(), VerticesVar)
 

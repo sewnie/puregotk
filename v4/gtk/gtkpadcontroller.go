@@ -168,13 +168,13 @@ func (x *PadController) SetAction(TypeVar PadActionType, IndexVar int, ModeVar i
 
 }
 
-var xPadControllerSetActionEntries func(uintptr, []PadActionEntry, int)
+var xPadControllerSetActionEntries func(uintptr, uintptr, int)
 
 // A convenience function to add a group of action entries on
 // @controller.
 //
 // See [struct@Gtk.PadActionEntry] and [method@Gtk.PadController.set_action].
-func (x *PadController) SetActionEntries(EntriesVar []PadActionEntry, NEntriesVar int) {
+func (x *PadController) SetActionEntries(EntriesVar uintptr, NEntriesVar int) {
 
 	xPadControllerSetActionEntries(x.GoPointer(), EntriesVar, NEntriesVar)
 

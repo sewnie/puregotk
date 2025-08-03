@@ -21,7 +21,7 @@ type ParamSpecClass struct {
 
 	ValueType types.GType
 
-	Dummy [4]uintptr
+	Dummy uintptr
 }
 
 func (x *ParamSpecClass) GoPointer() uintptr {

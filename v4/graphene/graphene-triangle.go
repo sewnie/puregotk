@@ -180,12 +180,12 @@ func (x *Triangle) GetVertices(AVar *Vec3, BVar *Vec3, CVar *Vec3) {
 
 }
 
-var xTriangleInitFromFloat func(uintptr, [3]float32, [3]float32, [3]float32) *Triangle
+var xTriangleInitFromFloat func(uintptr, uintptr, uintptr, uintptr) *Triangle
 
 // Initializes a #graphene_triangle_t using the three given arrays
 // of floating point values, each representing the coordinates of
 // a point in 3D space.
-func (x *Triangle) InitFromFloat(AVar [3]float32, BVar [3]float32, CVar [3]float32) *Triangle {
+func (x *Triangle) InitFromFloat(AVar uintptr, BVar uintptr, CVar uintptr) *Triangle {
 
 	cret := xTriangleInitFromFloat(x.GoPointer(), AVar, BVar, CVar)
 	return cret

@@ -69,14 +69,14 @@ func (x *Checksum) Free() {
 
 }
 
-var xChecksumGetDigest func(uintptr, []byte, uint)
+var xChecksumGetDigest func(uintptr, uintptr, uint)
 
 // Gets the digest from @checksum as a raw binary vector and places it
 // into @buffer. The size of the digest depends on the type of checksum.
 //
 // Once this function has been called, the #GChecksum is closed and can
 // no longer be updated with g_checksum_update().
-func (x *Checksum) GetDigest(BufferVar []byte, DigestLenVar uint) {
+func (x *Checksum) GetDigest(BufferVar uintptr, DigestLenVar uint) {
 
 	xChecksumGetDigest(x.GoPointer(), BufferVar, DigestLenVar)
 
@@ -105,12 +105,12 @@ func (x *Checksum) Reset() {
 
 }
 
-var xChecksumUpdate func(uintptr, []byte, int)
+var xChecksumUpdate func(uintptr, uintptr, int)
 
 // Feeds @data into an existing #GChecksum. The checksum must still be
 // open, that is g_checksum_get_string() or g_checksum_get_digest() must
 // not have been called on @checksum.
-func (x *Checksum) Update(DataVar []byte, LengthVar int) {
+func (x *Checksum) Update(DataVar uintptr, LengthVar int) {
 
 	xChecksumUpdate(x.GoPointer(), DataVar, LengthVar)
 
@@ -159,14 +159,14 @@ func ComputeChecksumForBytes(ChecksumTypeVar ChecksumType, DataVar *Bytes) strin
 	return cret
 }
 
-var xComputeChecksumForData func(ChecksumType, []byte, uint) string
+var xComputeChecksumForData func(ChecksumType, uintptr, uint) string
 
 // Computes the checksum for a binary @data of @length. This is a
 // convenience wrapper for g_checksum_new(), g_checksum_get_string()
 // and g_checksum_free().
 //
 // The hexadecimal string returned will be in lower case.
-func ComputeChecksumForData(ChecksumTypeVar ChecksumType, DataVar []byte, LengthVar uint) string {
+func ComputeChecksumForData(ChecksumTypeVar ChecksumType, DataVar uintptr, LengthVar uint) string {
 
 	cret := xComputeChecksumForData(ChecksumTypeVar, DataVar, LengthVar)
 	return cret

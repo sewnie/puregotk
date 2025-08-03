@@ -65,7 +65,7 @@ type GlyphString struct {
 
 	NumGlyphs int
 
-	Glyphs []GlyphInfo
+	Glyphs uintptr
 
 	LogClusters int
 
@@ -138,7 +138,7 @@ func (x *GlyphString) Free() {
 
 }
 
-var xGlyphStringGetLogicalWidths func(uintptr, string, int, int, []int)
+var xGlyphStringGetLogicalWidths func(uintptr, string, int, int, uintptr)
 
 // Given a `PangoGlyphString` and corresponding text, determine the width
 // corresponding to each character.
@@ -147,7 +147,7 @@ var xGlyphStringGetLogicalWidths func(uintptr, string, int, int, []int)
 // entire cluster is divided equally among the characters.
 //
 // See also [method@Pango.GlyphItem.get_logical_widths].
-func (x *GlyphString) GetLogicalWidths(TextVar string, LengthVar int, EmbeddingLevelVar int, LogicalWidthsVar []int) {
+func (x *GlyphString) GetLogicalWidths(TextVar string, LengthVar int, EmbeddingLevelVar int, LogicalWidthsVar uintptr) {
 
 	xGlyphStringGetLogicalWidths(x.GoPointer(), TextVar, LengthVar, EmbeddingLevelVar, LogicalWidthsVar)
 

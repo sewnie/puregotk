@@ -16,7 +16,7 @@ type TextTagClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *TextTagClass) GoPointer() uintptr {

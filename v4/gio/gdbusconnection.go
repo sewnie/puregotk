@@ -109,7 +109,7 @@ type DBusSubtreeDispatchFunc func(uintptr, string, string, string, string, uintp
 // contain the `/` character.
 //
 // The return value will be freed with g_strfreev().
-type DBusSubtreeEnumerateFunc func(uintptr, string, string, uintptr) []string
+type DBusSubtreeEnumerateFunc func(uintptr, string, string, uintptr) uintptr
 
 // The type of the @introspect function in #GDBusSubtreeVTable.
 //
@@ -181,7 +181,7 @@ type DBusInterfaceVTable struct {
 
 	SetProperty DBusInterfaceSetPropertyFunc
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *DBusInterfaceVTable) GoPointer() uintptr {
@@ -198,7 +198,7 @@ type DBusSubtreeVTable struct {
 
 	Dispatch DBusSubtreeDispatchFunc
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *DBusSubtreeVTable) GoPointer() uintptr {

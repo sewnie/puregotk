@@ -986,7 +986,7 @@ func (x *Font) GetFace() *FontFace {
 	return cls
 }
 
-var xFontGetFeatures func(uintptr, []uintptr, uint, uint)
+var xFontGetFeatures func(uintptr, uintptr, uint, uint)
 
 // Obtain the OpenType features that are provided by the font.
 //
@@ -995,7 +995,7 @@ var xFontGetFeatures func(uintptr, []uintptr, uint, uint)
 //
 // Note that this does not include OpenType features which the
 // rendering system enables by default.
-func (x *Font) GetFeatures(FeaturesVar []uintptr, LenVar uint, NumFeaturesVar uint) {
+func (x *Font) GetFeatures(FeaturesVar uintptr, LenVar uint, NumFeaturesVar uint) {
 
 	xFontGetFeatures(x.GoPointer(), FeaturesVar, LenVar, NumFeaturesVar)
 
@@ -1060,7 +1060,7 @@ func (x *Font) GetHbFont() uintptr {
 	return cret
 }
 
-var xFontGetLanguages func(uintptr) []Language
+var xFontGetLanguages func(uintptr) uintptr
 
 // Returns the languages that are supported by @font.
 //
@@ -1070,7 +1070,7 @@ var xFontGetLanguages func(uintptr) []Language
 //
 // The returned array is only valid as long as the font
 // and its fontmap are valid.
-func (x *Font) GetLanguages() []Language {
+func (x *Font) GetLanguages() uintptr {
 
 	cret := xFontGetLanguages(x.GoPointer())
 	return cret
@@ -1238,7 +1238,7 @@ func (x *FontFace) IsSynthesized() bool {
 	return cret
 }
 
-var xFontFaceListSizes func(uintptr, []int, int)
+var xFontFaceListSizes func(uintptr, uintptr, int)
 
 // List the available sizes for a font.
 //
@@ -1246,7 +1246,7 @@ var xFontFaceListSizes func(uintptr, []int, int)
 // %NULL at the location pointed to by @sizes and 0 at the location pointed
 // to by @n_sizes. The sizes returned are in Pango units and are sorted
 // in ascending order.
-func (x *FontFace) ListSizes(SizesVar []int, NSizesVar int) {
+func (x *FontFace) ListSizes(SizesVar uintptr, NSizesVar int) {
 
 	xFontFaceListSizes(x.GoPointer(), SizesVar, NSizesVar)
 

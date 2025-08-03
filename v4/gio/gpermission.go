@@ -17,7 +17,7 @@ type PermissionClass struct {
 
 	ParentClass uintptr
 
-	Reserved [16]uintptr
+	Reserved uintptr
 }
 
 func (x *PermissionClass) GoPointer() uintptr {

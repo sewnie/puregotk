@@ -18,7 +18,7 @@ type DebugControllerDBusClass struct {
 
 	ParentClass uintptr
 
-	Padding [12]uintptr
+	Padding uintptr
 }
 
 func (x *DebugControllerDBusClass) GoPointer() uintptr {

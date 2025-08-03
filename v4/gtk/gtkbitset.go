@@ -19,7 +19,7 @@ import (
 type BitsetIter struct {
 	_ structs.HostLayout
 
-	PrivateData [10]uintptr
+	PrivateData uintptr
 }
 
 var xBitsetIterGLibType func() types.GType

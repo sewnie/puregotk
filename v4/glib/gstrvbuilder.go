@@ -63,12 +63,12 @@ func (x *StrvBuilder) Addv(ValueVar []string) {
 
 }
 
-var xStrvBuilderEnd func(uintptr) []string
+var xStrvBuilderEnd func(uintptr) uintptr
 
 // Ends the builder process and returns the constructed NULL-terminated string
 // array. The returned value should be freed with g_strfreev() when no longer
 // needed.
-func (x *StrvBuilder) End() []string {
+func (x *StrvBuilder) End() uintptr {
 
 	cret := xStrvBuilderEnd(x.GoPointer())
 	return cret

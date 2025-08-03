@@ -86,7 +86,7 @@ type Cond struct {
 
 	P uintptr
 
-	I [2]uint
+	I uintptr
 }
 
 func (x *Cond) GoPointer() uintptr {
@@ -278,7 +278,7 @@ type Private struct {
 
 	Notify DestroyNotify
 
-	Future [2]uintptr
+	Future uintptr
 }
 
 func (x *Private) GoPointer() uintptr {
@@ -395,7 +395,7 @@ type RWLock struct {
 
 	P uintptr
 
-	I [2]uint
+	I uintptr
 }
 
 func (x *RWLock) GoPointer() uintptr {
@@ -553,7 +553,7 @@ type RecMutex struct {
 
 	P uintptr
 
-	I [2]uint
+	I uintptr
 }
 
 func (x *RecMutex) GoPointer() uintptr {

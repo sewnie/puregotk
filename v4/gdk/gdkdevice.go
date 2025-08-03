@@ -26,7 +26,7 @@ type TimeCoord struct {
 
 	Flags AxisFlags
 
-	Axes [12]float64
+	Axes uintptr
 }
 
 func (x *TimeCoord) GoPointer() uintptr {

@@ -18,7 +18,7 @@ type DBusObjectProxyClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *DBusObjectProxyClass) GoPointer() uintptr {

@@ -503,7 +503,7 @@ func (x *DBusActionGroup) HasAction(ActionNameVar string) bool {
 //
 // The caller is responsible for freeing the list with g_strfreev() when
 // it is no longer required.
-func (x *DBusActionGroup) ListActions() []string {
+func (x *DBusActionGroup) ListActions() uintptr {
 
 	cret := XGActionGroupListActions(x.GoPointer())
 	return cret
@@ -2222,7 +2222,7 @@ func NewDBusMessage() *DBusMessage {
 	return cls
 }
 
-var xNewDBusMessageFromBlob func([]byte, uint, DBusCapabilityFlags, **glib.Error) uintptr
+var xNewDBusMessageFromBlob func(uintptr, uint, DBusCapabilityFlags, **glib.Error) uintptr
 
 // Creates a new #GDBusMessage from the data stored at @blob. The byte
 // order that the message was in can be retrieved using
@@ -2230,7 +2230,7 @@ var xNewDBusMessageFromBlob func([]byte, uint, DBusCapabilityFlags, **glib.Error
 //
 // If the @blob cannot be parsed, contains invalid fields, or contains invalid
 // headers, %G_IO_ERROR_INVALID_ARGUMENT will be returned.
-func NewDBusMessageFromBlob(BlobVar []byte, BlobLenVar uint, CapabilitiesVar DBusCapabilityFlags) (*DBusMessage, error) {
+func NewDBusMessageFromBlob(BlobVar uintptr, BlobLenVar uint, CapabilitiesVar DBusCapabilityFlags) (*DBusMessage, error) {
 	var cls *DBusMessage
 	var cerr *glib.Error
 
@@ -2372,10 +2372,10 @@ func (x *DBusMessage) GetHeader(HeaderFieldVar DBusMessageHeaderField) *glib.Var
 	return cret
 }
 
-var xDBusMessageGetHeaderFields func(uintptr) []byte
+var xDBusMessageGetHeaderFields func(uintptr) uintptr
 
 // Gets an array of all header fields on @message that are set.
-func (x *DBusMessage) GetHeaderFields() []byte {
+func (x *DBusMessage) GetHeaderFields() uintptr {
 
 	cret := xDBusMessageGetHeaderFields(x.GoPointer())
 	return cret
@@ -2781,11 +2781,11 @@ func (x *DBusMessage) SetUnixFdList(FdListVar *UnixFDList) {
 
 }
 
-var xDBusMessageToBlob func(uintptr, uint, DBusCapabilityFlags, **glib.Error) []byte
+var xDBusMessageToBlob func(uintptr, uint, DBusCapabilityFlags, **glib.Error) uintptr
 
 // Serializes @message to a blob. The byte order returned by
 // g_dbus_message_get_byte_order() will be used.
-func (x *DBusMessage) ToBlob(OutSizeVar uint, CapabilitiesVar DBusCapabilityFlags) ([]byte, error) {
+func (x *DBusMessage) ToBlob(OutSizeVar uint, CapabilitiesVar DBusCapabilityFlags) (uintptr, error) {
 	var cerr *glib.Error
 
 	cret := xDBusMessageToBlob(x.GoPointer(), OutSizeVar, CapabilitiesVar, &cerr)
@@ -2824,11 +2824,11 @@ func (c *DBusMessage) SetGoPointer(ptr uintptr) {
 	c.Ptr = ptr
 }
 
-var xDBusMessageBytesNeeded func([]byte, uint, **glib.Error) int
+var xDBusMessageBytesNeeded func(uintptr, uint, **glib.Error) int
 
 // Utility function to calculate how many bytes are needed to
 // completely deserialize the D-Bus message stored at @blob.
-func DBusMessageBytesNeeded(BlobVar []byte, BlobLenVar uint) (int, error) {
+func DBusMessageBytesNeeded(BlobVar uintptr, BlobLenVar uint) (int, error) {
 	var cerr *glib.Error
 
 	cret := xDBusMessageBytesNeeded(BlobVar, BlobLenVar, &cerr)
@@ -5032,12 +5032,12 @@ func NewSubprocess(FlagsVar SubprocessFlags, ErrorVar **glib.Error, Argv0Var str
 	return cls
 }
 
-var xNewSubprocessv func([]string, SubprocessFlags, **glib.Error) uintptr
+var xNewSubprocessv func(uintptr, SubprocessFlags, **glib.Error) uintptr
 
 // Create a new process with the given flags and argument list.
 //
 // The argument list is expected to be %NULL-terminated.
-func NewSubprocessv(ArgvVar []string, FlagsVar SubprocessFlags) (*Subprocess, error) {
+func NewSubprocessv(ArgvVar uintptr, FlagsVar SubprocessFlags) (*Subprocess, error) {
 	var cls *Subprocess
 	var cerr *glib.Error
 
@@ -5628,7 +5628,7 @@ func (x *SubprocessLauncher) SetCwd(CwdVar string) {
 
 }
 
-var xSubprocessLauncherSetEnviron func(uintptr, []string)
+var xSubprocessLauncherSetEnviron func(uintptr, uintptr)
 
 // Replace the entire environment of processes launched from this
 // launcher with the given 'environ' variable.
@@ -5649,7 +5649,7 @@ var xSubprocessLauncherSetEnviron func(uintptr, []string)
 //
 // On UNIX, all strings in this array can be arbitrary byte strings.
 // On Windows, they should be in UTF-8.
-func (x *SubprocessLauncher) SetEnviron(EnvVar []string) {
+func (x *SubprocessLauncher) SetEnviron(EnvVar uintptr) {
 
 	xSubprocessLauncherSetEnviron(x.GoPointer(), EnvVar)
 
@@ -5764,10 +5764,10 @@ func (x *SubprocessLauncher) Spawn(ErrorVar **glib.Error, Argv0Var string, varAr
 	return cls
 }
 
-var xSubprocessLauncherSpawnv func(uintptr, []string, **glib.Error) uintptr
+var xSubprocessLauncherSpawnv func(uintptr, uintptr, **glib.Error) uintptr
 
 // Creates a #GSubprocess given a provided array of arguments.
-func (x *SubprocessLauncher) Spawnv(ArgvVar []string) (*Subprocess, error) {
+func (x *SubprocessLauncher) Spawnv(ArgvVar uintptr) (*Subprocess, error) {
 	var cls *Subprocess
 	var cerr *glib.Error
 

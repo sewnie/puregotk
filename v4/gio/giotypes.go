@@ -402,7 +402,7 @@ type InputMessage struct {
 
 	Address **SocketAddress
 
-	Vectors []InputVector
+	Vectors uintptr
 
 	NumVectors uint
 
