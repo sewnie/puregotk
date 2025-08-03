@@ -119,15 +119,15 @@ func (f *funcArgsTemplate) Add(p Parameter, ins string, ns string, kinds KindMap
 	}
 	goType := p.Translate(lns, kinds)
 	kind := kinds.Kind(lns, goType)
-
 	stars := strings.Count(goType, "*")
 	goType = util.NormalizeNamespace(ns, goType, true)
-
 	if kind != OtherType && kind != UnknownType {
-		goType = util.AddNamespace(goType, ins)
+		if ins != "" && strings.Count(goType, ".") < 1 {
+			goType = ins + "." + goType
+		}
 	}
 	if stars > 0 {
-		goType = util.StarsInFront(strings.ReplaceAll(goType, "*", ""), stars)
+		goType = strings.Repeat("*", stars) + strings.ReplaceAll(goType, "*", "")
 	}
 
 	// Get a suitable variable name

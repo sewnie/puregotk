@@ -1,10 +1,6 @@
 package types
 
-import (
-	"strings"
-
-	"github.com/jwijenbergh/puregotk/internal/gir/util"
-)
+import "github.com/jwijenbergh/puregotk/internal/gir/util"
 
 type Kind int8
 
@@ -15,7 +11,6 @@ const (
 	ClassesType
 	InterfacesType
 	RecordsType
-	SliceType
 	OtherType
 )
 
@@ -39,9 +34,6 @@ func (km KindMap) pair(ns string, name string) KindPair {
 }
 
 func (km KindMap) Kind(ns string, name string) Kind {
-	if strings.HasPrefix(name, "[") {
-		return SliceType
-	}
 	return km.pair(ns, name).K
 }
 
