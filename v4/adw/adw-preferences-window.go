@@ -19,7 +19,7 @@ type PreferencesWindowClass struct {
 
 	ParentClass uintptr
 
-	Padding [4]uintptr
+	Padding uintptr
 }
 
 func (x *PreferencesWindowClass) GoPointer() uintptr {
@@ -243,6 +243,9 @@ func (x *PreferencesWindow) SetVisiblePageName(NameVar string) {
 }
 
 func (c *PreferencesWindow) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -308,7 +311,7 @@ func (x *PreferencesWindow) UpdateProperty(FirstPropertyVar gtk.AccessibleProper
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *PreferencesWindow) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []gtk.AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *PreferencesWindow) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -344,7 +347,7 @@ func (x *PreferencesWindow) UpdateRelation(FirstRelationVar gtk.AccessibleRelati
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *PreferencesWindow) UpdateRelationValue(NRelationsVar int, RelationsVar []gtk.AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *PreferencesWindow) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -377,7 +380,7 @@ func (x *PreferencesWindow) UpdateState(FirstStateVar gtk.AccessibleState, varAr
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *PreferencesWindow) UpdateStateValue(NStatesVar int, StatesVar []gtk.AccessibleState, ValuesVar []gobject.Value) {
+func (x *PreferencesWindow) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 

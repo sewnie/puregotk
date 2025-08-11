@@ -418,10 +418,10 @@ func (x *PrintSettings) GetOutputBin() string {
 	return cret
 }
 
-var xPrintSettingsGetPageRanges func(uintptr, int) []PageRange
+var xPrintSettingsGetPageRanges func(uintptr, int) uintptr
 
 // Gets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
-func (x *PrintSettings) GetPageRanges(NumRangesVar int) []PageRange {
+func (x *PrintSettings) GetPageRanges(NumRangesVar int) uintptr {
 
 	cret := xPrintSettingsGetPageRanges(x.GoPointer(), NumRangesVar)
 	return cret
@@ -748,10 +748,10 @@ func (x *PrintSettings) SetOutputBin(OutputBinVar string) {
 
 }
 
-var xPrintSettingsSetPageRanges func(uintptr, []PageRange, int)
+var xPrintSettingsSetPageRanges func(uintptr, uintptr, int)
 
 // Sets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
-func (x *PrintSettings) SetPageRanges(PageRangesVar []PageRange, NumRangesVar int) {
+func (x *PrintSettings) SetPageRanges(PageRangesVar uintptr, NumRangesVar int) {
 
 	xPrintSettingsSetPageRanges(x.GoPointer(), PageRangesVar, NumRangesVar)
 
@@ -928,6 +928,9 @@ func (x *PrintSettings) Unset(KeyVar string) {
 }
 
 func (c *PrintSettings) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

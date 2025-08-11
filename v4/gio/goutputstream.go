@@ -320,7 +320,7 @@ func (x *OutputStream) Vprintf(BytesWrittenVar uint, CancellableVar *Cancellable
 	return cret
 }
 
-var xOutputStreamWrite func(uintptr, []byte, uint, uintptr, **glib.Error) int
+var xOutputStreamWrite func(uintptr, uintptr, uint, uintptr, **glib.Error) int
 
 // Tries to write @count bytes from @buffer into the stream. Will block
 // during the operation.
@@ -342,7 +342,7 @@ var xOutputStreamWrite func(uintptr, []byte, uint, uintptr, **glib.Error) int
 // partial result will be returned, without an error.
 //
 // On error -1 is returned and @error is set accordingly.
-func (x *OutputStream) Write(BufferVar []byte, CountVar uint, CancellableVar *Cancellable) (int, error) {
+func (x *OutputStream) Write(BufferVar uintptr, CountVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xOutputStreamWrite(x.GoPointer(), BufferVar, CountVar, CancellableVar.GoPointer(), &cerr)
@@ -353,7 +353,7 @@ func (x *OutputStream) Write(BufferVar []byte, CountVar uint, CancellableVar *Ca
 
 }
 
-var xOutputStreamWriteAll func(uintptr, []byte, uint, uint, uintptr, **glib.Error) bool
+var xOutputStreamWriteAll func(uintptr, uintptr, uint, uint, uintptr, **glib.Error) bool
 
 // Tries to write @count bytes from @buffer into the stream. Will block
 // during the operation.
@@ -374,7 +374,7 @@ var xOutputStreamWriteAll func(uintptr, []byte, uint, uint, uintptr, **glib.Erro
 // functionality is only available from C.  If you need it from another
 // language then you must write your own loop around
 // g_output_stream_write().
-func (x *OutputStream) WriteAll(BufferVar []byte, CountVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (bool, error) {
+func (x *OutputStream) WriteAll(BufferVar uintptr, CountVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (bool, error) {
 	var cerr *glib.Error
 
 	cret := xOutputStreamWriteAll(x.GoPointer(), BufferVar, CountVar, BytesWrittenVar, CancellableVar.GoPointer(), &cerr)
@@ -385,7 +385,7 @@ func (x *OutputStream) WriteAll(BufferVar []byte, CountVar uint, BytesWrittenVar
 
 }
 
-var xOutputStreamWriteAllAsync func(uintptr, []byte, uint, int, uintptr, uintptr, uintptr)
+var xOutputStreamWriteAllAsync func(uintptr, uintptr, uint, int, uintptr, uintptr, uintptr)
 
 // Request an asynchronous write of @count bytes from @buffer into
 // the stream. When the operation is finished @callback will be called.
@@ -402,7 +402,7 @@ var xOutputStreamWriteAllAsync func(uintptr, []byte, uint, int, uintptr, uintptr
 //
 // Note that no copy of @buffer will be made, so it must stay valid
 // until @callback is called.
-func (x *OutputStream) WriteAllAsync(BufferVar []byte, CountVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+func (x *OutputStream) WriteAllAsync(BufferVar uintptr, CountVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
 
 	xOutputStreamWriteAllAsync(x.GoPointer(), BufferVar, CountVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
 
@@ -431,7 +431,7 @@ func (x *OutputStream) WriteAllFinish(ResultVar AsyncResult, BytesWrittenVar uin
 
 }
 
-var xOutputStreamWriteAsync func(uintptr, []byte, uint, int, uintptr, uintptr, uintptr)
+var xOutputStreamWriteAsync func(uintptr, uintptr, uint, int, uintptr, uintptr, uintptr)
 
 // Request an asynchronous write of @count bytes from @buffer into
 // the stream. When the operation is finished @callback will be called.
@@ -468,7 +468,7 @@ var xOutputStreamWriteAsync func(uintptr, []byte, uint, int, uintptr, uintptr, u
 // until @callback is called. See g_output_stream_write_bytes_async()
 // for a #GBytes version that will automatically hold a reference to
 // the contents (without copying) for the duration of the call.
-func (x *OutputStream) WriteAsync(BufferVar []byte, CountVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+func (x *OutputStream) WriteAsync(BufferVar uintptr, CountVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
 
 	xOutputStreamWriteAsync(x.GoPointer(), BufferVar, CountVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
 
@@ -547,7 +547,7 @@ func (x *OutputStream) WriteFinish(ResultVar AsyncResult) (int, error) {
 
 }
 
-var xOutputStreamWritev func(uintptr, []OutputVector, uint, uint, uintptr, **glib.Error) bool
+var xOutputStreamWritev func(uintptr, uintptr, uint, uint, uintptr, **glib.Error) bool
 
 // Tries to write the bytes contained in the @n_vectors @vectors into the
 // stream. Will block during the operation.
@@ -572,7 +572,7 @@ var xOutputStreamWritev func(uintptr, []OutputVector, uint, uint, uintptr, **gli
 // aggregate buffer size, and will return %G_IO_ERROR_INVALID_ARGUMENT if these
 // are exceeded. For example, when writing to a local file on UNIX platforms,
 // the aggregate buffer size must not exceed %G_MAXSSIZE bytes.
-func (x *OutputStream) Writev(VectorsVar []OutputVector, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (bool, error) {
+func (x *OutputStream) Writev(VectorsVar uintptr, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (bool, error) {
 	var cerr *glib.Error
 
 	cret := xOutputStreamWritev(x.GoPointer(), VectorsVar, NVectorsVar, BytesWrittenVar, CancellableVar.GoPointer(), &cerr)
@@ -583,7 +583,7 @@ func (x *OutputStream) Writev(VectorsVar []OutputVector, NVectorsVar uint, Bytes
 
 }
 
-var xOutputStreamWritevAll func(uintptr, []OutputVector, uint, uint, uintptr, **glib.Error) bool
+var xOutputStreamWritevAll func(uintptr, uintptr, uint, uint, uintptr, **glib.Error) bool
 
 // Tries to write the bytes contained in the @n_vectors @vectors into the
 // stream. Will block during the operation.
@@ -607,7 +607,7 @@ var xOutputStreamWritevAll func(uintptr, []OutputVector, uint, uint, uintptr, **
 //
 // The content of the individual elements of @vectors might be changed by this
 // function.
-func (x *OutputStream) WritevAll(VectorsVar []OutputVector, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (bool, error) {
+func (x *OutputStream) WritevAll(VectorsVar uintptr, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (bool, error) {
 	var cerr *glib.Error
 
 	cret := xOutputStreamWritevAll(x.GoPointer(), VectorsVar, NVectorsVar, BytesWrittenVar, CancellableVar.GoPointer(), &cerr)
@@ -618,7 +618,7 @@ func (x *OutputStream) WritevAll(VectorsVar []OutputVector, NVectorsVar uint, By
 
 }
 
-var xOutputStreamWritevAllAsync func(uintptr, []OutputVector, uint, int, uintptr, uintptr, uintptr)
+var xOutputStreamWritevAllAsync func(uintptr, uintptr, uint, int, uintptr, uintptr, uintptr)
 
 // Request an asynchronous write of the bytes contained in the @n_vectors @vectors into
 // the stream. When the operation is finished @callback will be called.
@@ -636,7 +636,7 @@ var xOutputStreamWritevAllAsync func(uintptr, []OutputVector, uint, int, uintptr
 // Note that no copy of @vectors will be made, so it must stay valid
 // until @callback is called. The content of the individual elements
 // of @vectors might be changed by this function.
-func (x *OutputStream) WritevAllAsync(VectorsVar []OutputVector, NVectorsVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+func (x *OutputStream) WritevAllAsync(VectorsVar uintptr, NVectorsVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
 
 	xOutputStreamWritevAllAsync(x.GoPointer(), VectorsVar, NVectorsVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
 
@@ -665,7 +665,7 @@ func (x *OutputStream) WritevAllFinish(ResultVar AsyncResult, BytesWrittenVar ui
 
 }
 
-var xOutputStreamWritevAsync func(uintptr, []OutputVector, uint, int, uintptr, uintptr, uintptr)
+var xOutputStreamWritevAsync func(uintptr, uintptr, uint, int, uintptr, uintptr, uintptr)
 
 // Request an asynchronous write of the bytes contained in @n_vectors @vectors into
 // the stream. When the operation is finished @callback will be called.
@@ -697,7 +697,7 @@ var xOutputStreamWritevAsync func(uintptr, []OutputVector, uint, int, uintptr, u
 //
 // Note that no copy of @vectors will be made, so it must stay valid
 // until @callback is called.
-func (x *OutputStream) WritevAsync(VectorsVar []OutputVector, NVectorsVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+func (x *OutputStream) WritevAsync(VectorsVar uintptr, NVectorsVar uint, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
 
 	xOutputStreamWritevAsync(x.GoPointer(), VectorsVar, NVectorsVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
 
@@ -718,6 +718,9 @@ func (x *OutputStream) WritevFinish(ResultVar AsyncResult, BytesWrittenVar uint)
 }
 
 func (c *OutputStream) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

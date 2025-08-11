@@ -27,7 +27,7 @@ type SignalAccumulator func(*SignalInvocationHint, *Value, *Value, uintptr) bool
 // trap all emissions of that signal, from any object.
 //
 // You may not attach these to signals created with the %G_SIGNAL_NO_HOOKS flag.
-type SignalEmissionHook func(*SignalInvocationHint, uint, []Value, uintptr) bool
+type SignalEmissionHook func(*SignalInvocationHint, uint, uintptr, uintptr) bool
 
 // The #GSignalInvocationHint structure is used to pass on additional information
 // to callbacks during a signal emission.
@@ -63,7 +63,7 @@ type SignalQuery struct {
 
 	NParams uint
 
-	ParamTypes []types.GType
+	ParamTypes uintptr
 }
 
 func (x *SignalQuery) GoPointer() uintptr {
@@ -226,13 +226,13 @@ func SignalAddEmissionHook(SignalIdVar uint, DetailVar glib.Quark, HookFuncVar *
 	return cret
 }
 
-var xSignalChainFromOverridden func([]Value, *Value)
+var xSignalChainFromOverridden func(uintptr, *Value)
 
 // Calls the original class closure of a signal. This function should only
 // be called from an overridden class closure; see
 // g_signal_override_class_closure() and
 // g_signal_override_class_handler().
-func SignalChainFromOverridden(InstanceAndParamsVar []Value, ReturnValueVar *Value) {
+func SignalChainFromOverridden(InstanceAndParamsVar uintptr, ReturnValueVar *Value) {
 
 	xSignalChainFromOverridden(InstanceAndParamsVar, ReturnValueVar)
 
@@ -320,14 +320,14 @@ func SignalEmitValist(InstanceVar *TypeInstance, SignalIdVar uint, DetailVar gli
 
 }
 
-var xSignalEmitv func([]Value, uint, glib.Quark, *Value)
+var xSignalEmitv func(uintptr, uint, glib.Quark, *Value)
 
 // Emits a signal. Signal emission is done synchronously.
 // The method will only return control after all handlers are called or signal emission was stopped.
 //
 // Note that g_signal_emitv() doesn't change @return_value if no handlers are
 // connected, in contrast to g_signal_emit() and g_signal_emit_valist().
-func SignalEmitv(InstanceAndParamsVar []Value, SignalIdVar uint, DetailVar glib.Quark, ReturnValueVar *Value) {
+func SignalEmitv(InstanceAndParamsVar uintptr, SignalIdVar uint, DetailVar glib.Quark, ReturnValueVar *Value) {
 
 	xSignalEmitv(InstanceAndParamsVar, SignalIdVar, DetailVar, ReturnValueVar)
 
@@ -511,12 +511,12 @@ func SignalIsValidName(NameVar string) bool {
 	return cret
 }
 
-var xSignalListIds func(types.GType, uint) []uint
+var xSignalListIds func(types.GType, uint) uintptr
 
 // Lists the signals by id that a certain instance or interface type
 // created. Further information about the signals can be acquired through
 // g_signal_query().
-func SignalListIds(ItypeVar types.GType, NIdsVar uint) []uint {
+func SignalListIds(ItypeVar types.GType, NIdsVar uint) uintptr {
 
 	cret := xSignalListIds(ItypeVar, NIdsVar)
 	return cret
@@ -622,7 +622,7 @@ func SignalNewValist(SignalNameVar string, ItypeVar types.GType, SignalFlagsVar 
 	return cret
 }
 
-var xSignalNewv func(string, types.GType, SignalFlags, *Closure, uintptr, uintptr, SignalCMarshaller, types.GType, uint, []types.GType) uint
+var xSignalNewv func(string, types.GType, SignalFlags, *Closure, uintptr, uintptr, SignalCMarshaller, types.GType, uint, uintptr) uint
 
 // Creates a new signal. (This is usually done in the class initializer.)
 //
@@ -630,7 +630,7 @@ var xSignalNewv func(string, types.GType, SignalFlags, *Closure, uintptr, uintpt
 //
 // If c_marshaller is %NULL, g_cclosure_marshal_generic() will be used as
 // the marshaller for this signal.
-func SignalNewv(SignalNameVar string, ItypeVar types.GType, SignalFlagsVar SignalFlags, ClassClosureVar *Closure, AccumulatorVar *SignalAccumulator, AccuDataVar uintptr, CMarshallerVar SignalCMarshaller, ReturnTypeVar types.GType, NParamsVar uint, ParamTypesVar []types.GType) uint {
+func SignalNewv(SignalNameVar string, ItypeVar types.GType, SignalFlagsVar SignalFlags, ClassClosureVar *Closure, AccumulatorVar *SignalAccumulator, AccuDataVar uintptr, CMarshallerVar SignalCMarshaller, ReturnTypeVar types.GType, NParamsVar uint, ParamTypesVar uintptr) uint {
 
 	cret := xSignalNewv(SignalNameVar, ItypeVar, SignalFlagsVar, ClassClosureVar, glib.NewCallback(AccumulatorVar), AccuDataVar, CMarshallerVar, ReturnTypeVar, NParamsVar, ParamTypesVar)
 	return cret

@@ -24,7 +24,7 @@ type FontChooserIface struct {
 
 	BaseIface uintptr
 
-	Padding [10]uintptr
+	Padding uintptr
 }
 
 func (x *FontChooserIface) GoPointer() uintptr {
@@ -72,6 +72,9 @@ type FontChooserBase struct {
 }
 
 func (x *FontChooserBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 

@@ -68,12 +68,12 @@ func NewSnapshot() *Snapshot {
 	return cls
 }
 
-var xSnapshotAppendBorder func(uintptr, *gsk.RoundedRect, [4]float32, [4]gdk.RGBA)
+var xSnapshotAppendBorder func(uintptr, *gsk.RoundedRect, uintptr, uintptr)
 
 // Appends a stroked border rectangle inside the given @outline.
 //
 // The four sides of the border can have different widths and colors.
-func (x *Snapshot) AppendBorder(OutlineVar *gsk.RoundedRect, BorderWidthVar [4]float32, BorderColorVar [4]gdk.RGBA) {
+func (x *Snapshot) AppendBorder(OutlineVar *gsk.RoundedRect, BorderWidthVar uintptr, BorderColorVar uintptr) {
 
 	xSnapshotAppendBorder(x.GoPointer(), OutlineVar, BorderWidthVar, BorderColorVar)
 
@@ -103,10 +103,10 @@ func (x *Snapshot) AppendColor(ColorVar *gdk.RGBA, BoundsVar *graphene.Rect) {
 
 }
 
-var xSnapshotAppendConicGradient func(uintptr, *graphene.Rect, *graphene.Point, float32, []gsk.ColorStop, uint)
+var xSnapshotAppendConicGradient func(uintptr, *graphene.Rect, *graphene.Point, float32, uintptr, uint)
 
 // Appends a conic gradient node with the given stops to @snapshot.
-func (x *Snapshot) AppendConicGradient(BoundsVar *graphene.Rect, CenterVar *graphene.Point, RotationVar float32, StopsVar []gsk.ColorStop, NStopsVar uint) {
+func (x *Snapshot) AppendConicGradient(BoundsVar *graphene.Rect, CenterVar *graphene.Point, RotationVar float32, StopsVar uintptr, NStopsVar uint) {
 
 	xSnapshotAppendConicGradient(x.GoPointer(), BoundsVar, CenterVar, RotationVar, StopsVar, NStopsVar)
 
@@ -129,10 +129,10 @@ func (x *Snapshot) AppendLayout(LayoutVar *pango.Layout, ColorVar *gdk.RGBA) {
 
 }
 
-var xSnapshotAppendLinearGradient func(uintptr, *graphene.Rect, *graphene.Point, *graphene.Point, []gsk.ColorStop, uint)
+var xSnapshotAppendLinearGradient func(uintptr, *graphene.Rect, *graphene.Point, *graphene.Point, uintptr, uint)
 
 // Appends a linear gradient node with the given stops to @snapshot.
-func (x *Snapshot) AppendLinearGradient(BoundsVar *graphene.Rect, StartPointVar *graphene.Point, EndPointVar *graphene.Point, StopsVar []gsk.ColorStop, NStopsVar uint) {
+func (x *Snapshot) AppendLinearGradient(BoundsVar *graphene.Rect, StartPointVar *graphene.Point, EndPointVar *graphene.Point, StopsVar uintptr, NStopsVar uint) {
 
 	xSnapshotAppendLinearGradient(x.GoPointer(), BoundsVar, StartPointVar, EndPointVar, StopsVar, NStopsVar)
 
@@ -160,28 +160,28 @@ func (x *Snapshot) AppendOutsetShadow(OutlineVar *gsk.RoundedRect, ColorVar *gdk
 
 }
 
-var xSnapshotAppendRadialGradient func(uintptr, *graphene.Rect, *graphene.Point, float32, float32, float32, float32, []gsk.ColorStop, uint)
+var xSnapshotAppendRadialGradient func(uintptr, *graphene.Rect, *graphene.Point, float32, float32, float32, float32, uintptr, uint)
 
 // Appends a radial gradient node with the given stops to @snapshot.
-func (x *Snapshot) AppendRadialGradient(BoundsVar *graphene.Rect, CenterVar *graphene.Point, HradiusVar float32, VradiusVar float32, StartVar float32, EndVar float32, StopsVar []gsk.ColorStop, NStopsVar uint) {
+func (x *Snapshot) AppendRadialGradient(BoundsVar *graphene.Rect, CenterVar *graphene.Point, HradiusVar float32, VradiusVar float32, StartVar float32, EndVar float32, StopsVar uintptr, NStopsVar uint) {
 
 	xSnapshotAppendRadialGradient(x.GoPointer(), BoundsVar, CenterVar, HradiusVar, VradiusVar, StartVar, EndVar, StopsVar, NStopsVar)
 
 }
 
-var xSnapshotAppendRepeatingLinearGradient func(uintptr, *graphene.Rect, *graphene.Point, *graphene.Point, []gsk.ColorStop, uint)
+var xSnapshotAppendRepeatingLinearGradient func(uintptr, *graphene.Rect, *graphene.Point, *graphene.Point, uintptr, uint)
 
 // Appends a repeating linear gradient node with the given stops to @snapshot.
-func (x *Snapshot) AppendRepeatingLinearGradient(BoundsVar *graphene.Rect, StartPointVar *graphene.Point, EndPointVar *graphene.Point, StopsVar []gsk.ColorStop, NStopsVar uint) {
+func (x *Snapshot) AppendRepeatingLinearGradient(BoundsVar *graphene.Rect, StartPointVar *graphene.Point, EndPointVar *graphene.Point, StopsVar uintptr, NStopsVar uint) {
 
 	xSnapshotAppendRepeatingLinearGradient(x.GoPointer(), BoundsVar, StartPointVar, EndPointVar, StopsVar, NStopsVar)
 
 }
 
-var xSnapshotAppendRepeatingRadialGradient func(uintptr, *graphene.Rect, *graphene.Point, float32, float32, float32, float32, []gsk.ColorStop, uint)
+var xSnapshotAppendRepeatingRadialGradient func(uintptr, *graphene.Rect, *graphene.Point, float32, float32, float32, float32, uintptr, uint)
 
 // Appends a repeating radial gradient node with the given stops to @snapshot.
-func (x *Snapshot) AppendRepeatingRadialGradient(BoundsVar *graphene.Rect, CenterVar *graphene.Point, HradiusVar float32, VradiusVar float32, StartVar float32, EndVar float32, StopsVar []gsk.ColorStop, NStopsVar uint) {
+func (x *Snapshot) AppendRepeatingRadialGradient(BoundsVar *graphene.Rect, CenterVar *graphene.Point, HradiusVar float32, VradiusVar float32, StartVar float32, EndVar float32, StopsVar uintptr, NStopsVar uint) {
 
 	xSnapshotAppendRepeatingRadialGradient(x.GoPointer(), BoundsVar, CenterVar, HradiusVar, VradiusVar, StartVar, EndVar, StopsVar, NStopsVar)
 
@@ -423,12 +423,12 @@ func (x *Snapshot) PushRoundedClip(BoundsVar *gsk.RoundedRect) {
 
 }
 
-var xSnapshotPushShadow func(uintptr, []gsk.Shadow, uint)
+var xSnapshotPushShadow func(uintptr, uintptr, uint)
 
 // Applies a shadow to an image.
 //
 // The image is recorded until the next call to [method@Gtk.Snapshot.pop].
-func (x *Snapshot) PushShadow(ShadowVar []gsk.Shadow, NShadowsVar uint) {
+func (x *Snapshot) PushShadow(ShadowVar uintptr, NShadowsVar uint) {
 
 	xSnapshotPushShadow(x.GoPointer(), ShadowVar, NShadowsVar)
 
@@ -640,6 +640,9 @@ func (x *Snapshot) Translate3d(PointVar *graphene.Point3D) {
 }
 
 func (c *Snapshot) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

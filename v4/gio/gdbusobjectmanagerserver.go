@@ -18,7 +18,7 @@ type DBusObjectManagerServerClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *DBusObjectManagerServerClass) GoPointer() uintptr {
@@ -172,6 +172,9 @@ func (x *DBusObjectManagerServer) Unexport(ObjectPathVar string) bool {
 }
 
 func (c *DBusObjectManagerServer) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

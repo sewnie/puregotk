@@ -20,7 +20,7 @@ type ApplicationWindowClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *ApplicationWindowClass) GoPointer() uintptr {
@@ -197,6 +197,9 @@ func (x *ApplicationWindow) SetShowMenubar(ShowMenubarVar bool) {
 }
 
 func (c *ApplicationWindow) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -396,7 +399,7 @@ func (x *ApplicationWindow) HasAction(ActionNameVar string) bool {
 //
 // The caller is responsible for freeing the list with g_strfreev() when
 // it is no longer required.
-func (x *ApplicationWindow) ListActions() []string {
+func (x *ApplicationWindow) ListActions() uintptr {
 
 	cret := gio.XGActionGroupListActions(x.GoPointer())
 	return cret
@@ -490,7 +493,7 @@ func (x *ApplicationWindow) AddAction(ActionVar gio.Action) {
 //	}
 //
 // ]|
-func (x *ApplicationWindow) AddActionEntries(EntriesVar []gio.ActionEntry, NEntriesVar int, UserDataVar uintptr) {
+func (x *ApplicationWindow) AddActionEntries(EntriesVar uintptr, NEntriesVar int, UserDataVar uintptr) {
 
 	gio.XGActionMapAddActionEntries(x.GoPointer(), EntriesVar, NEntriesVar, UserDataVar)
 
@@ -580,7 +583,7 @@ func (x *ApplicationWindow) UpdateProperty(FirstPropertyVar AccessibleProperty, 
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *ApplicationWindow) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *ApplicationWindow) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -616,7 +619,7 @@ func (x *ApplicationWindow) UpdateRelation(FirstRelationVar AccessibleRelation, 
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *ApplicationWindow) UpdateRelationValue(NRelationsVar int, RelationsVar []AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *ApplicationWindow) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -649,7 +652,7 @@ func (x *ApplicationWindow) UpdateState(FirstStateVar AccessibleState, varArgs .
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *ApplicationWindow) UpdateStateValue(NStatesVar int, StatesVar []AccessibleState, ValuesVar []gobject.Value) {
+func (x *ApplicationWindow) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 

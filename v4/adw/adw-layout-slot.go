@@ -71,6 +71,9 @@ func (x *LayoutSlot) GetSlotId() string {
 }
 
 func (c *LayoutSlot) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -136,7 +139,7 @@ func (x *LayoutSlot) UpdateProperty(FirstPropertyVar gtk.AccessibleProperty, var
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *LayoutSlot) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []gtk.AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *LayoutSlot) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -172,7 +175,7 @@ func (x *LayoutSlot) UpdateRelation(FirstRelationVar gtk.AccessibleRelation, var
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *LayoutSlot) UpdateRelationValue(NRelationsVar int, RelationsVar []gtk.AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *LayoutSlot) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -205,7 +208,7 @@ func (x *LayoutSlot) UpdateState(FirstStateVar gtk.AccessibleState, varArgs ...i
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *LayoutSlot) UpdateStateValue(NStatesVar int, StatesVar []gtk.AccessibleState, ValuesVar []gobject.Value) {
+func (x *LayoutSlot) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 

@@ -57,7 +57,7 @@ func NewGestureStylus() *GestureStylus {
 	return cls
 }
 
-var xGestureStylusGetAxes func(uintptr, []gdk.AxisUse, []float64) bool
+var xGestureStylusGetAxes func(uintptr, uintptr, uintptr) bool
 
 // Returns the current values for the requested @axes.
 //
@@ -65,7 +65,7 @@ var xGestureStylusGetAxes func(uintptr, []gdk.AxisUse, []float64) bool
 // [signal@Gtk.GestureStylus::down], [signal@Gtk.GestureStylus::motion],
 // [signal@Gtk.GestureStylus::up] or [signal@Gtk.GestureStylus::proximity]
 // signals.
-func (x *GestureStylus) GetAxes(AxesVar []gdk.AxisUse, ValuesVar []float64) bool {
+func (x *GestureStylus) GetAxes(AxesVar uintptr, ValuesVar uintptr) bool {
 
 	cret := xGestureStylusGetAxes(x.GoPointer(), AxesVar, ValuesVar)
 	return cret
@@ -129,6 +129,9 @@ func (x *GestureStylus) GetDeviceTool() *gdk.DeviceTool {
 }
 
 func (c *GestureStylus) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

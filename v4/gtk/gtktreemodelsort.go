@@ -18,7 +18,7 @@ type TreeModelSortClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *TreeModelSortClass) GoPointer() uintptr {
@@ -266,6 +266,9 @@ func (x *TreeModelSort) ResetDefaultSortFunc() {
 }
 
 func (c *TreeModelSort) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -614,7 +617,7 @@ func (x *TreeModelSort) RowsReordered(PathVar *TreePath, IterVar *TreeIter, NewO
 //
 // This should be called by models when their rows have been
 // reordered.
-func (x *TreeModelSort) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar []int, LengthVar int) {
+func (x *TreeModelSort) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar uintptr, LengthVar int) {
 
 	XGtkTreeModelRowsReorderedWithLength(x.GoPointer(), PathVar, IterVar, NewOrderVar, LengthVar)
 

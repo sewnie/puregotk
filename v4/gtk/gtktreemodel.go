@@ -123,10 +123,10 @@ func NewTreePathFromIndices(FirstIndexVar int, varArgs ...interface{}) *TreePath
 	return cret
 }
 
-var xNewTreePathFromIndicesv func([]int, uint) *TreePath
+var xNewTreePathFromIndicesv func(uintptr, uint) *TreePath
 
 // Creates a new path with the given @indices array of @length.
-func NewTreePathFromIndicesv(IndicesVar []int, LengthVar uint) *TreePath {
+func NewTreePathFromIndicesv(IndicesVar uintptr, LengthVar uint) *TreePath {
 
 	cret := xNewTreePathFromIndicesv(IndicesVar, LengthVar)
 	return cret
@@ -221,14 +221,14 @@ func (x *TreePath) GetIndices() int {
 	return cret
 }
 
-var xTreePathGetIndicesWithDepth func(uintptr, int) []int
+var xTreePathGetIndicesWithDepth func(uintptr, int) uintptr
 
 // Returns the current indices of @path.
 //
 // This is an array of integers, each representing a node in a tree.
 // It also returns the number of elements in the array.
 // The array should not be freed.
-func (x *TreePath) GetIndicesWithDepth(DepthVar int) []int {
+func (x *TreePath) GetIndicesWithDepth(DepthVar int) uintptr {
 
 	cret := xTreePathGetIndicesWithDepth(x.GoPointer(), DepthVar)
 	return cret
@@ -661,7 +661,7 @@ type TreeModel interface {
 	RowHasChildToggled(PathVar *TreePath, IterVar *TreeIter)
 	RowInserted(PathVar *TreePath, IterVar *TreeIter)
 	RowsReordered(PathVar *TreePath, IterVar *TreeIter, NewOrderVar int)
-	RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar []int, LengthVar int)
+	RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar uintptr, LengthVar int)
 	UnrefNode(IterVar *TreeIter)
 }
 
@@ -676,6 +676,9 @@ type TreeModelBase struct {
 }
 
 func (x *TreeModelBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -988,7 +991,7 @@ func (x *TreeModelBase) RowsReordered(PathVar *TreePath, IterVar *TreeIter, NewO
 //
 // This should be called by models when their rows have been
 // reordered.
-func (x *TreeModelBase) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar []int, LengthVar int) {
+func (x *TreeModelBase) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar uintptr, LengthVar int) {
 
 	XGtkTreeModelRowsReorderedWithLength(x.GoPointer(), PathVar, IterVar, NewOrderVar, LengthVar)
 
@@ -1034,7 +1037,7 @@ var XGtkTreeModelRowDeleted func(uintptr, *TreePath)
 var XGtkTreeModelRowHasChildToggled func(uintptr, *TreePath, *TreeIter)
 var XGtkTreeModelRowInserted func(uintptr, *TreePath, *TreeIter)
 var XGtkTreeModelRowsReordered func(uintptr, *TreePath, *TreeIter, int)
-var XGtkTreeModelRowsReorderedWithLength func(uintptr, *TreePath, *TreeIter, []int, int)
+var XGtkTreeModelRowsReorderedWithLength func(uintptr, *TreePath, *TreeIter, uintptr, int)
 var XGtkTreeModelUnrefNode func(uintptr, *TreeIter)
 
 // These flags indicate various properties of a `GtkTreeModel`.
@@ -1083,12 +1086,12 @@ func TreeRowReferenceInserted(ProxyVar *gobject.Object, PathVar *TreePath) {
 
 }
 
-var xTreeRowReferenceReordered func(uintptr, *TreePath, *TreeIter, []int)
+var xTreeRowReferenceReordered func(uintptr, *TreePath, *TreeIter, uintptr)
 
 // Lets a set of row reference created by
 // gtk_tree_row_reference_new_proxy() know that the
 // model emitted the ::rows-reordered signal.
-func TreeRowReferenceReordered(ProxyVar *gobject.Object, PathVar *TreePath, IterVar *TreeIter, NewOrderVar []int) {
+func TreeRowReferenceReordered(ProxyVar *gobject.Object, PathVar *TreePath, IterVar *TreeIter, NewOrderVar uintptr) {
 
 	xTreeRowReferenceReordered(ProxyVar.GoPointer(), PathVar, IterVar, NewOrderVar)
 

@@ -464,6 +464,9 @@ func (x *OverlaySplitView) SetSidebarWidthUnit(UnitVar LengthUnit) {
 }
 
 func (c *OverlaySplitView) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -498,7 +501,7 @@ func (x *OverlaySplitView) GetProgress() float64 {
 //
 // Each snap point represents a progress value that is considered acceptable to
 // end the swipe on.
-func (x *OverlaySplitView) GetSnapPoints(NSnapPointsVar int) []float64 {
+func (x *OverlaySplitView) GetSnapPoints(NSnapPointsVar int) uintptr {
 
 	cret := XAdwSwipeableGetSnapPoints(x.GoPointer(), NSnapPointsVar)
 	return cret
@@ -577,7 +580,7 @@ func (x *OverlaySplitView) UpdateProperty(FirstPropertyVar gtk.AccessiblePropert
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *OverlaySplitView) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []gtk.AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *OverlaySplitView) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -613,7 +616,7 @@ func (x *OverlaySplitView) UpdateRelation(FirstRelationVar gtk.AccessibleRelatio
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *OverlaySplitView) UpdateRelationValue(NRelationsVar int, RelationsVar []gtk.AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *OverlaySplitView) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -646,7 +649,7 @@ func (x *OverlaySplitView) UpdateState(FirstStateVar gtk.AccessibleState, varArg
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *OverlaySplitView) UpdateStateValue(NStatesVar int, StatesVar []gtk.AccessibleState, ValuesVar []gobject.Value) {
+func (x *OverlaySplitView) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 

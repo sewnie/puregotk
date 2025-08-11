@@ -41,7 +41,7 @@ type PollableInputStream interface {
 	CanPoll() bool
 	CreateSource(CancellableVar *Cancellable) *glib.Source
 	IsReadable() bool
-	ReadNonblocking(BufferVar []byte, CountVar uint, CancellableVar *Cancellable) int
+	ReadNonblocking(BufferVar uintptr, CountVar uint, CancellableVar *Cancellable) int
 }
 
 var xPollableInputStreamGLibType func() types.GType
@@ -55,6 +55,9 @@ type PollableInputStreamBase struct {
 }
 
 func (x *PollableInputStreamBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -114,7 +117,7 @@ func (x *PollableInputStreamBase) IsReadable() bool {
 // if @cancellable has already been cancelled when you call, which
 // may happen if you call this method after a source triggers due
 // to having been cancelled.
-func (x *PollableInputStreamBase) ReadNonblocking(BufferVar []byte, CountVar uint, CancellableVar *Cancellable) (int, error) {
+func (x *PollableInputStreamBase) ReadNonblocking(BufferVar uintptr, CountVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := XGPollableInputStreamReadNonblocking(x.GoPointer(), BufferVar, CountVar, CancellableVar.GoPointer(), &cerr)
@@ -128,7 +131,7 @@ func (x *PollableInputStreamBase) ReadNonblocking(BufferVar []byte, CountVar uin
 var XGPollableInputStreamCanPoll func(uintptr) bool
 var XGPollableInputStreamCreateSource func(uintptr, uintptr) *glib.Source
 var XGPollableInputStreamIsReadable func(uintptr) bool
-var XGPollableInputStreamReadNonblocking func(uintptr, []byte, uint, uintptr, **glib.Error) int
+var XGPollableInputStreamReadNonblocking func(uintptr, uintptr, uint, uintptr, **glib.Error) int
 
 func init() {
 	lib, err := purego.Dlopen(core.GetPath("GIO"), purego.RTLD_NOW|purego.RTLD_GLOBAL)

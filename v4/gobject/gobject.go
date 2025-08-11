@@ -49,7 +49,7 @@ type InitiallyUnownedClass struct {
 
 	Flags uint
 
-	Pdummy [6]uintptr
+	Pdummy uintptr
 }
 
 func (x *InitiallyUnownedClass) GoPointer() uintptr {
@@ -94,7 +94,7 @@ type ObjectClass struct {
 
 	Flags uint
 
-	Pdummy [6]uintptr
+	Pdummy uintptr
 }
 
 func (x *ObjectClass) GoPointer() uintptr {
@@ -437,6 +437,9 @@ func InitiallyUnownedNewFromInternalPtr(ptr uintptr) *InitiallyUnowned {
 }
 
 func (c *InitiallyUnowned) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -532,7 +535,7 @@ func NewObjectValist(ObjectTypeVar types.GType, FirstPropertyNameVar string, Var
 	return cls
 }
 
-var xNewObjectWithProperties func(types.GType, uint, []string, []Value) uintptr
+var xNewObjectWithProperties func(types.GType, uint, []string, uintptr) uintptr
 
 // Creates a new instance of a #GObject subtype and sets its properties using
 // the provided arrays. Both arrays must have exactly @n_properties elements,
@@ -540,7 +543,7 @@ var xNewObjectWithProperties func(types.GType, uint, []string, []Value) uintptr
 //
 // Construction parameters (see %G_PARAM_CONSTRUCT, %G_PARAM_CONSTRUCT_ONLY)
 // which are not explicitly specified are set to their default values.
-func NewObjectWithProperties(ObjectTypeVar types.GType, NPropertiesVar uint, NamesVar []string, ValuesVar []Value) *Object {
+func NewObjectWithProperties(ObjectTypeVar types.GType, NPropertiesVar uint, NamesVar []string, ValuesVar uintptr) *Object {
 	var cls *Object
 
 	cret := xNewObjectWithProperties(ObjectTypeVar, NPropertiesVar, NamesVar, ValuesVar)
@@ -553,13 +556,13 @@ func NewObjectWithProperties(ObjectTypeVar types.GType, NPropertiesVar uint, Nam
 	return cls
 }
 
-var xNewObjectv func(types.GType, uint, []Parameter) uintptr
+var xNewObjectv func(types.GType, uint, uintptr) uintptr
 
 // Creates a new instance of a #GObject subtype and sets its properties.
 //
 // Construction parameters (see %G_PARAM_CONSTRUCT, %G_PARAM_CONSTRUCT_ONLY)
 // which are not explicitly specified are set to their default values.
-func NewObjectv(ObjectTypeVar types.GType, NParametersVar uint, ParametersVar []Parameter) *Object {
+func NewObjectv(ObjectTypeVar types.GType, NParametersVar uint, ParametersVar uintptr) *Object {
 	var cls *Object
 
 	cret := xNewObjectv(ObjectTypeVar, NParametersVar, ParametersVar)
@@ -960,13 +963,13 @@ func (x *Object) GetValist(FirstPropertyNameVar string, VarArgsVar []interface{}
 
 }
 
-var xObjectGetv func(uintptr, uint, []string, []Value)
+var xObjectGetv func(uintptr, uint, uintptr, uintptr)
 
 // Gets @n_properties properties for an @object.
 // Obtained properties will be set to @values. All properties must be valid.
 // Warnings will be emitted and undefined behaviour may result if invalid
 // properties are passed in.
-func (x *Object) Getv(NPropertiesVar uint, NamesVar []string, ValuesVar []Value) {
+func (x *Object) Getv(NPropertiesVar uint, NamesVar uintptr, ValuesVar uintptr) {
 
 	xObjectGetv(x.GoPointer(), NPropertiesVar, NamesVar, ValuesVar)
 
@@ -1272,13 +1275,13 @@ func (x *Object) SetValist(FirstPropertyNameVar string, VarArgsVar []interface{}
 
 }
 
-var xObjectSetv func(uintptr, uint, []string, []Value)
+var xObjectSetv func(uintptr, uint, uintptr, uintptr)
 
 // Sets @n_properties properties for an @object.
 // Properties to be set will be taken from @values. All properties must be
 // valid. Warnings will be emitted and undefined behaviour may result if invalid
 // properties are passed in.
-func (x *Object) Setv(NPropertiesVar uint, NamesVar []string, ValuesVar []Value) {
+func (x *Object) Setv(NPropertiesVar uint, NamesVar uintptr, ValuesVar uintptr) {
 
 	xObjectSetv(x.GoPointer(), NPropertiesVar, NamesVar, ValuesVar)
 
@@ -1469,6 +1472,9 @@ func (x *Object) WeakUnref(NotifyVar *WeakNotify, DataVar uintptr) {
 }
 
 func (c *Object) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

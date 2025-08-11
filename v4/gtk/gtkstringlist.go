@@ -76,10 +76,10 @@ func StringListNewFromInternalPtr(ptr uintptr) *StringList {
 	return cls
 }
 
-var xNewStringList func([]string) uintptr
+var xNewStringList func(uintptr) uintptr
 
 // Creates a new `GtkStringList` with the given @strings.
-func NewStringList(StringsVar []string) *StringList {
+func NewStringList(StringsVar uintptr) *StringList {
 	var cls *StringList
 
 	cret := xNewStringList(StringsVar)
@@ -130,7 +130,7 @@ func (x *StringList) Remove(PositionVar uint) {
 
 }
 
-var xStringListSplice func(uintptr, uint, uint, []string)
+var xStringListSplice func(uintptr, uint, uint, uintptr)
 
 // Changes @self by removing @n_removals strings and adding @additions
 // to it.
@@ -144,7 +144,7 @@ var xStringListSplice func(uintptr, uint, uint, []string)
 // The parameters @position and @n_removals must be correct (ie:
 // @position + @n_removals must be less than or equal to the length
 // of the list at the time this function is called).
-func (x *StringList) Splice(PositionVar uint, NRemovalsVar uint, AdditionsVar []string) {
+func (x *StringList) Splice(PositionVar uint, NRemovalsVar uint, AdditionsVar uintptr) {
 
 	xStringListSplice(x.GoPointer(), PositionVar, NRemovalsVar, AdditionsVar)
 
@@ -168,6 +168,9 @@ func (x *StringList) Take(StringVar string) {
 }
 
 func (c *StringList) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -322,6 +325,9 @@ func (x *StringObject) GetString() string {
 }
 
 func (c *StringObject) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

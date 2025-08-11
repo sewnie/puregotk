@@ -69,13 +69,13 @@ func (x *SimpleProxyResolver) SetDefaultProxy(DefaultProxyVar string) {
 
 }
 
-var xSimpleProxyResolverSetIgnoreHosts func(uintptr, []string)
+var xSimpleProxyResolverSetIgnoreHosts func(uintptr, uintptr)
 
 // Sets the list of ignored hosts.
 //
 // See #GSimpleProxyResolver:ignore-hosts for more details on how the
 // @ignore_hosts argument is interpreted.
-func (x *SimpleProxyResolver) SetIgnoreHosts(IgnoreHostsVar []string) {
+func (x *SimpleProxyResolver) SetIgnoreHosts(IgnoreHostsVar uintptr) {
 
 	xSimpleProxyResolverSetIgnoreHosts(x.GoPointer(), IgnoreHostsVar)
 
@@ -98,6 +98,9 @@ func (x *SimpleProxyResolver) SetUriProxy(UriSchemeVar string, ProxyVar string) 
 }
 
 func (c *SimpleProxyResolver) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -129,7 +132,7 @@ func (x *SimpleProxyResolver) IsSupported() bool {
 // `direct://` is used when no proxy is needed.
 // Direct connection should not be attempted unless it is part of the
 // returned array of proxies.
-func (x *SimpleProxyResolver) Lookup(UriVar string, CancellableVar *Cancellable) ([]string, error) {
+func (x *SimpleProxyResolver) Lookup(UriVar string, CancellableVar *Cancellable) (uintptr, error) {
 	var cerr *glib.Error
 
 	cret := XGProxyResolverLookup(x.GoPointer(), UriVar, CancellableVar.GoPointer(), &cerr)
@@ -151,7 +154,7 @@ func (x *SimpleProxyResolver) LookupAsync(UriVar string, CancellableVar *Cancell
 // Call this function to obtain the array of proxy URIs when
 // g_proxy_resolver_lookup_async() is complete. See
 // g_proxy_resolver_lookup() for more details.
-func (x *SimpleProxyResolver) LookupFinish(ResultVar AsyncResult) ([]string, error) {
+func (x *SimpleProxyResolver) LookupFinish(ResultVar AsyncResult) (uintptr, error) {
 	var cerr *glib.Error
 
 	cret := XGProxyResolverLookupFinish(x.GoPointer(), ResultVar.GoPointer(), &cerr)
@@ -162,13 +165,13 @@ func (x *SimpleProxyResolver) LookupFinish(ResultVar AsyncResult) ([]string, err
 
 }
 
-var xSimpleProxyResolverNew func(string, []string) uintptr
+var xSimpleProxyResolverNew func(string, uintptr) uintptr
 
 // Creates a new #GSimpleProxyResolver. See
 // #GSimpleProxyResolver:default-proxy and
 // #GSimpleProxyResolver:ignore-hosts for more details on how the
 // arguments are interpreted.
-func SimpleProxyResolverNew(DefaultProxyVar string, IgnoreHostsVar []string) *ProxyResolverBase {
+func SimpleProxyResolverNew(DefaultProxyVar string, IgnoreHostsVar uintptr) *ProxyResolverBase {
 	var cls *ProxyResolverBase
 
 	cret := xSimpleProxyResolverNew(DefaultProxyVar, IgnoreHostsVar)

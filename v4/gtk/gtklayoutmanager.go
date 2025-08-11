@@ -21,7 +21,7 @@ type LayoutManagerClass struct {
 
 	LayoutChildType types.GType
 
-	Padding [16]uintptr
+	Padding uintptr
 }
 
 func (x *LayoutManagerClass) GoPointer() uintptr {
@@ -182,6 +182,9 @@ func (x *LayoutManager) Measure(WidgetVar *Widget, OrientationVar Orientation, F
 }
 
 func (c *LayoutManager) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

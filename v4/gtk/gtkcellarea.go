@@ -27,7 +27,7 @@ type CellAreaClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *CellAreaClass) GoPointer() uintptr {
@@ -973,6 +973,9 @@ func (x *CellArea) StopEditing(CanceledVar bool) {
 }
 
 func (c *CellArea) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

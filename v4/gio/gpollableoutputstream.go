@@ -47,8 +47,8 @@ type PollableOutputStream interface {
 	CanPoll() bool
 	CreateSource(CancellableVar *Cancellable) *glib.Source
 	IsWritable() bool
-	WriteNonblocking(BufferVar []byte, CountVar uint, CancellableVar *Cancellable) int
-	WritevNonblocking(VectorsVar []OutputVector, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) PollableReturn
+	WriteNonblocking(BufferVar uintptr, CountVar uint, CancellableVar *Cancellable) int
+	WritevNonblocking(VectorsVar uintptr, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) PollableReturn
 }
 
 var xPollableOutputStreamGLibType func() types.GType
@@ -62,6 +62,9 @@ type PollableOutputStreamBase struct {
 }
 
 func (x *PollableOutputStreamBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -125,7 +128,7 @@ func (x *PollableOutputStreamBase) IsWritable() bool {
 // Also note that if %G_IO_ERROR_WOULD_BLOCK is returned some underlying
 // transports like D/TLS require that you re-send the same @buffer and
 // @count in the next write call.
-func (x *PollableOutputStreamBase) WriteNonblocking(BufferVar []byte, CountVar uint, CancellableVar *Cancellable) (int, error) {
+func (x *PollableOutputStreamBase) WriteNonblocking(BufferVar uintptr, CountVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := XGPollableOutputStreamWriteNonblocking(x.GoPointer(), BufferVar, CountVar, CancellableVar.GoPointer(), &cerr)
@@ -152,7 +155,7 @@ func (x *PollableOutputStreamBase) WriteNonblocking(BufferVar []byte, CountVar u
 // Also note that if %G_POLLABLE_RETURN_WOULD_BLOCK is returned some underlying
 // transports like D/TLS require that you re-send the same @vectors and
 // @n_vectors in the next write call.
-func (x *PollableOutputStreamBase) WritevNonblocking(VectorsVar []OutputVector, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (PollableReturn, error) {
+func (x *PollableOutputStreamBase) WritevNonblocking(VectorsVar uintptr, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (PollableReturn, error) {
 	var cerr *glib.Error
 
 	cret := XGPollableOutputStreamWritevNonblocking(x.GoPointer(), VectorsVar, NVectorsVar, BytesWrittenVar, CancellableVar.GoPointer(), &cerr)
@@ -166,8 +169,8 @@ func (x *PollableOutputStreamBase) WritevNonblocking(VectorsVar []OutputVector, 
 var XGPollableOutputStreamCanPoll func(uintptr) bool
 var XGPollableOutputStreamCreateSource func(uintptr, uintptr) *glib.Source
 var XGPollableOutputStreamIsWritable func(uintptr) bool
-var XGPollableOutputStreamWriteNonblocking func(uintptr, []byte, uint, uintptr, **glib.Error) int
-var XGPollableOutputStreamWritevNonblocking func(uintptr, []OutputVector, uint, uint, uintptr, **glib.Error) PollableReturn
+var XGPollableOutputStreamWriteNonblocking func(uintptr, uintptr, uint, uintptr, **glib.Error) int
+var XGPollableOutputStreamWritevNonblocking func(uintptr, uintptr, uint, uint, uintptr, **glib.Error) PollableReturn
 
 func init() {
 	lib, err := purego.Dlopen(core.GetPath("GIO"), purego.RTLD_NOW|purego.RTLD_GLOBAL)

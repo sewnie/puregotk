@@ -69,7 +69,7 @@ func (x *KeyFile) GetBoolean(GroupNameVar string, KeyVar string) (bool, error) {
 
 }
 
-var xKeyFileGetBooleanList func(uintptr, string, string, uint, **Error) []bool
+var xKeyFileGetBooleanList func(uintptr, string, string, uint, **Error) uintptr
 
 // Returns the values associated with @key under @group_name as
 // booleans.
@@ -78,7 +78,7 @@ var xKeyFileGetBooleanList func(uintptr, string, string, uint, **Error) []bool
 // %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
 // with @key cannot be interpreted as booleans then %NULL is returned
 // and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
-func (x *KeyFile) GetBooleanList(GroupNameVar string, KeyVar string, LengthVar uint) ([]bool, error) {
+func (x *KeyFile) GetBooleanList(GroupNameVar string, KeyVar string, LengthVar uint) (uintptr, error) {
 	var cerr *Error
 
 	cret := xKeyFileGetBooleanList(x.GoPointer(), GroupNameVar, KeyVar, LengthVar, &cerr)
@@ -130,7 +130,7 @@ func (x *KeyFile) GetDouble(GroupNameVar string, KeyVar string) (float64, error)
 
 }
 
-var xKeyFileGetDoubleList func(uintptr, string, string, uint, **Error) []float64
+var xKeyFileGetDoubleList func(uintptr, string, string, uint, **Error) uintptr
 
 // Returns the values associated with @key under @group_name as
 // doubles.
@@ -139,7 +139,7 @@ var xKeyFileGetDoubleList func(uintptr, string, string, uint, **Error) []float64
 // %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
 // with @key cannot be interpreted as doubles then %NULL is returned
 // and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
-func (x *KeyFile) GetDoubleList(GroupNameVar string, KeyVar string, LengthVar uint) ([]float64, error) {
+func (x *KeyFile) GetDoubleList(GroupNameVar string, KeyVar string, LengthVar uint) (uintptr, error) {
 	var cerr *Error
 
 	cret := xKeyFileGetDoubleList(x.GoPointer(), GroupNameVar, KeyVar, LengthVar, &cerr)
@@ -150,12 +150,12 @@ func (x *KeyFile) GetDoubleList(GroupNameVar string, KeyVar string, LengthVar ui
 
 }
 
-var xKeyFileGetGroups func(uintptr, uint) []string
+var xKeyFileGetGroups func(uintptr, uint) uintptr
 
 // Returns all groups in the key file loaded with @key_file.
 // The array of returned groups will be %NULL-terminated, so
 // @length may optionally be %NULL.
-func (x *KeyFile) GetGroups(LengthVar uint) []string {
+func (x *KeyFile) GetGroups(LengthVar uint) uintptr {
 
 	cret := xKeyFileGetGroups(x.GoPointer(), LengthVar)
 	return cret
@@ -198,7 +198,7 @@ func (x *KeyFile) GetInteger(GroupNameVar string, KeyVar string) (int, error) {
 
 }
 
-var xKeyFileGetIntegerList func(uintptr, string, string, uint, **Error) []int
+var xKeyFileGetIntegerList func(uintptr, string, string, uint, **Error) uintptr
 
 // Returns the values associated with @key under @group_name as
 // integers.
@@ -208,7 +208,7 @@ var xKeyFileGetIntegerList func(uintptr, string, string, uint, **Error) []int
 // with @key cannot be interpreted as integers, or are out of range for
 // #gint, then %NULL is returned
 // and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
-func (x *KeyFile) GetIntegerList(GroupNameVar string, KeyVar string, LengthVar uint) ([]int, error) {
+func (x *KeyFile) GetIntegerList(GroupNameVar string, KeyVar string, LengthVar uint) (uintptr, error) {
 	var cerr *Error
 
 	cret := xKeyFileGetIntegerList(x.GoPointer(), GroupNameVar, KeyVar, LengthVar, &cerr)
@@ -219,14 +219,14 @@ func (x *KeyFile) GetIntegerList(GroupNameVar string, KeyVar string, LengthVar u
 
 }
 
-var xKeyFileGetKeys func(uintptr, string, uint, **Error) []string
+var xKeyFileGetKeys func(uintptr, string, uint, **Error) uintptr
 
 // Returns all keys for the group name @group_name.  The array of
 // returned keys will be %NULL-terminated, so @length may
 // optionally be %NULL. In the event that the @group_name cannot
 // be found, %NULL is returned and @error is set to
 // %G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
-func (x *KeyFile) GetKeys(GroupNameVar string, LengthVar uint) ([]string, error) {
+func (x *KeyFile) GetKeys(GroupNameVar string, LengthVar uint) (uintptr, error) {
 	var cerr *Error
 
 	cret := xKeyFileGetKeys(x.GoPointer(), GroupNameVar, LengthVar, &cerr)
@@ -279,7 +279,7 @@ func (x *KeyFile) GetLocaleString(GroupNameVar string, KeyVar string, LocaleVar 
 
 }
 
-var xKeyFileGetLocaleStringList func(uintptr, string, string, string, uint, **Error) []string
+var xKeyFileGetLocaleStringList func(uintptr, string, string, string, uint, **Error) uintptr
 
 // Returns the values associated with @key under @group_name
 // translated in the given @locale if available.  If @locale is
@@ -295,7 +295,7 @@ var xKeyFileGetLocaleStringList func(uintptr, string, string, string, uint, **Er
 // can be found then the untranslated values are returned. The
 // returned array is %NULL-terminated, so @length may optionally
 // be %NULL.
-func (x *KeyFile) GetLocaleStringList(GroupNameVar string, KeyVar string, LocaleVar string, LengthVar uint) ([]string, error) {
+func (x *KeyFile) GetLocaleStringList(GroupNameVar string, KeyVar string, LocaleVar string, LengthVar uint) (uintptr, error) {
 	var cerr *Error
 
 	cret := xKeyFileGetLocaleStringList(x.GoPointer(), GroupNameVar, KeyVar, LocaleVar, LengthVar, &cerr)
@@ -336,7 +336,7 @@ func (x *KeyFile) GetString(GroupNameVar string, KeyVar string) (string, error) 
 
 }
 
-var xKeyFileGetStringList func(uintptr, string, string, uint, **Error) []string
+var xKeyFileGetStringList func(uintptr, string, string, uint, **Error) uintptr
 
 // Returns the values associated with @key under @group_name.
 //
@@ -344,7 +344,7 @@ var xKeyFileGetStringList func(uintptr, string, string, uint, **Error) []string
 // @error is set to %G_KEY_FILE_ERROR_KEY_NOT_FOUND.  In the
 // event that the @group_name cannot be found, %NULL is returned
 // and @error is set to %G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
-func (x *KeyFile) GetStringList(GroupNameVar string, KeyVar string, LengthVar uint) ([]string, error) {
+func (x *KeyFile) GetStringList(GroupNameVar string, KeyVar string, LengthVar uint) (uintptr, error) {
 	var cerr *Error
 
 	cret := xKeyFileGetStringList(x.GoPointer(), GroupNameVar, KeyVar, LengthVar, &cerr)
@@ -471,7 +471,7 @@ func (x *KeyFile) LoadFromDataDirs(FileVar string, FullPathVar string, FlagsVar 
 
 }
 
-var xKeyFileLoadFromDirs func(uintptr, string, []string, string, KeyFileFlags, **Error) bool
+var xKeyFileLoadFromDirs func(uintptr, string, uintptr, string, KeyFileFlags, **Error) bool
 
 // This function looks for a key file named @file in the paths
 // specified in @search_dirs, loads the file into @key_file and
@@ -482,7 +482,7 @@ var xKeyFileLoadFromDirs func(uintptr, string, []string, string, KeyFileFlags, *
 // the file is found but the OS returns an error when opening or reading the
 // file, a %G_FILE_ERROR is returned. If there is a problem parsing the file, a
 // %G_KEY_FILE_ERROR is returned.
-func (x *KeyFile) LoadFromDirs(FileVar string, SearchDirsVar []string, FullPathVar string, FlagsVar KeyFileFlags) (bool, error) {
+func (x *KeyFile) LoadFromDirs(FileVar string, SearchDirsVar uintptr, FullPathVar string, FlagsVar KeyFileFlags) (bool, error) {
 	var cerr *Error
 
 	cret := xKeyFileLoadFromDirs(x.GoPointer(), FileVar, SearchDirsVar, FullPathVar, FlagsVar, &cerr)
@@ -599,12 +599,12 @@ func (x *KeyFile) SetBoolean(GroupNameVar string, KeyVar string, ValueVar bool) 
 
 }
 
-var xKeyFileSetBooleanList func(uintptr, string, string, []bool, uint)
+var xKeyFileSetBooleanList func(uintptr, string, string, uintptr, uint)
 
 // Associates a list of boolean values with @key under @group_name.
 // If @key cannot be found then it is created.
 // If @group_name is %NULL, the start_group is used.
-func (x *KeyFile) SetBooleanList(GroupNameVar string, KeyVar string, ListVar []bool, LengthVar uint) {
+func (x *KeyFile) SetBooleanList(GroupNameVar string, KeyVar string, ListVar uintptr, LengthVar uint) {
 
 	xKeyFileSetBooleanList(x.GoPointer(), GroupNameVar, KeyVar, ListVar, LengthVar)
 
@@ -641,11 +641,11 @@ func (x *KeyFile) SetDouble(GroupNameVar string, KeyVar string, ValueVar float64
 
 }
 
-var xKeyFileSetDoubleList func(uintptr, string, string, []float64, uint)
+var xKeyFileSetDoubleList func(uintptr, string, string, uintptr, uint)
 
 // Associates a list of double values with @key under
 // @group_name.  If @key cannot be found then it is created.
-func (x *KeyFile) SetDoubleList(GroupNameVar string, KeyVar string, ListVar []float64, LengthVar uint) {
+func (x *KeyFile) SetDoubleList(GroupNameVar string, KeyVar string, ListVar uintptr, LengthVar uint) {
 
 	xKeyFileSetDoubleList(x.GoPointer(), GroupNameVar, KeyVar, ListVar, LengthVar)
 
@@ -671,11 +671,11 @@ func (x *KeyFile) SetInteger(GroupNameVar string, KeyVar string, ValueVar int) {
 
 }
 
-var xKeyFileSetIntegerList func(uintptr, string, string, []int, uint)
+var xKeyFileSetIntegerList func(uintptr, string, string, uintptr, uint)
 
 // Associates a list of integer values with @key under @group_name.
 // If @key cannot be found then it is created.
-func (x *KeyFile) SetIntegerList(GroupNameVar string, KeyVar string, ListVar []int, LengthVar uint) {
+func (x *KeyFile) SetIntegerList(GroupNameVar string, KeyVar string, ListVar uintptr, LengthVar uint) {
 
 	xKeyFileSetIntegerList(x.GoPointer(), GroupNameVar, KeyVar, ListVar, LengthVar)
 
@@ -702,12 +702,12 @@ func (x *KeyFile) SetLocaleString(GroupNameVar string, KeyVar string, LocaleVar 
 
 }
 
-var xKeyFileSetLocaleStringList func(uintptr, string, string, string, []string, uint)
+var xKeyFileSetLocaleStringList func(uintptr, string, string, string, uintptr, uint)
 
 // Associates a list of string values for @key and @locale under
 // @group_name.  If the translation for @key cannot be found then
 // it is created.
-func (x *KeyFile) SetLocaleStringList(GroupNameVar string, KeyVar string, LocaleVar string, ListVar []string, LengthVar uint) {
+func (x *KeyFile) SetLocaleStringList(GroupNameVar string, KeyVar string, LocaleVar string, ListVar uintptr, LengthVar uint) {
 
 	xKeyFileSetLocaleStringList(x.GoPointer(), GroupNameVar, KeyVar, LocaleVar, ListVar, LengthVar)
 
@@ -726,12 +726,12 @@ func (x *KeyFile) SetString(GroupNameVar string, KeyVar string, StringVar string
 
 }
 
-var xKeyFileSetStringList func(uintptr, string, string, []string, uint)
+var xKeyFileSetStringList func(uintptr, string, string, uintptr, uint)
 
 // Associates a list of string values for @key under @group_name.
 // If @key cannot be found then it is created.
 // If @group_name cannot be found then it is created.
-func (x *KeyFile) SetStringList(GroupNameVar string, KeyVar string, ListVar []string, LengthVar uint) {
+func (x *KeyFile) SetStringList(GroupNameVar string, KeyVar string, ListVar uintptr, LengthVar uint) {
 
 	xKeyFileSetStringList(x.GoPointer(), GroupNameVar, KeyVar, ListVar, LengthVar)
 

@@ -18,7 +18,7 @@ type TreeStoreClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *TreeStoreClass) GoPointer() uintptr {
@@ -105,10 +105,10 @@ func NewTreeStore(NColumnsVar int, varArgs ...interface{}) *TreeStore {
 	return cls
 }
 
-var xNewTreeStorev func(int, []types.GType) uintptr
+var xNewTreeStorev func(int, uintptr) uintptr
 
 // Non vararg creation function.  Used primarily by language bindings.
-func NewTreeStorev(NColumnsVar int, TypesVar []types.GType) *TreeStore {
+func NewTreeStorev(NColumnsVar int, TypesVar uintptr) *TreeStore {
 	var cls *TreeStore
 
 	cret := xNewTreeStorev(NColumnsVar, TypesVar)
@@ -218,12 +218,12 @@ func (x *TreeStore) InsertWithValues(IterVar *TreeIter, ParentVar *TreeIter, Pos
 
 }
 
-var xTreeStoreInsertWithValuesv func(uintptr, *TreeIter, *TreeIter, int, []int, []gobject.Value, int)
+var xTreeStoreInsertWithValuesv func(uintptr, *TreeIter, *TreeIter, int, uintptr, uintptr, int)
 
 // A variant of gtk_tree_store_insert_with_values() which takes
 // the columns and values as two arrays, instead of varargs.  This
 // function is mainly intended for language bindings.
-func (x *TreeStore) InsertWithValuesv(IterVar *TreeIter, ParentVar *TreeIter, PositionVar int, ColumnsVar []int, ValuesVar []gobject.Value, NValuesVar int) {
+func (x *TreeStore) InsertWithValuesv(IterVar *TreeIter, ParentVar *TreeIter, PositionVar int, ColumnsVar uintptr, ValuesVar uintptr, NValuesVar int) {
 
 	xTreeStoreInsertWithValuesv(x.GoPointer(), IterVar, ParentVar, PositionVar, ColumnsVar, ValuesVar, NValuesVar)
 
@@ -309,12 +309,12 @@ func (x *TreeStore) Remove(IterVar *TreeIter) bool {
 	return cret
 }
 
-var xTreeStoreReorder func(uintptr, *TreeIter, []int)
+var xTreeStoreReorder func(uintptr, *TreeIter, uintptr)
 
 // Reorders the children of @parent in @tree_store to follow the order
 // indicated by @new_order. Note that this function only works with
 // unsorted stores.
-func (x *TreeStore) Reorder(ParentVar *TreeIter, NewOrderVar []int) {
+func (x *TreeStore) Reorder(ParentVar *TreeIter, NewOrderVar uintptr) {
 
 	xTreeStoreReorder(x.GoPointer(), ParentVar, NewOrderVar)
 
@@ -337,13 +337,13 @@ func (x *TreeStore) Set(IterVar *TreeIter, varArgs ...interface{}) {
 
 }
 
-var xTreeStoreSetColumnTypes func(uintptr, int, []types.GType)
+var xTreeStoreSetColumnTypes func(uintptr, int, uintptr)
 
 // This function is meant primarily for `GObjects` that inherit from
 // `GtkTreeStore`, and should only be used when constructing a new
 // `GtkTreeStore`.  It will not function after a row has been added,
 // or a method on the `GtkTreeModel` interface is called.
-func (x *TreeStore) SetColumnTypes(NColumnsVar int, TypesVar []types.GType) {
+func (x *TreeStore) SetColumnTypes(NColumnsVar int, TypesVar uintptr) {
 
 	xTreeStoreSetColumnTypes(x.GoPointer(), NColumnsVar, TypesVar)
 
@@ -370,13 +370,13 @@ func (x *TreeStore) SetValue(IterVar *TreeIter, ColumnVar int, ValueVar *gobject
 
 }
 
-var xTreeStoreSetValuesv func(uintptr, *TreeIter, []int, []gobject.Value, int)
+var xTreeStoreSetValuesv func(uintptr, *TreeIter, uintptr, uintptr, int)
 
 // A variant of gtk_tree_store_set_valist() which takes
 // the columns and values as two arrays, instead of varargs.  This
 // function is mainly intended for language bindings or in case
 // the number of columns to change is not known until run-time.
-func (x *TreeStore) SetValuesv(IterVar *TreeIter, ColumnsVar []int, ValuesVar []gobject.Value, NValuesVar int) {
+func (x *TreeStore) SetValuesv(IterVar *TreeIter, ColumnsVar uintptr, ValuesVar uintptr, NValuesVar int) {
 
 	xTreeStoreSetValuesv(x.GoPointer(), IterVar, ColumnsVar, ValuesVar, NValuesVar)
 
@@ -393,6 +393,9 @@ func (x *TreeStore) Swap(AVar *TreeIter, BVar *TreeIter) {
 }
 
 func (c *TreeStore) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -774,7 +777,7 @@ func (x *TreeStore) RowsReordered(PathVar *TreePath, IterVar *TreeIter, NewOrder
 //
 // This should be called by models when their rows have been
 // reordered.
-func (x *TreeStore) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar []int, LengthVar int) {
+func (x *TreeStore) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar uintptr, LengthVar int) {
 
 	XGtkTreeModelRowsReorderedWithLength(x.GoPointer(), PathVar, IterVar, NewOrderVar, LengthVar)
 

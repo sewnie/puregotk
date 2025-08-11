@@ -43,11 +43,11 @@ type Accessible interface {
 	ResetRelation(RelationVar AccessibleRelation)
 	ResetState(StateVar AccessibleState)
 	UpdateProperty(FirstPropertyVar AccessibleProperty, varArgs ...interface{})
-	UpdatePropertyValue(NPropertiesVar int, PropertiesVar []AccessibleProperty, ValuesVar []gobject.Value)
+	UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr)
 	UpdateRelation(FirstRelationVar AccessibleRelation, varArgs ...interface{})
-	UpdateRelationValue(NRelationsVar int, RelationsVar []AccessibleRelation, ValuesVar []gobject.Value)
+	UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr)
 	UpdateState(FirstStateVar AccessibleState, varArgs ...interface{})
-	UpdateStateValue(NStatesVar int, StatesVar []AccessibleState, ValuesVar []gobject.Value)
+	UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr)
 }
 
 var xAccessibleGLibType func() types.GType
@@ -61,6 +61,9 @@ type AccessibleBase struct {
 }
 
 func (x *AccessibleBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -126,7 +129,7 @@ func (x *AccessibleBase) UpdateProperty(FirstPropertyVar AccessibleProperty, var
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *AccessibleBase) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *AccessibleBase) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -162,7 +165,7 @@ func (x *AccessibleBase) UpdateRelation(FirstRelationVar AccessibleRelation, var
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *AccessibleBase) UpdateRelationValue(NRelationsVar int, RelationsVar []AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *AccessibleBase) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -195,7 +198,7 @@ func (x *AccessibleBase) UpdateState(FirstStateVar AccessibleState, varArgs ...i
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *AccessibleBase) UpdateStateValue(NStatesVar int, StatesVar []AccessibleState, ValuesVar []gobject.Value) {
+func (x *AccessibleBase) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 
@@ -206,11 +209,11 @@ var XGtkAccessibleResetProperty func(uintptr, AccessibleProperty)
 var XGtkAccessibleResetRelation func(uintptr, AccessibleRelation)
 var XGtkAccessibleResetState func(uintptr, AccessibleState)
 var XGtkAccessibleUpdateProperty func(uintptr, AccessibleProperty, ...interface{})
-var XGtkAccessibleUpdatePropertyValue func(uintptr, int, []AccessibleProperty, []gobject.Value)
+var XGtkAccessibleUpdatePropertyValue func(uintptr, int, uintptr, uintptr)
 var XGtkAccessibleUpdateRelation func(uintptr, AccessibleRelation, ...interface{})
-var XGtkAccessibleUpdateRelationValue func(uintptr, int, []AccessibleRelation, []gobject.Value)
+var XGtkAccessibleUpdateRelationValue func(uintptr, int, uintptr, uintptr)
 var XGtkAccessibleUpdateState func(uintptr, AccessibleState, ...interface{})
-var XGtkAccessibleUpdateStateValue func(uintptr, int, []AccessibleState, []gobject.Value)
+var XGtkAccessibleUpdateStateValue func(uintptr, int, uintptr, uintptr)
 
 var xAccessiblePropertyInitValue func(AccessibleProperty, *gobject.Value)
 

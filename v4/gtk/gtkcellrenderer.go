@@ -18,7 +18,7 @@ type CellRendererClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *CellRendererClass) GoPointer() uintptr {
@@ -418,6 +418,9 @@ func (x *CellRenderer) StopEditing(CanceledVar bool) {
 }
 
 func (c *CellRenderer) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

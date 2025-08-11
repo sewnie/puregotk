@@ -82,7 +82,7 @@ type ActionGroup interface {
 	GetActionStateHint(ActionNameVar string) *glib.Variant
 	GetActionStateType(ActionNameVar string) *glib.VariantType
 	HasAction(ActionNameVar string) bool
-	ListActions() []string
+	ListActions() uintptr
 	QueryAction(ActionNameVar string, EnabledVar bool, ParameterTypeVar **glib.VariantType, StateTypeVar **glib.VariantType, StateHintVar **glib.Variant, StateVar **glib.Variant) bool
 }
 
@@ -97,6 +97,9 @@ type ActionGroupBase struct {
 }
 
 func (x *ActionGroupBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -296,7 +299,7 @@ func (x *ActionGroupBase) HasAction(ActionNameVar string) bool {
 //
 // The caller is responsible for freeing the list with g_strfreev() when
 // it is no longer required.
-func (x *ActionGroupBase) ListActions() []string {
+func (x *ActionGroupBase) ListActions() uintptr {
 
 	cret := XGActionGroupListActions(x.GoPointer())
 	return cret
@@ -347,7 +350,7 @@ var XGActionGroupGetActionState func(uintptr, string) *glib.Variant
 var XGActionGroupGetActionStateHint func(uintptr, string) *glib.Variant
 var XGActionGroupGetActionStateType func(uintptr, string) *glib.VariantType
 var XGActionGroupHasAction func(uintptr, string) bool
-var XGActionGroupListActions func(uintptr) []string
+var XGActionGroupListActions func(uintptr) uintptr
 var XGActionGroupQueryAction func(uintptr, string, bool, **glib.VariantType, **glib.VariantType, **glib.Variant, **glib.Variant) bool
 
 func init() {

@@ -833,7 +833,7 @@ func (x *Socket) Listen() (bool, error) {
 
 }
 
-var xSocketReceive func(uintptr, []byte, uint, uintptr, **glib.Error) int
+var xSocketReceive func(uintptr, uintptr, uint, uintptr, **glib.Error) int
 
 // Receive data (up to @size bytes) from a socket. This is mainly used by
 // connection-oriented sockets; it is identical to g_socket_receive_from()
@@ -858,7 +858,7 @@ var xSocketReceive func(uintptr, []byte, uint, uintptr, **glib.Error) int
 // %G_IO_IN condition.
 //
 // On error -1 is returned and @error is set accordingly.
-func (x *Socket) Receive(BufferVar []byte, SizeVar uint, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) Receive(BufferVar uintptr, SizeVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketReceive(x.GoPointer(), BufferVar, SizeVar, CancellableVar.GoPointer(), &cerr)
@@ -869,7 +869,7 @@ func (x *Socket) Receive(BufferVar []byte, SizeVar uint, CancellableVar *Cancell
 
 }
 
-var xSocketReceiveFrom func(uintptr, *uintptr, []byte, uint, uintptr, **glib.Error) int
+var xSocketReceiveFrom func(uintptr, *uintptr, uintptr, uint, uintptr, **glib.Error) int
 
 // Receive data (up to @size bytes) from a socket.
 //
@@ -878,7 +878,7 @@ var xSocketReceiveFrom func(uintptr, *uintptr, []byte, uint, uintptr, **glib.Err
 // @address is owned by the caller.
 //
 // See g_socket_receive() for additional information.
-func (x *Socket) ReceiveFrom(AddressVar **SocketAddress, BufferVar []byte, SizeVar uint, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) ReceiveFrom(AddressVar **SocketAddress, BufferVar uintptr, SizeVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketReceiveFrom(x.GoPointer(), gobject.ConvertPtr(AddressVar), BufferVar, SizeVar, CancellableVar.GoPointer(), &cerr)
@@ -889,7 +889,7 @@ func (x *Socket) ReceiveFrom(AddressVar **SocketAddress, BufferVar []byte, SizeV
 
 }
 
-var xSocketReceiveMessage func(uintptr, *uintptr, []InputVector, int, uintptr, int, int, uintptr, **glib.Error) int
+var xSocketReceiveMessage func(uintptr, *uintptr, uintptr, int, uintptr, int, int, uintptr, **glib.Error) int
 
 // Receive data from a socket.  For receiving multiple messages, see
 // g_socket_receive_messages(); for easier use, see
@@ -950,7 +950,7 @@ var xSocketReceiveMessage func(uintptr, *uintptr, []InputVector, int, uintptr, i
 // %G_IO_IN condition.
 //
 // On error -1 is returned and @error is set accordingly.
-func (x *Socket) ReceiveMessage(AddressVar **SocketAddress, VectorsVar []InputVector, NumVectorsVar int, MessagesVar uintptr, NumMessagesVar int, FlagsVar int, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) ReceiveMessage(AddressVar **SocketAddress, VectorsVar uintptr, NumVectorsVar int, MessagesVar uintptr, NumMessagesVar int, FlagsVar int, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketReceiveMessage(x.GoPointer(), gobject.ConvertPtr(AddressVar), VectorsVar, NumVectorsVar, MessagesVar, NumMessagesVar, FlagsVar, CancellableVar.GoPointer(), &cerr)
@@ -961,7 +961,7 @@ func (x *Socket) ReceiveMessage(AddressVar **SocketAddress, VectorsVar []InputVe
 
 }
 
-var xSocketReceiveMessages func(uintptr, []InputMessage, uint, int, uintptr, **glib.Error) int
+var xSocketReceiveMessages func(uintptr, uintptr, uint, int, uintptr, **glib.Error) int
 
 // Receive multiple data messages from @socket in one go.  This is the most
 // complicated and fully-featured version of this call. For easier use, see
@@ -1011,7 +1011,7 @@ var xSocketReceiveMessages func(uintptr, []InputMessage, uint, int, uintptr, **g
 // On error -1 is returned and @error is set accordingly. An error will only
 // be returned if zero messages could be received; otherwise the number of
 // messages successfully received before the error will be returned.
-func (x *Socket) ReceiveMessages(MessagesVar []InputMessage, NumMessagesVar uint, FlagsVar int, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) ReceiveMessages(MessagesVar uintptr, NumMessagesVar uint, FlagsVar int, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketReceiveMessages(x.GoPointer(), MessagesVar, NumMessagesVar, FlagsVar, CancellableVar.GoPointer(), &cerr)
@@ -1022,12 +1022,12 @@ func (x *Socket) ReceiveMessages(MessagesVar []InputMessage, NumMessagesVar uint
 
 }
 
-var xSocketReceiveWithBlocking func(uintptr, []byte, uint, bool, uintptr, **glib.Error) int
+var xSocketReceiveWithBlocking func(uintptr, uintptr, uint, bool, uintptr, **glib.Error) int
 
 // This behaves exactly the same as g_socket_receive(), except that
 // the choice of blocking or non-blocking behavior is determined by
 // the @blocking argument rather than by @socket's properties.
-func (x *Socket) ReceiveWithBlocking(BufferVar []byte, SizeVar uint, BlockingVar bool, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) ReceiveWithBlocking(BufferVar uintptr, SizeVar uint, BlockingVar bool, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketReceiveWithBlocking(x.GoPointer(), BufferVar, SizeVar, BlockingVar, CancellableVar.GoPointer(), &cerr)
@@ -1038,7 +1038,7 @@ func (x *Socket) ReceiveWithBlocking(BufferVar []byte, SizeVar uint, BlockingVar
 
 }
 
-var xSocketSend func(uintptr, []byte, uint, uintptr, **glib.Error) int
+var xSocketSend func(uintptr, uintptr, uint, uintptr, **glib.Error) int
 
 // Tries to send @size bytes from @buffer on the socket. This is
 // mainly used by connection-oriented sockets; it is identical to
@@ -1054,7 +1054,7 @@ var xSocketSend func(uintptr, []byte, uint, uintptr, **glib.Error) int
 // very common due to the way the underlying APIs work.)
 //
 // On error -1 is returned and @error is set accordingly.
-func (x *Socket) Send(BufferVar []byte, SizeVar uint, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) Send(BufferVar uintptr, SizeVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketSend(x.GoPointer(), BufferVar, SizeVar, CancellableVar.GoPointer(), &cerr)
@@ -1065,7 +1065,7 @@ func (x *Socket) Send(BufferVar []byte, SizeVar uint, CancellableVar *Cancellabl
 
 }
 
-var xSocketSendMessage func(uintptr, uintptr, []OutputVector, int, uintptr, int, int, uintptr, **glib.Error) int
+var xSocketSendMessage func(uintptr, uintptr, uintptr, int, uintptr, int, int, uintptr, **glib.Error) int
 
 // Send data to @address on @socket.  For sending multiple messages see
 // g_socket_send_messages(); for easier use, see
@@ -1109,7 +1109,7 @@ var xSocketSendMessage func(uintptr, uintptr, []OutputVector, int, uintptr, int,
 // function.
 //
 // On error -1 is returned and @error is set accordingly.
-func (x *Socket) SendMessage(AddressVar *SocketAddress, VectorsVar []OutputVector, NumVectorsVar int, MessagesVar uintptr, NumMessagesVar int, FlagsVar int, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) SendMessage(AddressVar *SocketAddress, VectorsVar uintptr, NumVectorsVar int, MessagesVar uintptr, NumMessagesVar int, FlagsVar int, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketSendMessage(x.GoPointer(), AddressVar.GoPointer(), VectorsVar, NumVectorsVar, MessagesVar, NumMessagesVar, FlagsVar, CancellableVar.GoPointer(), &cerr)
@@ -1120,7 +1120,7 @@ func (x *Socket) SendMessage(AddressVar *SocketAddress, VectorsVar []OutputVecto
 
 }
 
-var xSocketSendMessageWithTimeout func(uintptr, uintptr, []OutputVector, int, uintptr, int, int, int64, uint, uintptr, **glib.Error) PollableReturn
+var xSocketSendMessageWithTimeout func(uintptr, uintptr, uintptr, int, uintptr, int, int, int64, uint, uintptr, **glib.Error) PollableReturn
 
 // This behaves exactly the same as g_socket_send_message(), except that
 // the choice of timeout behavior is determined by the @timeout_us argument
@@ -1129,7 +1129,7 @@ var xSocketSendMessageWithTimeout func(uintptr, uintptr, []OutputVector, int, ui
 // On error %G_POLLABLE_RETURN_FAILED is returned and @error is set accordingly, or
 // if the socket is currently not writable %G_POLLABLE_RETURN_WOULD_BLOCK is
 // returned. @bytes_written will contain 0 in both cases.
-func (x *Socket) SendMessageWithTimeout(AddressVar *SocketAddress, VectorsVar []OutputVector, NumVectorsVar int, MessagesVar uintptr, NumMessagesVar int, FlagsVar int, TimeoutUsVar int64, BytesWrittenVar uint, CancellableVar *Cancellable) (PollableReturn, error) {
+func (x *Socket) SendMessageWithTimeout(AddressVar *SocketAddress, VectorsVar uintptr, NumVectorsVar int, MessagesVar uintptr, NumMessagesVar int, FlagsVar int, TimeoutUsVar int64, BytesWrittenVar uint, CancellableVar *Cancellable) (PollableReturn, error) {
 	var cerr *glib.Error
 
 	cret := xSocketSendMessageWithTimeout(x.GoPointer(), AddressVar.GoPointer(), VectorsVar, NumVectorsVar, MessagesVar, NumMessagesVar, FlagsVar, TimeoutUsVar, BytesWrittenVar, CancellableVar.GoPointer(), &cerr)
@@ -1140,7 +1140,7 @@ func (x *Socket) SendMessageWithTimeout(AddressVar *SocketAddress, VectorsVar []
 
 }
 
-var xSocketSendMessages func(uintptr, []OutputMessage, uint, int, uintptr, **glib.Error) int
+var xSocketSendMessages func(uintptr, uintptr, uint, int, uintptr, **glib.Error) int
 
 // Send multiple data messages from @socket in one go.  This is the most
 // complicated and fully-featured version of this call. For easier use, see
@@ -1176,7 +1176,7 @@ var xSocketSendMessages func(uintptr, []OutputMessage, uint, int, uintptr, **gli
 // On error -1 is returned and @error is set accordingly. An error will only
 // be returned if zero messages could be sent; otherwise the number of messages
 // successfully sent before the error will be returned.
-func (x *Socket) SendMessages(MessagesVar []OutputMessage, NumMessagesVar uint, FlagsVar int, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) SendMessages(MessagesVar uintptr, NumMessagesVar uint, FlagsVar int, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketSendMessages(x.GoPointer(), MessagesVar, NumMessagesVar, FlagsVar, CancellableVar.GoPointer(), &cerr)
@@ -1187,14 +1187,14 @@ func (x *Socket) SendMessages(MessagesVar []OutputMessage, NumMessagesVar uint, 
 
 }
 
-var xSocketSendTo func(uintptr, uintptr, []byte, uint, uintptr, **glib.Error) int
+var xSocketSendTo func(uintptr, uintptr, uintptr, uint, uintptr, **glib.Error) int
 
 // Tries to send @size bytes from @buffer to @address. If @address is
 // %NULL then the message is sent to the default receiver (set by
 // g_socket_connect()).
 //
 // See g_socket_send() for additional information.
-func (x *Socket) SendTo(AddressVar *SocketAddress, BufferVar []byte, SizeVar uint, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) SendTo(AddressVar *SocketAddress, BufferVar uintptr, SizeVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketSendTo(x.GoPointer(), AddressVar.GoPointer(), BufferVar, SizeVar, CancellableVar.GoPointer(), &cerr)
@@ -1205,12 +1205,12 @@ func (x *Socket) SendTo(AddressVar *SocketAddress, BufferVar []byte, SizeVar uin
 
 }
 
-var xSocketSendWithBlocking func(uintptr, []byte, uint, bool, uintptr, **glib.Error) int
+var xSocketSendWithBlocking func(uintptr, uintptr, uint, bool, uintptr, **glib.Error) int
 
 // This behaves exactly the same as g_socket_send(), except that
 // the choice of blocking or non-blocking behavior is determined by
 // the @blocking argument rather than by @socket's properties.
-func (x *Socket) SendWithBlocking(BufferVar []byte, SizeVar uint, BlockingVar bool, CancellableVar *Cancellable) (int, error) {
+func (x *Socket) SendWithBlocking(BufferVar uintptr, SizeVar uint, BlockingVar bool, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
 	cret := xSocketSendWithBlocking(x.GoPointer(), BufferVar, SizeVar, BlockingVar, CancellableVar.GoPointer(), &cerr)
@@ -1413,6 +1413,9 @@ func (x *Socket) SpeaksIpv4() bool {
 }
 
 func (c *Socket) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

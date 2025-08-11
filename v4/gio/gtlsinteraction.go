@@ -31,7 +31,7 @@ type TlsInteractionClass struct {
 
 	ParentClass uintptr
 
-	Padding [21]uintptr
+	Padding uintptr
 }
 
 func (x *TlsInteractionClass) GoPointer() uintptr {
@@ -287,6 +287,9 @@ func (x *TlsInteraction) RequestCertificateFinish(ResultVar AsyncResult) (TlsInt
 }
 
 func (c *TlsInteraction) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

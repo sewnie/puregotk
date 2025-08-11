@@ -120,10 +120,10 @@ func (x *Vec2) Init(XVar float32, YVar float32) *Vec2 {
 	return cret
 }
 
-var xVec2InitFromFloat func(uintptr, [2]float32) *Vec2
+var xVec2InitFromFloat func(uintptr, uintptr) *Vec2
 
 // Initializes @v with the contents of the given array.
-func (x *Vec2) InitFromFloat(SrcVar [2]float32) *Vec2 {
+func (x *Vec2) InitFromFloat(SrcVar uintptr) *Vec2 {
 
 	cret := xVec2InitFromFloat(x.GoPointer(), SrcVar)
 	return cret
@@ -234,10 +234,10 @@ func (x *Vec2) Subtract(BVar *Vec2, ResVar *Vec2) {
 
 }
 
-var xVec2ToFloat func(uintptr, [2]float32)
+var xVec2ToFloat func(uintptr, uintptr)
 
 // Stores the components of @v into an array.
-func (x *Vec2) ToFloat(DestVar [2]float32) {
+func (x *Vec2) ToFloat(DestVar uintptr) {
 
 	xVec2ToFloat(x.GoPointer(), DestVar)
 

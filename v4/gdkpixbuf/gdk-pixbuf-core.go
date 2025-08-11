@@ -13,7 +13,7 @@ import (
 // pixel array so that a pixbuf can be created from it; in this case you
 // will need to pass in a function of type `GdkPixbufDestroyNotify` so that
 // the pixel data can be freed when the pixbuf is finalized.
-type PixbufDestroyNotify func([]byte, uintptr)
+type PixbufDestroyNotify func(uintptr, uintptr)
 
 // Save functions used by [method@GdkPixbuf.Pixbuf.save_to_callback].
 //
@@ -23,7 +23,7 @@ type PixbufDestroyNotify func([]byte, uintptr)
 // If successful it should return `TRUE`; if an error occurs it should set
 // `error` and return `FALSE`, in which case `gdk_pixbuf_save_to_callback()`
 // will fail with the same error.
-type PixbufSaveFunc func([]byte, uint, **glib.Error, uintptr) bool
+type PixbufSaveFunc func(uintptr, uint, **glib.Error, uintptr) bool
 
 // This enumeration defines the color spaces that are supported by
 // the gdk-pixbuf library.

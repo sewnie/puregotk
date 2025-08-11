@@ -19,7 +19,7 @@ type ApplicationClass struct {
 
 	ParentClass uintptr
 
-	Padding [4]uintptr
+	Padding uintptr
 }
 
 func (x *ApplicationClass) GoPointer() uintptr {
@@ -111,6 +111,9 @@ func (x *Application) GetStyleManager() *StyleManager {
 }
 
 func (c *Application) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -310,7 +313,7 @@ func (x *Application) HasAction(ActionNameVar string) bool {
 //
 // The caller is responsible for freeing the list with g_strfreev() when
 // it is no longer required.
-func (x *Application) ListActions() []string {
+func (x *Application) ListActions() uintptr {
 
 	cret := gio.XGActionGroupListActions(x.GoPointer())
 	return cret
@@ -404,7 +407,7 @@ func (x *Application) AddAction(ActionVar gio.Action) {
 //	}
 //
 // ]|
-func (x *Application) AddActionEntries(EntriesVar []gio.ActionEntry, NEntriesVar int, UserDataVar uintptr) {
+func (x *Application) AddActionEntries(EntriesVar uintptr, NEntriesVar int, UserDataVar uintptr) {
 
 	gio.XGActionMapAddActionEntries(x.GoPointer(), EntriesVar, NEntriesVar, UserDataVar)
 

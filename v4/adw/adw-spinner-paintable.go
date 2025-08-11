@@ -115,6 +115,9 @@ func (x *SpinnerPaintable) SetWidget(WidgetVar *gtk.Widget) {
 }
 
 func (c *SpinnerPaintable) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -270,7 +273,7 @@ func (x *SpinnerPaintable) Snapshot(SnapshotVar *gdk.Snapshot, WidthVar float64,
 //
 // If less than 4 colors are provided, GTK will pad the array with default
 // colors.
-func (x *SpinnerPaintable) SnapshotSymbolic(SnapshotVar *gdk.Snapshot, WidthVar float64, HeightVar float64, ColorsVar []gdk.RGBA, NColorsVar uint) {
+func (x *SpinnerPaintable) SnapshotSymbolic(SnapshotVar *gdk.Snapshot, WidthVar float64, HeightVar float64, ColorsVar uintptr, NColorsVar uint) {
 
 	gtk.XGtkSymbolicPaintableSnapshotSymbolic(x.GoPointer(), SnapshotVar.GoPointer(), WidthVar, HeightVar, ColorsVar, NColorsVar)
 

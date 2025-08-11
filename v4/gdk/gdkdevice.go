@@ -26,7 +26,7 @@ type TimeCoord struct {
 
 	Flags AxisFlags
 
-	Axes [12]float64
+	Axes uintptr
 }
 
 func (x *TimeCoord) GoPointer() uintptr {
@@ -330,6 +330,9 @@ func (x *Device) HasBidiLayouts() bool {
 }
 
 func (c *Device) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

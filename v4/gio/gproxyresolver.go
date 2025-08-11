@@ -34,9 +34,9 @@ type ProxyResolver interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
 	IsSupported() bool
-	Lookup(UriVar string, CancellableVar *Cancellable) []string
+	Lookup(UriVar string, CancellableVar *Cancellable) uintptr
 	LookupAsync(UriVar string, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr)
-	LookupFinish(ResultVar AsyncResult) []string
+	LookupFinish(ResultVar AsyncResult) uintptr
 }
 
 var xProxyResolverGLibType func() types.GType
@@ -50,6 +50,9 @@ type ProxyResolverBase struct {
 }
 
 func (x *ProxyResolverBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -81,7 +84,7 @@ func (x *ProxyResolverBase) IsSupported() bool {
 // `direct://` is used when no proxy is needed.
 // Direct connection should not be attempted unless it is part of the
 // returned array of proxies.
-func (x *ProxyResolverBase) Lookup(UriVar string, CancellableVar *Cancellable) ([]string, error) {
+func (x *ProxyResolverBase) Lookup(UriVar string, CancellableVar *Cancellable) (uintptr, error) {
 	var cerr *glib.Error
 
 	cret := XGProxyResolverLookup(x.GoPointer(), UriVar, CancellableVar.GoPointer(), &cerr)
@@ -103,7 +106,7 @@ func (x *ProxyResolverBase) LookupAsync(UriVar string, CancellableVar *Cancellab
 // Call this function to obtain the array of proxy URIs when
 // g_proxy_resolver_lookup_async() is complete. See
 // g_proxy_resolver_lookup() for more details.
-func (x *ProxyResolverBase) LookupFinish(ResultVar AsyncResult) ([]string, error) {
+func (x *ProxyResolverBase) LookupFinish(ResultVar AsyncResult) (uintptr, error) {
 	var cerr *glib.Error
 
 	cret := XGProxyResolverLookupFinish(x.GoPointer(), ResultVar.GoPointer(), &cerr)
@@ -115,9 +118,9 @@ func (x *ProxyResolverBase) LookupFinish(ResultVar AsyncResult) ([]string, error
 }
 
 var XGProxyResolverIsSupported func(uintptr) bool
-var XGProxyResolverLookup func(uintptr, string, uintptr, **glib.Error) []string
+var XGProxyResolverLookup func(uintptr, string, uintptr, **glib.Error) uintptr
 var XGProxyResolverLookupAsync func(uintptr, string, uintptr, uintptr, uintptr)
-var XGProxyResolverLookupFinish func(uintptr, uintptr, **glib.Error) []string
+var XGProxyResolverLookupFinish func(uintptr, uintptr, **glib.Error) uintptr
 
 const (
 	// Extension point for proxy resolving functionality.

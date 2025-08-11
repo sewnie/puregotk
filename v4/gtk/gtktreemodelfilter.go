@@ -29,7 +29,7 @@ type TreeModelFilterClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *TreeModelFilterClass) GoPointer() uintptr {
@@ -213,7 +213,7 @@ func (x *TreeModelFilter) Refilter() {
 
 }
 
-var xTreeModelFilterSetModifyFunc func(uintptr, int, []types.GType, uintptr, uintptr, uintptr)
+var xTreeModelFilterSetModifyFunc func(uintptr, int, uintptr, uintptr, uintptr, uintptr)
 
 // With the @n_columns and @types parameters, you give an array of column
 // types for this model (which will be exposed to the parent model/view).
@@ -225,7 +225,7 @@ var xTreeModelFilterSetModifyFunc func(uintptr, int, []types.GType, uintptr, uin
 //
 // Note that gtk_tree_model_filter_set_modify_func()
 // can only be called once for a given filter model.
-func (x *TreeModelFilter) SetModifyFunc(NColumnsVar int, TypesVar []types.GType, FuncVar *TreeModelFilterModifyFunc, DataVar uintptr, DestroyVar *glib.DestroyNotify) {
+func (x *TreeModelFilter) SetModifyFunc(NColumnsVar int, TypesVar uintptr, FuncVar *TreeModelFilterModifyFunc, DataVar uintptr, DestroyVar *glib.DestroyNotify) {
 
 	xTreeModelFilterSetModifyFunc(x.GoPointer(), NColumnsVar, TypesVar, glib.NewCallback(FuncVar), DataVar, glib.NewCallback(DestroyVar))
 
@@ -294,6 +294,9 @@ func (x *TreeModelFilter) SetVisibleFunc(FuncVar *TreeModelFilterVisibleFunc, Da
 }
 
 func (c *TreeModelFilter) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -642,7 +645,7 @@ func (x *TreeModelFilter) RowsReordered(PathVar *TreePath, IterVar *TreeIter, Ne
 //
 // This should be called by models when their rows have been
 // reordered.
-func (x *TreeModelFilter) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar []int, LengthVar int) {
+func (x *TreeModelFilter) RowsReorderedWithLength(PathVar *TreePath, IterVar *TreeIter, NewOrderVar uintptr, LengthVar int) {
 
 	XGtkTreeModelRowsReorderedWithLength(x.GoPointer(), PathVar, IterVar, NewOrderVar, LengthVar)
 

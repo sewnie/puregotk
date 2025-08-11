@@ -364,7 +364,7 @@ func (x *TabOverview) SetView(ViewVar *TabView) {
 
 }
 
-var xTabOverviewSetupExtraDropTarget func(uintptr, gdk.DragAction, []types.GType, uint)
+var xTabOverviewSetupExtraDropTarget func(uintptr, gdk.DragAction, uintptr, uint)
 
 // Sets the supported types for this drop target.
 //
@@ -378,13 +378,16 @@ var xTabOverviewSetupExtraDropTarget func(uintptr, gdk.DragAction, []types.GType
 //
 // The [signal@TabOverview::extra-drag-drop] signal can be used to handle the
 // drop.
-func (x *TabOverview) SetupExtraDropTarget(ActionsVar gdk.DragAction, TypesVar []types.GType, NTypesVar uint) {
+func (x *TabOverview) SetupExtraDropTarget(ActionsVar gdk.DragAction, TypesVar uintptr, NTypesVar uint) {
 
 	xTabOverviewSetupExtraDropTarget(x.GoPointer(), ActionsVar, TypesVar, NTypesVar)
 
 }
 
 func (c *TabOverview) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -530,7 +533,7 @@ func (x *TabOverview) UpdateProperty(FirstPropertyVar gtk.AccessibleProperty, va
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *TabOverview) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []gtk.AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *TabOverview) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -566,7 +569,7 @@ func (x *TabOverview) UpdateRelation(FirstRelationVar gtk.AccessibleRelation, va
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *TabOverview) UpdateRelationValue(NRelationsVar int, RelationsVar []gtk.AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *TabOverview) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -599,7 +602,7 @@ func (x *TabOverview) UpdateState(FirstStateVar gtk.AccessibleState, varArgs ...
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *TabOverview) UpdateStateValue(NStatesVar int, StatesVar []gtk.AccessibleState, ValuesVar []gobject.Value) {
+func (x *TabOverview) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 

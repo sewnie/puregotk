@@ -32,7 +32,7 @@ type PixbufModuleFillInfoFunc func(*PixbufFormat)
 type PixbufModuleFillVtableFunc func(*PixbufModule)
 
 // Incrementally loads a buffer into the image data.
-type PixbufModuleIncrementLoadFunc func(uintptr, []byte, uint, **glib.Error) bool
+type PixbufModuleIncrementLoadFunc func(uintptr, uintptr, uint, **glib.Error) bool
 
 // Loads a file from a standard C file stream into a new `GdkPixbufAnimation`.
 //
@@ -60,14 +60,14 @@ type PixbufModulePreparedFunc func(uintptr, uintptr, uintptr)
 // The optional `option_keys` and `option_values` arrays contain the keys and
 // values (in the same order) for attributes to be saved alongside the image
 // data.
-type PixbufModuleSaveCallbackFunc func(uintptr, uintptr, uintptr, []string, []string, **glib.Error) bool
+type PixbufModuleSaveCallbackFunc func(uintptr, uintptr, uintptr, uintptr, uintptr, **glib.Error) bool
 
 // Saves a `GdkPixbuf` into a standard C file stream.
 //
 // The optional `param_keys` and `param_values` arrays contain the keys and
 // values (in the same order) for attributes to be saved alongside the image
 // data.
-type PixbufModuleSaveFunc func(uintptr, uintptr, []string, []string, **glib.Error) bool
+type PixbufModuleSaveFunc func(uintptr, uintptr, uintptr, uintptr, **glib.Error) bool
 
 // Checks whether the given `option_key` is supported when saving.
 type PixbufModuleSaveOptionSupportedFunc func(string) bool
@@ -116,9 +116,9 @@ type PixbufFormat struct {
 
 	Description uintptr
 
-	MimeTypes []string
+	MimeTypes uintptr
 
-	Extensions []string
+	Extensions uintptr
 
 	Flags uint32
 
@@ -165,11 +165,11 @@ func (x *PixbufFormat) GetDescription() string {
 	return cret
 }
 
-var xPixbufFormatGetExtensions func(uintptr) []string
+var xPixbufFormatGetExtensions func(uintptr) uintptr
 
 // Returns the filename extensions typically used for files in the
 // given format.
-func (x *PixbufFormat) GetExtensions() []string {
+func (x *PixbufFormat) GetExtensions() uintptr {
 
 	cret := xPixbufFormatGetExtensions(x.GoPointer())
 	return cret
@@ -187,10 +187,10 @@ func (x *PixbufFormat) GetLicense() string {
 	return cret
 }
 
-var xPixbufFormatGetMimeTypes func(uintptr) []string
+var xPixbufFormatGetMimeTypes func(uintptr) uintptr
 
 // Returns the mime types supported by the format.
-func (x *PixbufFormat) GetMimeTypes() []string {
+func (x *PixbufFormat) GetMimeTypes() uintptr {
 
 	cret := xPixbufFormatGetMimeTypes(x.GoPointer())
 	return cret

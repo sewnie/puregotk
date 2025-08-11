@@ -17,7 +17,7 @@ type CellRendererTextClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *CellRendererTextClass) GoPointer() uintptr {
@@ -87,6 +87,9 @@ func (x *CellRendererText) SetFixedHeightFromFont(NumberOfRowsVar int) {
 }
 
 func (c *CellRendererText) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

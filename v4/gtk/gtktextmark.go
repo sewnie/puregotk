@@ -16,7 +16,7 @@ type TextMarkClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *TextMarkClass) GoPointer() uintptr {
@@ -169,6 +169,9 @@ func (x *TextMark) SetVisible(SettingVar bool) {
 }
 
 func (c *TextMark) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

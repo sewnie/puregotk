@@ -337,7 +337,7 @@ func GetRealName() string {
 	return cret
 }
 
-var xGetSystemConfigDirs func() []string
+var xGetSystemConfigDirs func() uintptr
 
 // Returns an ordered list of base directories in which to access
 // system-wide configuration information.
@@ -359,13 +359,13 @@ var xGetSystemConfigDirs func() []string
 //
 // The return value is cached and modifying it at runtime is not supported, as
 // it’s not thread-safe to modify environment variables at runtime.
-func GetSystemConfigDirs() []string {
+func GetSystemConfigDirs() uintptr {
 
 	cret := xGetSystemConfigDirs()
 	return cret
 }
 
-var xGetSystemDataDirs func() []string
+var xGetSystemDataDirs func() uintptr
 
 // Returns an ordered list of base directories in which to access
 // system-wide application data.
@@ -401,7 +401,7 @@ var xGetSystemDataDirs func() []string
 //
 // The return value is cached and modifying it at runtime is not supported, as
 // it’s not thread-safe to modify environment variables at runtime.
-func GetSystemDataDirs() []string {
+func GetSystemDataDirs() uintptr {
 
 	cret := xGetSystemDataDirs()
 	return cret
@@ -588,7 +588,7 @@ func NullifyPointer(NullifyLocationVar uintptr) {
 
 }
 
-var xParseDebugString func(string, []DebugKey, uint) uint
+var xParseDebugString func(string, uintptr, uint) uint
 
 // Parses a string containing debugging options
 // into a %guint containing bit flags. This is used
@@ -602,7 +602,7 @@ var xParseDebugString func(string, []DebugKey, uint) uint
 //
 // If @string is equal to "help", all the available keys in @keys
 // are printed out to standard error.
-func ParseDebugString(StringVar string, KeysVar []DebugKey, NkeysVar uint) uint {
+func ParseDebugString(StringVar string, KeysVar uintptr, NkeysVar uint) uint {
 
 	cret := xParseDebugString(StringVar, KeysVar, NkeysVar)
 	return cret

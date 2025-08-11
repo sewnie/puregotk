@@ -16,7 +16,7 @@ type CellAreaContextClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *CellAreaContextClass) GoPointer() uintptr {
@@ -229,6 +229,9 @@ func (x *CellAreaContext) Reset() {
 }
 
 func (c *CellAreaContext) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

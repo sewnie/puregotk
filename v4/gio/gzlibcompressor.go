@@ -90,6 +90,9 @@ func (x *ZlibCompressor) SetFileInfo(FileInfoVar *FileInfo) {
 }
 
 func (c *ZlibCompressor) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -179,7 +182,7 @@ func (c *ZlibCompressor) SetGoPointer(ptr uintptr) {
 // at a partial multibyte sequence). Converters are supposed to try
 // to produce as much output as possible and then return an error
 // (typically %G_IO_ERROR_PARTIAL_INPUT).
-func (x *ZlibCompressor) Convert(InbufVar []byte, InbufSizeVar uint, OutbufVar []byte, OutbufSizeVar uint, FlagsVar ConverterFlags, BytesReadVar uint, BytesWrittenVar uint) (ConverterResult, error) {
+func (x *ZlibCompressor) Convert(InbufVar uintptr, InbufSizeVar uint, OutbufVar uintptr, OutbufSizeVar uint, FlagsVar ConverterFlags, BytesReadVar uint, BytesWrittenVar uint) (ConverterResult, error) {
 	var cerr *glib.Error
 
 	cret := XGConverterConvert(x.GoPointer(), InbufVar, InbufSizeVar, OutbufVar, OutbufSizeVar, FlagsVar, BytesReadVar, BytesWrittenVar, &cerr)

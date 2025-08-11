@@ -320,7 +320,7 @@ func (x *Display) ListSeats() *glib.List {
 	return cret
 }
 
-var xDisplayMapKeycode func(uintptr, uint, uintptr, []uint, int) bool
+var xDisplayMapKeycode func(uintptr, uint, uintptr, uintptr, int) bool
 
 // Returns the keyvals bound to @keycode.
 //
@@ -331,7 +331,7 @@ var xDisplayMapKeycode func(uintptr, uint, uintptr, []uint, int) bool
 // keyboard group and level.
 //
 // Free the returned arrays with g_free().
-func (x *Display) MapKeycode(KeycodeVar uint, KeysVar uintptr, KeyvalsVar []uint, NEntriesVar int) bool {
+func (x *Display) MapKeycode(KeycodeVar uint, KeysVar uintptr, KeyvalsVar uintptr, NEntriesVar int) bool {
 
 	cret := xDisplayMapKeycode(x.GoPointer(), KeycodeVar, KeysVar, KeyvalsVar, NEntriesVar)
 	return cret
@@ -475,6 +475,9 @@ func (x *Display) TranslateKey(KeycodeVar uint, StateVar ModifierType, GroupVar 
 }
 
 func (c *Display) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

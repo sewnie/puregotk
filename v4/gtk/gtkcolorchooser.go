@@ -16,7 +16,7 @@ type ColorChooserInterface struct {
 
 	BaseInterface uintptr
 
-	Padding [12]uintptr
+	Padding uintptr
 }
 
 func (x *ColorChooserInterface) GoPointer() uintptr {
@@ -34,7 +34,7 @@ func (x *ColorChooserInterface) GoPointer() uintptr {
 type ColorChooser interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
-	AddPalette(OrientationVar Orientation, ColorsPerLineVar int, NColorsVar int, ColorsVar []gdk.RGBA)
+	AddPalette(OrientationVar Orientation, ColorsPerLineVar int, NColorsVar int, ColorsVar uintptr)
 	GetRgba(ColorVar *gdk.RGBA)
 	GetUseAlpha() bool
 	SetRgba(ColorVar *gdk.RGBA)
@@ -52,6 +52,9 @@ type ColorChooserBase struct {
 }
 
 func (x *ColorChooserBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -76,7 +79,7 @@ func (x *ColorChooserBase) SetGoPointer(ptr uintptr) {
 // of removing the default color palette from the color chooser.
 //
 // If @colors is %NULL, removes all previously added palettes.
-func (x *ColorChooserBase) AddPalette(OrientationVar Orientation, ColorsPerLineVar int, NColorsVar int, ColorsVar []gdk.RGBA) {
+func (x *ColorChooserBase) AddPalette(OrientationVar Orientation, ColorsPerLineVar int, NColorsVar int, ColorsVar uintptr) {
 
 	XGtkColorChooserAddPalette(x.GoPointer(), OrientationVar, ColorsPerLineVar, NColorsVar, ColorsVar)
 
@@ -110,7 +113,7 @@ func (x *ColorChooserBase) SetUseAlpha(UseAlphaVar bool) {
 
 }
 
-var XGtkColorChooserAddPalette func(uintptr, Orientation, int, int, []gdk.RGBA)
+var XGtkColorChooserAddPalette func(uintptr, Orientation, int, int, uintptr)
 var XGtkColorChooserGetRgba func(uintptr, *gdk.RGBA)
 var XGtkColorChooserGetUseAlpha func(uintptr) bool
 var XGtkColorChooserSetRgba func(uintptr, *gdk.RGBA)

@@ -30,7 +30,7 @@ type ActionEntry struct {
 
 	State uintptr
 
-	Padding [3]uint
+	Padding uintptr
 }
 
 func (x *ActionEntry) GoPointer() uintptr {
@@ -61,7 +61,7 @@ type ActionMap interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
 	AddAction(ActionVar Action)
-	AddActionEntries(EntriesVar []ActionEntry, NEntriesVar int, UserDataVar uintptr)
+	AddActionEntries(EntriesVar uintptr, NEntriesVar int, UserDataVar uintptr)
 	LookupAction(ActionNameVar string) *ActionBase
 	RemoveAction(ActionNameVar string)
 }
@@ -77,6 +77,9 @@ type ActionMapBase struct {
 }
 
 func (x *ActionMapBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 
@@ -139,7 +142,7 @@ func (x *ActionMapBase) AddAction(ActionVar Action) {
 //	}
 //
 // ]|
-func (x *ActionMapBase) AddActionEntries(EntriesVar []ActionEntry, NEntriesVar int, UserDataVar uintptr) {
+func (x *ActionMapBase) AddActionEntries(EntriesVar uintptr, NEntriesVar int, UserDataVar uintptr) {
 
 	XGActionMapAddActionEntries(x.GoPointer(), EntriesVar, NEntriesVar, UserDataVar)
 
@@ -172,7 +175,7 @@ func (x *ActionMapBase) RemoveAction(ActionNameVar string) {
 }
 
 var XGActionMapAddAction func(uintptr, uintptr)
-var XGActionMapAddActionEntries func(uintptr, []ActionEntry, int, uintptr)
+var XGActionMapAddActionEntries func(uintptr, uintptr, int, uintptr)
 var XGActionMapLookupAction func(uintptr, string) uintptr
 var XGActionMapRemoveAction func(uintptr, string)
 

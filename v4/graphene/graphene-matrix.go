@@ -209,11 +209,11 @@ func (x *Matrix) InitFrom2d(XxVar float64, YxVar float64, XyVar float64, YyVar f
 	return cret
 }
 
-var xMatrixInitFromFloat func(uintptr, [16]float32) *Matrix
+var xMatrixInitFromFloat func(uintptr, uintptr) *Matrix
 
 // Initializes a #graphene_matrix_t with the given array of floating
 // point values.
-func (x *Matrix) InitFromFloat(VVar [16]float32) *Matrix {
+func (x *Matrix) InitFromFloat(VVar uintptr) *Matrix {
 
 	cret := xMatrixInitFromFloat(x.GoPointer(), VVar)
 	return cret
@@ -620,11 +620,11 @@ func (x *Matrix) To2d(XxVar float64, YxVar float64, XyVar float64, YyVar float64
 	return cret
 }
 
-var xMatrixToFloat func(uintptr, [16]float32)
+var xMatrixToFloat func(uintptr, uintptr)
 
 // Converts a #graphene_matrix_t to an array of floating point
 // values.
-func (x *Matrix) ToFloat(VVar [16]float32) {
+func (x *Matrix) ToFloat(VVar uintptr) {
 
 	xMatrixToFloat(x.GoPointer(), VVar)
 

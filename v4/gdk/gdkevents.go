@@ -385,6 +385,9 @@ func (x *ButtonEvent) GetButton() uint {
 }
 
 func (c *ButtonEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -437,6 +440,9 @@ func (x *CrossingEvent) GetMode() CrossingMode {
 }
 
 func (c *CrossingEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -479,6 +485,9 @@ func (x *DNDEvent) GetDrop() *Drop {
 }
 
 func (c *DNDEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -504,6 +513,9 @@ func DeleteEventNewFromInternalPtr(ptr uintptr) *DeleteEvent {
 }
 
 func (c *DeleteEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -573,13 +585,13 @@ func (x *Event) GetDistance(Event2Var *Event, DistanceVar float64) bool {
 	return cret
 }
 
-var xEventGetAxes func(uintptr, []float64, uint) bool
+var xEventGetAxes func(uintptr, uintptr, uint) bool
 
 // Extracts all axis values from an event.
 //
 // To find out which axes are used, use [method@Gdk.DeviceTool.get_axes]
 // on the device tool returned by [method@Gdk.Event.get_device_tool].
-func (x *Event) GetAxes(AxesVar []float64, NAxesVar uint) bool {
+func (x *Event) GetAxes(AxesVar uintptr, NAxesVar uint) bool {
 
 	cret := xEventGetAxes(x.GoPointer(), AxesVar, NAxesVar)
 	return cret
@@ -679,7 +691,7 @@ func (x *Event) GetEventType() EventType {
 	return cret
 }
 
-var xEventGetHistory func(uintptr, uint) []TimeCoord
+var xEventGetHistory func(uintptr, uint) uintptr
 
 // Retrieves the history of the device that @event is for, as a list of
 // time and coordinates.
@@ -690,7 +702,7 @@ var xEventGetHistory func(uintptr, uint) []TimeCoord
 // Note that only motion and scroll events record history, and motion
 // events do it only if one of the mouse buttons is down, or the device
 // has a tool.
-func (x *Event) GetHistory(OutNCoordsVar uint) []TimeCoord {
+func (x *Event) GetHistory(OutNCoordsVar uint) uintptr {
 
 	cret := xEventGetHistory(x.GoPointer(), OutNCoordsVar)
 	return cret
@@ -814,6 +826,9 @@ func (x *Event) Unref() {
 }
 
 func (c *Event) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -849,6 +864,9 @@ func (x *FocusEvent) GetIn() bool {
 }
 
 func (c *FocusEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -900,6 +918,9 @@ func (x *GrabBrokenEvent) GetImplicit() bool {
 }
 
 func (c *GrabBrokenEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1007,6 +1028,9 @@ func (x *KeyEvent) Matches(KeyvalVar uint, ModifiersVar ModifierType) KeyMatch {
 }
 
 func (c *KeyEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1032,6 +1056,9 @@ func MotionEventNewFromInternalPtr(ptr uintptr) *MotionEvent {
 }
 
 func (c *MotionEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1085,6 +1112,9 @@ func (x *PadEvent) GetGroupMode(GroupVar uint, ModeVar uint) {
 }
 
 func (c *PadEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1110,6 +1140,9 @@ func ProximityEventNewFromInternalPtr(ptr uintptr) *ProximityEvent {
 }
 
 func (c *ProximityEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1188,6 +1221,9 @@ func (x *ScrollEvent) IsStop() bool {
 }
 
 func (c *ScrollEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1222,6 +1258,9 @@ func (x *TouchEvent) GetEmulatingPointer() bool {
 }
 
 func (c *TouchEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1297,6 +1336,9 @@ func (x *TouchpadEvent) GetPinchScale() float64 {
 }
 
 func (c *TouchpadEvent) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

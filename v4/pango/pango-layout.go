@@ -409,7 +409,7 @@ func (x *LayoutLine) GetStartIndex() int {
 	return cret
 }
 
-var xLayoutLineGetXRanges func(uintptr, int, int, []int, int)
+var xLayoutLineGetXRanges func(uintptr, int, int, uintptr, int)
 
 // Gets a list of visual ranges corresponding to a given logical range.
 //
@@ -417,7 +417,7 @@ var xLayoutLineGetXRanges func(uintptr, int, int, []int, int)
 // ranges which are adjacent. The ranges will be sorted from left to
 // right. The ranges are with respect to the left edge of the entire
 // layout, not with respect to the line.
-func (x *LayoutLine) GetXRanges(StartIndexVar int, EndIndexVar int, RangesVar []int, NRangesVar int) {
+func (x *LayoutLine) GetXRanges(StartIndexVar int, EndIndexVar int, RangesVar uintptr, NRangesVar int) {
 
 	xLayoutLineGetXRanges(x.GoPointer(), StartIndexVar, EndIndexVar, RangesVar, NRangesVar)
 
@@ -1039,7 +1039,7 @@ func (x *Layout) GetLogAttrs(AttrsVar uintptr, NAttrsVar int) {
 
 }
 
-var xLayoutGetLogAttrsReadonly func(uintptr, int) []LogAttr
+var xLayoutGetLogAttrsReadonly func(uintptr, int) uintptr
 
 // Retrieves an array of logical attributes for each character in
 // the @layout.
@@ -1052,7 +1052,7 @@ var xLayoutGetLogAttrsReadonly func(uintptr, int) []LogAttr
 // than the total number of characters in the layout, since there
 // need to be attributes corresponding to both the position before
 // the first character and the position after the last character.
-func (x *Layout) GetLogAttrsReadonly(NAttrsVar int) []LogAttr {
+func (x *Layout) GetLogAttrsReadonly(NAttrsVar int) uintptr {
 
 	cret := xLayoutGetLogAttrsReadonly(x.GoPointer(), NAttrsVar)
 	return cret
@@ -1671,6 +1671,9 @@ func (x *Layout) XyToIndex(XVar int, YVar int, IndexVar int, TrailingVar int) bo
 }
 
 func (c *Layout) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

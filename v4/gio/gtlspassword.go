@@ -18,7 +18,7 @@ type TlsPasswordClass struct {
 
 	ParentClass uintptr
 
-	Padding [4]uintptr
+	Padding uintptr
 }
 
 func (x *TlsPasswordClass) GoPointer() uintptr {
@@ -84,14 +84,14 @@ func (x *TlsPassword) GetFlags() TlsPasswordFlags {
 	return cret
 }
 
-var xTlsPasswordGetValue func(uintptr, uint) []byte
+var xTlsPasswordGetValue func(uintptr, uint) uintptr
 
 // Get the password value. If @length is not %NULL then it will be
 // filled in with the length of the password value. (Note that the
 // password value is not nul-terminated, so you can only pass %NULL
 // for @length in contexts where you know the password will have a
 // certain fixed length.)
-func (x *TlsPassword) GetValue(LengthVar uint) []byte {
+func (x *TlsPassword) GetValue(LengthVar uint) uintptr {
 
 	cret := xTlsPasswordGetValue(x.GoPointer(), LengthVar)
 	return cret
@@ -126,7 +126,7 @@ func (x *TlsPassword) SetFlags(FlagsVar TlsPasswordFlags) {
 
 }
 
-var xTlsPasswordSetValue func(uintptr, []byte, int)
+var xTlsPasswordSetValue func(uintptr, uintptr, int)
 
 // Set the value for this password. The @value will be copied by the password
 // object.
@@ -135,13 +135,13 @@ var xTlsPasswordSetValue func(uintptr, []byte, int)
 // @length if using a nul-terminated password, and @length will be
 // calculated automatically. (Note that the terminating nul is not
 // considered part of the password in this case.)
-func (x *TlsPassword) SetValue(ValueVar []byte, LengthVar int) {
+func (x *TlsPassword) SetValue(ValueVar uintptr, LengthVar int) {
 
 	xTlsPasswordSetValue(x.GoPointer(), ValueVar, LengthVar)
 
 }
 
-var xTlsPasswordSetValueFull func(uintptr, []byte, int, uintptr)
+var xTlsPasswordSetValueFull func(uintptr, uintptr, int, uintptr)
 
 // Provide the value for this password.
 //
@@ -152,7 +152,7 @@ var xTlsPasswordSetValueFull func(uintptr, []byte, int, uintptr)
 // @length if using a nul-terminated password, and @length will be
 // calculated automatically. (Note that the terminating nul is not
 // considered part of the password in this case.)
-func (x *TlsPassword) SetValueFull(ValueVar []byte, LengthVar int, DestroyVar *glib.DestroyNotify) {
+func (x *TlsPassword) SetValueFull(ValueVar uintptr, LengthVar int, DestroyVar *glib.DestroyNotify) {
 
 	xTlsPasswordSetValueFull(x.GoPointer(), ValueVar, LengthVar, glib.NewCallback(DestroyVar))
 
@@ -170,6 +170,9 @@ func (x *TlsPassword) SetWarning(WarningVar string) {
 }
 
 func (c *TlsPassword) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

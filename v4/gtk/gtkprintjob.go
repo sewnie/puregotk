@@ -95,10 +95,10 @@ func (x *PrintJob) GetNumCopies() int {
 	return cret
 }
 
-var xPrintJobGetPageRanges func(uintptr, int) []PageRange
+var xPrintJobGetPageRanges func(uintptr, int) uintptr
 
 // Gets the page ranges for this job.
-func (x *PrintJob) GetPageRanges(NRangesVar int) []PageRange {
+func (x *PrintJob) GetPageRanges(NRangesVar int) uintptr {
 
 	cret := xPrintJobGetPageRanges(x.GoPointer(), NRangesVar)
 	return cret
@@ -272,10 +272,10 @@ func (x *PrintJob) SetNumCopies(NumCopiesVar int) {
 
 }
 
-var xPrintJobSetPageRanges func(uintptr, []PageRange, int)
+var xPrintJobSetPageRanges func(uintptr, uintptr, int)
 
 // Sets the page ranges for this job.
-func (x *PrintJob) SetPageRanges(RangesVar []PageRange, NRangesVar int) {
+func (x *PrintJob) SetPageRanges(RangesVar uintptr, NRangesVar int) {
 
 	xPrintJobSetPageRanges(x.GoPointer(), RangesVar, NRangesVar)
 
@@ -389,6 +389,9 @@ func (x *PrintJob) SetTrackPrintStatus(TrackStatusVar bool) {
 }
 
 func (c *PrintJob) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

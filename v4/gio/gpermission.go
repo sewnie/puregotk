@@ -17,7 +17,7 @@ type PermissionClass struct {
 
 	ParentClass uintptr
 
-	Reserved [16]uintptr
+	Reserved uintptr
 }
 
 func (x *PermissionClass) GoPointer() uintptr {
@@ -226,6 +226,9 @@ func (x *Permission) ReleaseFinish(ResultVar AsyncResult) (bool, error) {
 }
 
 func (c *Permission) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

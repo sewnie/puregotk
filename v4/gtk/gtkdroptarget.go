@@ -190,12 +190,12 @@ func (x *DropTarget) GetFormats() *gdk.ContentFormats {
 	return cret
 }
 
-var xDropTargetGetGtypes func(uintptr, uint) []types.GType
+var xDropTargetGetGtypes func(uintptr, uint) uintptr
 
 // Gets the list of supported `GType`s that can be dropped on the target.
 //
 // If no types have been set, `NULL` will be returned.
-func (x *DropTarget) GetGtypes(NTypesVar uint) []types.GType {
+func (x *DropTarget) GetGtypes(NTypesVar uint) uintptr {
 
 	cret := xDropTargetGetGtypes(x.GoPointer(), NTypesVar)
 	return cret
@@ -244,10 +244,10 @@ func (x *DropTarget) SetActions(ActionsVar gdk.DragAction) {
 
 }
 
-var xDropTargetSetGtypes func(uintptr, []types.GType, uint)
+var xDropTargetSetGtypes func(uintptr, uintptr, uint)
 
 // Sets the supported `GTypes` for this drop target.
-func (x *DropTarget) SetGtypes(TypesVar []types.GType, NTypesVar uint) {
+func (x *DropTarget) SetGtypes(TypesVar uintptr, NTypesVar uint) {
 
 	xDropTargetSetGtypes(x.GoPointer(), TypesVar, NTypesVar)
 
@@ -263,6 +263,9 @@ func (x *DropTarget) SetPreload(PreloadVar bool) {
 }
 
 func (c *DropTarget) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

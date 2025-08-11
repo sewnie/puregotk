@@ -45,7 +45,7 @@ func (x *BuildableParseContext) GetElement() string {
 	return cret
 }
 
-var xBuildableParseContextGetElementStack func(uintptr) []string
+var xBuildableParseContextGetElementStack func(uintptr) uintptr
 
 // Retrieves the element stack from the internal state of the parser.
 //
@@ -58,7 +58,7 @@ var xBuildableParseContextGetElementStack func(uintptr) []string
 // end_element handlers where gtk_buildable_parse_context_get_element()
 // would merely return the name of the element that is being
 // processed.
-func (x *BuildableParseContext) GetElementStack() []string {
+func (x *BuildableParseContext) GetElementStack() uintptr {
 
 	cret := xBuildableParseContextGetElementStack(x.GoPointer())
 	return cret
@@ -138,7 +138,7 @@ func (x *BuildableParseContext) Push(ParserVar *BuildableParser, UserDataVar uin
 type BuildableParser struct {
 	_ structs.HostLayout
 
-	Padding [4]uintptr
+	Padding uintptr
 }
 
 func (x *BuildableParser) GoPointer() uintptr {
@@ -175,6 +175,9 @@ type BuildableBase struct {
 }
 
 func (x *BuildableBase) GoPointer() uintptr {
+	if x == nil {
+		return 0
+	}
 	return x.Ptr
 }
 

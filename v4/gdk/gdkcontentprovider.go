@@ -19,7 +19,7 @@ type ContentProviderClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *ContentProviderClass) GoPointer() uintptr {
@@ -225,6 +225,9 @@ func (x *ContentProvider) WriteMimeTypeFinish(ResultVar gio.AsyncResult) (bool, 
 }
 
 func (c *ContentProvider) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 

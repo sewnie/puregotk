@@ -32,7 +32,7 @@ type Value struct {
 
 	GType types.GType
 
-	Data [2]uint64
+	Data uintptr
 }
 
 var xValueGLibType func() types.GType

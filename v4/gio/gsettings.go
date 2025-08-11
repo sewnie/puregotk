@@ -38,7 +38,7 @@ type SettingsClass struct {
 
 	ParentClass uintptr
 
-	Padding [20]uintptr
+	Padding uintptr
 }
 
 func (x *SettingsClass) GoPointer() uintptr {
@@ -890,13 +890,13 @@ func (x *Settings) GetString(KeyVar string) string {
 	return cret
 }
 
-var xSettingsGetStrv func(uintptr, string) []string
+var xSettingsGetStrv func(uintptr, string) uintptr
 
 // A convenience variant of g_settings_get() for string arrays.
 //
 // It is a programmer error to give a @key that isn't specified as
 // having an array of strings type in the schema for @settings.
-func (x *Settings) GetStrv(KeyVar string) []string {
+func (x *Settings) GetStrv(KeyVar string) uintptr {
 
 	cret := xSettingsGetStrv(x.GoPointer(), KeyVar)
 	return cret
@@ -979,7 +979,7 @@ func (x *Settings) IsWritable(NameVar string) bool {
 	return cret
 }
 
-var xSettingsListChildren func(uintptr) []string
+var xSettingsListChildren func(uintptr) uintptr
 
 // Gets the list of children on @settings.
 //
@@ -992,13 +992,13 @@ var xSettingsListChildren func(uintptr) []string
 //
 // You should free the return value with g_strfreev() when you are done
 // with it.
-func (x *Settings) ListChildren() []string {
+func (x *Settings) ListChildren() uintptr {
 
 	cret := xSettingsListChildren(x.GoPointer())
 	return cret
 }
 
-var xSettingsListKeys func(uintptr) []string
+var xSettingsListKeys func(uintptr) uintptr
 
 // Introspects the list of keys on @settings.
 //
@@ -1008,7 +1008,7 @@ var xSettingsListKeys func(uintptr) []string
 //
 // You should free the return value with g_strfreev() when you are done
 // with it.
-func (x *Settings) ListKeys() []string {
+func (x *Settings) ListKeys() uintptr {
 
 	cret := xSettingsListKeys(x.GoPointer())
 	return cret
@@ -1174,7 +1174,7 @@ func (x *Settings) SetString(KeyVar string, ValueVar string) bool {
 	return cret
 }
 
-var xSettingsSetStrv func(uintptr, string, []string) bool
+var xSettingsSetStrv func(uintptr, string, uintptr) bool
 
 // Sets @key in @settings to @value.
 //
@@ -1183,7 +1183,7 @@ var xSettingsSetStrv func(uintptr, string, []string) bool
 //
 // It is a programmer error to give a @key that isn't specified as
 // having an array of strings type in the schema for @settings.
-func (x *Settings) SetStrv(KeyVar string, ValueVar []string) bool {
+func (x *Settings) SetStrv(KeyVar string, ValueVar uintptr) bool {
 
 	cret := xSettingsSetStrv(x.GoPointer(), KeyVar, ValueVar)
 	return cret
@@ -1235,6 +1235,9 @@ func (x *Settings) SetValue(KeyVar string, ValueVar *glib.Variant) bool {
 }
 
 func (c *Settings) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1368,19 +1371,19 @@ func (x *Settings) ConnectWritableChanged(cb *func(Settings, string)) uint32 {
 	return gobject.SignalConnect(x.GoPointer(), "writable-changed", cbRefPtr)
 }
 
-var xSettingsListRelocatableSchemas func() []string
+var xSettingsListRelocatableSchemas func() uintptr
 
 // Deprecated.
-func SettingsListRelocatableSchemas() []string {
+func SettingsListRelocatableSchemas() uintptr {
 
 	cret := xSettingsListRelocatableSchemas()
 	return cret
 }
 
-var xSettingsListSchemas func() []string
+var xSettingsListSchemas func() uintptr
 
 // Deprecated.
-func SettingsListSchemas() []string {
+func SettingsListSchemas() uintptr {
 
 	cret := xSettingsListSchemas()
 	return cret

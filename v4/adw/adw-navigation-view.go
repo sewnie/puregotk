@@ -20,7 +20,7 @@ type NavigationPageClass struct {
 
 	ParentClass uintptr
 
-	Padding [8]uintptr
+	Padding uintptr
 }
 
 func (x *NavigationPageClass) GoPointer() uintptr {
@@ -215,6 +215,9 @@ func (x *NavigationPage) SetTitle(TitleVar string) {
 }
 
 func (c *NavigationPage) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -376,7 +379,7 @@ func (x *NavigationPage) UpdateProperty(FirstPropertyVar gtk.AccessibleProperty,
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *NavigationPage) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []gtk.AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *NavigationPage) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -412,7 +415,7 @@ func (x *NavigationPage) UpdateRelation(FirstRelationVar gtk.AccessibleRelation,
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *NavigationPage) UpdateRelationValue(NRelationsVar int, RelationsVar []gtk.AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *NavigationPage) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -445,7 +448,7 @@ func (x *NavigationPage) UpdateState(FirstStateVar gtk.AccessibleState, varArgs 
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *NavigationPage) UpdateStateValue(NStatesVar int, StatesVar []gtk.AccessibleState, ValuesVar []gobject.Value) {
+func (x *NavigationPage) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 
@@ -895,7 +898,7 @@ func (x *NavigationView) Replace(PagesVar uintptr, NPagesVar int) {
 
 }
 
-var xNavigationViewReplaceWithTags func(uintptr, []string, int)
+var xNavigationViewReplaceWithTags func(uintptr, uintptr, int)
 
 // Replaces the current navigation stack with pages with the tags @tags.
 //
@@ -912,7 +915,7 @@ var xNavigationViewReplaceWithTags func(uintptr, []string, int)
 // The [signal@NavigationView::replaced] signal will be emitted.
 //
 // See [method@NavigationView.replace] and [property@NavigationPage:tag].
-func (x *NavigationView) ReplaceWithTags(TagsVar []string, NTagsVar int) {
+func (x *NavigationView) ReplaceWithTags(TagsVar uintptr, NTagsVar int) {
 
 	xNavigationViewReplaceWithTags(x.GoPointer(), TagsVar, NTagsVar)
 
@@ -942,6 +945,9 @@ func (x *NavigationView) SetPopOnEscape(PopOnEscapeVar bool) {
 }
 
 func (c *NavigationView) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
@@ -1077,7 +1083,7 @@ func (x *NavigationView) GetProgress() float64 {
 //
 // Each snap point represents a progress value that is considered acceptable to
 // end the swipe on.
-func (x *NavigationView) GetSnapPoints(NSnapPointsVar int) []float64 {
+func (x *NavigationView) GetSnapPoints(NSnapPointsVar int) uintptr {
 
 	cret := XAdwSwipeableGetSnapPoints(x.GoPointer(), NSnapPointsVar)
 	return cret
@@ -1156,7 +1162,7 @@ func (x *NavigationView) UpdateProperty(FirstPropertyVar gtk.AccessibleProperty,
 // property change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *NavigationView) UpdatePropertyValue(NPropertiesVar int, PropertiesVar []gtk.AccessibleProperty, ValuesVar []gobject.Value) {
+func (x *NavigationView) UpdatePropertyValue(NPropertiesVar int, PropertiesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdatePropertyValue(x.GoPointer(), NPropertiesVar, PropertiesVar, ValuesVar)
 
@@ -1192,7 +1198,7 @@ func (x *NavigationView) UpdateRelation(FirstRelationVar gtk.AccessibleRelation,
 // relation change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *NavigationView) UpdateRelationValue(NRelationsVar int, RelationsVar []gtk.AccessibleRelation, ValuesVar []gobject.Value) {
+func (x *NavigationView) UpdateRelationValue(NRelationsVar int, RelationsVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateRelationValue(x.GoPointer(), NRelationsVar, RelationsVar, ValuesVar)
 
@@ -1225,7 +1231,7 @@ func (x *NavigationView) UpdateState(FirstStateVar gtk.AccessibleState, varArgs 
 // state change must be communicated to assistive technologies.
 //
 // This function is meant to be used by language bindings.
-func (x *NavigationView) UpdateStateValue(NStatesVar int, StatesVar []gtk.AccessibleState, ValuesVar []gobject.Value) {
+func (x *NavigationView) UpdateStateValue(NStatesVar int, StatesVar uintptr, ValuesVar uintptr) {
 
 	gtk.XGtkAccessibleUpdateStateValue(x.GoPointer(), NStatesVar, StatesVar, ValuesVar)
 

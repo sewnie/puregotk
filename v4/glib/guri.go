@@ -344,7 +344,7 @@ type UriParamsIter struct {
 
 	Dummy2 uintptr
 
-	Dummy3 [256]byte
+	Dummy3 uintptr
 }
 
 func (x *UriParamsIter) GoPointer() uintptr {
@@ -573,7 +573,7 @@ func UriBuildWithUser(FlagsVar UriFlags, SchemeVar string, UserVar string, Passw
 	return cret
 }
 
-var xUriEscapeBytes func([]byte, uint, string) string
+var xUriEscapeBytes func(uintptr, uint, string) string
 
 // Escapes arbitrary data for use in a URI.
 //
@@ -586,7 +586,7 @@ var xUriEscapeBytes func([]byte, uint, string) string
 //
 // Though technically incorrect, this will also allow escaping nul
 // bytes as `%“00`.
-func UriEscapeBytes(UnescapedVar []byte, LengthVar uint, ReservedCharsAllowedVar string) string {
+func UriEscapeBytes(UnescapedVar uintptr, LengthVar uint, ReservedCharsAllowedVar string) string {
 
 	cret := xUriEscapeBytes(UnescapedVar, LengthVar, ReservedCharsAllowedVar)
 	return cret

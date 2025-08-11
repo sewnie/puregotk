@@ -18,9 +18,9 @@ type DBusInterfaceSkeletonClass struct {
 
 	ParentClass uintptr
 
-	VfuncPadding [8]uintptr
+	VfuncPadding uintptr
 
-	SignalPadding [8]uintptr
+	SignalPadding uintptr
 }
 
 func (x *DBusInterfaceSkeletonClass) GoPointer() uintptr {
@@ -206,6 +206,9 @@ func (x *DBusInterfaceSkeleton) UnexportFromConnection(ConnectionVar *DBusConnec
 }
 
 func (c *DBusInterfaceSkeleton) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
 	return c.Ptr
 }
 
