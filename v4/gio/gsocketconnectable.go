@@ -23,12 +23,12 @@ func (x *SocketConnectableIface) GoPointer() uintptr {
 }
 
 // Objects that describe one or more potential socket endpoints
-// implement #GSocketConnectable. Callers can then use
-// g_socket_connectable_enumerate() to get a #GSocketAddressEnumerator
-// to try out each socket address in turn until one succeeds, as shown
-// in the sample code below.
+// implement `GSocketConnectable`. Callers can then use
+// [method@Gio.SocketConnectable.enumerate] to get a
+// [class@Gio.SocketAddressEnumerator] to try out each socket address in turn
+// until one succeeds, as shown in the sample code below.
 //
-// |[&lt;!-- language="C" --&gt;
+// ```c
 // MyConnectionType *
 // connect_to_host (const char    *hostname,
 //
@@ -81,7 +81,7 @@ func (x *SocketConnectableIface) GoPointer() uintptr {
 //	    }
 //	}
 //
-// ]|
+// ```
 type SocketConnectable interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)

@@ -49,7 +49,13 @@ type InitiallyUnownedClass struct {
 
 	Flags uint
 
-	Pdummy [6]uintptr
+	NConstructProperties uint
+
+	Pspecs uintptr
+
+	NPspecs uint
+
+	Pdummy [3]uintptr
 }
 
 func (x *InitiallyUnownedClass) GoPointer() uintptr {
@@ -94,7 +100,13 @@ type ObjectClass struct {
 
 	Flags uint
 
-	Pdummy [6]uintptr
+	NConstructProperties uint
+
+	Pspecs uintptr
+
+	NPspecs uint
+
+	Pdummy [3]uintptr
 }
 
 func (x *ObjectClass) GoPointer() uintptr {
@@ -139,9 +151,11 @@ var xObjectClassInstallProperties func(uintptr, uint, uintptr)
 //
 // |[&lt;!-- language="C" --&gt;
 //
-//	enum {
-//	  PROP_0, PROP_FOO, PROP_BAR, N_PROPERTIES
-//	};
+//	typedef enum {
+//	  PROP_FOO = 1,
+//	  PROP_BAR,
+//	  N_PROPERTIES
+//	} MyObjectProperty;
 //
 // static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 //
@@ -152,20 +166,20 @@ var xObjectClassInstallProperties func(uintptr, uint, uintptr)
 //	  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 //
 //	  obj_properties[PROP_FOO] =
-//	    g_param_spec_int ("foo", "Foo", "Foo",
+//	    g_param_spec_int ("foo", NULL, NULL,
 //	                      -1, G_MAXINT,
 //	                      0,
-//	                      G_PARAM_READWRITE);
+//	                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 //
 //	  obj_properties[PROP_BAR] =
-//	    g_param_spec_string ("bar", "Bar", "Bar",
+//	    g_param_spec_string ("bar", NULL, NULL,
 //	                         NULL,
-//	                         G_PARAM_READWRITE);
+//	                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 //
 //	  gobject_class-&gt;set_property = my_object_set_property;
 //	  gobject_class-&gt;get_property = my_object_get_property;
 //	  g_object_class_install_properties (gobject_class,
-//	                                     N_PROPERTIES,
+//	                                     G_N_ELEMENTS (obj_properties),
 //	                                     obj_properties);
 //	}
 //
@@ -410,6 +424,14 @@ var xSignalConnectObject func(*TypeInstance, string, uintptr, uintptr, ConnectFl
 // disconnected.  Note that this is not currently threadsafe (ie:
 // emitting a signal while @gobject is being destroyed in another thread
 // is not safe).
+//
+// This function cannot fail. If the given signal name doesn’t exist,
+// a critical warning is emitted. No validation is performed on the
+// "detail" string when specified in @detailed_signal, other than a
+// non-empty check.
+//
+// Refer to the [signals documentation](signals.html) for more
+// details.
 func SignalConnectObject(InstanceVar *TypeInstance, DetailedSignalVar string, CHandlerVar *Callback, GobjectVar *Object, ConnectFlagsVar ConnectFlags) uint32 {
 
 	cret := xSignalConnectObject(InstanceVar, DetailedSignalVar, glib.NewCallback(CHandlerVar), GobjectVar.GoPointer(), ConnectFlagsVar)
@@ -449,16 +471,26 @@ func (c *InitiallyUnowned) SetGoPointer(ptr uintptr) {
 
 // The base object type.
 //
-// All the fields in the `GObject` structure are private to the implementation
-// and should never be accessed directly.
+// `GObject` is the fundamental type providing the common attributes and
+// methods for all object types in GTK, Pango and other libraries
+// based on GObject. The `GObject` class provides methods for object
+// construction and destruction, property access methods, and signal
+// support. Signals are described in detail [here][gobject-Signals].
 //
-// Since GLib 2.72, all #GObjects are guaranteed to be aligned to at least the
-// alignment of the largest basic GLib type (typically this is #guint64 or
-// #gdouble). If you need larger alignment for an element in a #GObject, you
-// should allocate it on the heap (aligned), or arrange for your #GObject to be
-// appropriately padded. This guarantee applies to the #GObject (or derived)
-// struct, the #GObjectClass (or derived) struct, and any private data allocated
-// by G_ADD_PRIVATE().
+// For a tutorial on implementing a new `GObject` class, see [How to define and
+// implement a new GObject](tutorial.html#how-to-define-and-implement-a-new-gobject).
+// For a list of naming conventions for GObjects and their methods, see the
+// [GType conventions](concepts.html#conventions). For the high-level concepts
+// behind GObject, read
+// [Instantiatable classed types: Objects](concepts.html#instantiatable-classed-types-objects).
+//
+// Since GLib 2.72, all `GObject`s are guaranteed to be aligned to at least the
+// alignment of the largest basic GLib type (typically this is `guint64` or
+// `gdouble`). If you need larger alignment for an element in a `GObject`, you
+// should allocate it on the heap (aligned), or arrange for your `GObject` to be
+// appropriately padded. This guarantee applies to the `GObject` (or derived)
+// struct, the `GObjectClass` (or derived) struct, and any private data allocated
+// by `G_ADD_PRIVATE()`.
 type Object struct {
 	Ptr uintptr
 }
@@ -485,22 +517,22 @@ var xNewObject func(types.GType, string, ...interface{}) uintptr
 // per g_type_create_instance().
 //
 // Note that in C, small integer types in variable argument lists are promoted
-// up to #gint or #guint as appropriate, and read back accordingly. #gint is 32
-// bits on every platform on which GLib is currently supported. This means that
-// you can use C expressions of type #gint with g_object_new() and properties of
-// type #gint or #guint or smaller. Specifically, you can use integer literals
+// up to `gint` or `guint` as appropriate, and read back accordingly. `gint` is
+// 32 bits on every platform on which GLib is currently supported. This means that
+// you can use C expressions of type `gint` with g_object_new() and properties of
+// type `gint` or `guint` or smaller. Specifically, you can use integer literals
 // with these property types.
 //
-// When using property types of #gint64 or #guint64, you must ensure that the
+// When using property types of `gint64` or `guint64`, you must ensure that the
 // value that you provide is 64 bit. This means that you should use a cast or
 // make use of the %G_GINT64_CONSTANT or %G_GUINT64_CONSTANT macros.
 //
-// Similarly, #gfloat is promoted to #gdouble, so you must ensure that the value
-// you provide is a #gdouble, even for a property of type #gfloat.
+// Similarly, `gfloat` is promoted to `gdouble`, so you must ensure that the value
+// you provide is a `gdouble`, even for a property of type `gfloat`.
 //
 // Since GLib 2.72, all #GObjects are guaranteed to be aligned to at least the
-// alignment of the largest basic GLib type (typically this is #guint64 or
-// #gdouble). If you need larger alignment for an element in a #GObject, you
+// alignment of the largest basic GLib type (typically this is `guint64` or
+// `gdouble`). If you need larger alignment for an element in a #GObject, you
 // should allocate it on the heap (aligned), or arrange for your #GObject to be
 // appropriately padded.
 func NewObject(ObjectTypeVar types.GType, FirstPropertyNameVar string, varArgs ...interface{}) *Object {
@@ -605,6 +637,13 @@ var xObjectAddToggleRef func(uintptr, uintptr, uintptr)
 // of them will ever be notified until all but one are removed.  For
 // this reason, you should only ever use a toggle reference if there
 // is important state in the proxy object.
+//
+// Note that if you unref the object on another thread, then @notify might
+// still be invoked after g_object_remove_toggle_ref(), and the object argument
+// might be a dangling pointer. If the object is destroyed on other threads,
+// you must take care of that yourself.
+//
+// A g_object_add_toggle_ref() must be released with g_object_remove_toggle_ref().
 func (x *Object) AddToggleRef(NotifyVar *ToggleNotify, DataVar uintptr) {
 
 	xObjectAddToggleRef(x.GoPointer(), glib.NewCallback(NotifyVar), DataVar)
@@ -746,28 +785,30 @@ var xObjectConnect func(uintptr, string, ...interface{}) uintptr
 // A convenience function to connect multiple signals at once.
 //
 // The signal specs expected by this function have the form
-// "modifier::signal_name", where modifier can be one of the following:
-// - signal: equivalent to g_signal_connect_data (..., NULL, 0)
-// - object-signal, object_signal: equivalent to g_signal_connect_object (..., 0)
-// - swapped-signal, swapped_signal: equivalent to g_signal_connect_data (..., NULL, G_CONNECT_SWAPPED)
-// - swapped_object_signal, swapped-object-signal: equivalent to g_signal_connect_object (..., G_CONNECT_SWAPPED)
-// - signal_after, signal-after: equivalent to g_signal_connect_data (..., NULL, G_CONNECT_AFTER)
-// - object_signal_after, object-signal-after: equivalent to g_signal_connect_object (..., G_CONNECT_AFTER)
-// - swapped_signal_after, swapped-signal-after: equivalent to g_signal_connect_data (..., NULL, G_CONNECT_SWAPPED | G_CONNECT_AFTER)
-// - swapped_object_signal_after, swapped-object-signal-after: equivalent to g_signal_connect_object (..., G_CONNECT_SWAPPED | G_CONNECT_AFTER)
+// `modifier::signal_name`, where `modifier` can be one of the
+// following:
 //
-// |[&lt;!-- language="C" --&gt;
+// - `signal`: equivalent to `g_signal_connect_data (..., NULL, G_CONNECT_DEFAULT)`
+// - `object-signal`, `object_signal`: equivalent to `g_signal_connect_object (..., G_CONNECT_DEFAULT)`
+// - `swapped-signal`, `swapped_signal`: equivalent to `g_signal_connect_data (..., NULL, G_CONNECT_SWAPPED)`
+// - `swapped_object_signal`, `swapped-object-signal`: equivalent to `g_signal_connect_object (..., G_CONNECT_SWAPPED)`
+// - `signal_after`, `signal-after`: equivalent to `g_signal_connect_data (..., NULL, G_CONNECT_AFTER)`
+// - `object_signal_after`, `object-signal-after`: equivalent to `g_signal_connect_object (..., G_CONNECT_AFTER)`
+// - `swapped_signal_after`, `swapped-signal-after`: equivalent to `g_signal_connect_data (..., NULL, G_CONNECT_SWAPPED | G_CONNECT_AFTER)`
+// - `swapped_object_signal_after`, `swapped-object-signal-after`: equivalent to `g_signal_connect_object (..., G_CONNECT_SWAPPED | G_CONNECT_AFTER)`
 //
-//	  menu-&gt;toplevel = g_object_connect (g_object_new (GTK_TYPE_WINDOW,
-//							   "type", GTK_WINDOW_POPUP,
-//							   "child", menu,
-//							   NULL),
-//					     "signal::event", gtk_menu_window_event, menu,
-//					     "signal::size_request", gtk_menu_window_size_request, menu,
-//					     "signal::destroy", gtk_widget_destroyed, &amp;menu-&gt;toplevel,
-//					     NULL);
+// ```c
+// menu-&gt;toplevel = g_object_connect (g_object_new (GTK_TYPE_WINDOW,
 //
-// ]|
+//	              "type", GTK_WINDOW_POPUP,
+//	              "child", menu,
+//	              NULL),
+//	"signal::event", gtk_menu_window_event, menu,
+//	"signal::size_request", gtk_menu_window_size_request, menu,
+//	"signal::destroy", gtk_widget_destroyed, &amp;menu-&gt;toplevel,
+//	NULL);
+//
+// ```
 func (x *Object) Connect(SignalSpecVar string, varArgs ...interface{}) *Object {
 	var cls *Object
 
@@ -1016,22 +1057,21 @@ var xObjectNotifyByPspec func(uintptr, uintptr)
 //
 // |[&lt;!-- language="C" --&gt;
 //
-//	enum
+//	typedef enum
 //	{
-//	  PROP_0,
-//	  PROP_FOO,
+//	  PROP_FOO = 1,
 //	  PROP_LAST
-//	};
+//	} MyObjectProperty;
 //
 //	static GParamSpec *properties[PROP_LAST];
 //
 //	static void
 //	my_object_class_init (MyObjectClass *klass)
 //	{
-//	  properties[PROP_FOO] = g_param_spec_int ("foo", "Foo", "The foo",
+//	  properties[PROP_FOO] = g_param_spec_int ("foo", NULL, NULL,
 //	                                           0, 100,
 //	                                           50,
-//	                                           G_PARAM_READWRITE);
+//	                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 //	  g_object_class_install_property (gobject_class,
 //	                                   PROP_FOO,
 //	                                   properties[PROP_FOO]);
@@ -1105,6 +1145,11 @@ var xObjectRemoveToggleRef func(uintptr, uintptr, uintptr)
 
 // Removes a reference added with g_object_add_toggle_ref(). The
 // reference count of the object is decreased by one.
+//
+// Note that if you unref the object on another thread, then @notify might
+// still be invoked after g_object_remove_toggle_ref(), and the object argument
+// might be a dangling pointer. If the object is destroyed on other threads,
+// you must take care of that yourself.
 func (x *Object) RemoveToggleRef(NotifyVar *ToggleNotify, DataVar uintptr) {
 
 	xObjectRemoveToggleRef(x.GoPointer(), glib.NewCallback(NotifyVar), DataVar)
@@ -1370,7 +1415,7 @@ var xObjectTakeRef func(uintptr) uintptr
 //
 // Using this function on the return value of the user's callback allows
 // the user to do whichever is more convenient for them. The caller will
-// alway receives exactly one full reference to the value: either the
+// always receives exactly one full reference to the value: either the
 // one that was returned in the first place, or a floating reference
 // that has been converted to a full reference.
 //
@@ -1507,7 +1552,7 @@ func (c *Object) SetGoPointer(ptr uintptr) {
 // ]|
 //
 // It is important to note that you must use
-// [canonical parameter names][canonical-parameter-names] as
+// [canonical parameter names][class@GObject.ParamSpec#parameter-names] as
 // detail strings for the notify signal.
 func (x *Object) ConnectNotify(cb *func(Object, uintptr)) uint32 {
 	cbPtr := uintptr(unsafe.Pointer(cb))

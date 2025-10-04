@@ -161,13 +161,14 @@ func PrintErrorQuark() glib.Quark {
 
 var xPrintRunPageSetupDialog func(uintptr, uintptr, uintptr) uintptr
 
-// Runs a page setup dialog, letting the user modify the values from
-// @page_setup. If the user cancels the dialog, the returned `GtkPageSetup`
-// is identical to the passed in @page_setup, otherwise it contains the
-// modifications done in the dialog.
+// Runs a page setup dialog, letting the user modify the values from @page_setup.
+//
+// If the user cancels the dialog, the returned `GtkPageSetup` is identical
+// to the passed in @page_setup, otherwise it contains the modifications
+// done in the dialog.
 //
 // Note that this function may use a recursive mainloop to show the page
-// setup dialog. See gtk_print_run_page_setup_dialog_async() if this is
+// setup dialog. See [func@Gtk.print_run_page_setup_dialog_async] if this is
 // a problem.
 func PrintRunPageSetupDialog(ParentVar *Window, PageSetupVar *PageSetup, SettingsVar *PrintSettings) *PageSetup {
 	var cls *PageSetup
@@ -186,16 +187,16 @@ var xPrintRunPageSetupDialogAsync func(uintptr, uintptr, uintptr, uintptr, uintp
 
 // Runs a page setup dialog, letting the user modify the values from @page_setup.
 //
-// In contrast to gtk_print_run_page_setup_dialog(), this function  returns after
-// showing the page setup dialog on platforms that support this, and calls @done_cb
-// from a signal handler for the ::response signal of the dialog.
+// In contrast to [func@Gtk.print_run_page_setup_dialog], this function  returns
+// after showing the page setup dialog on platforms that support this, and calls
+// @done_cb from a signal handler for the ::response signal of the dialog.
 func PrintRunPageSetupDialogAsync(ParentVar *Window, PageSetupVar *PageSetup, SettingsVar *PrintSettings, DoneCbVar *PageSetupDoneFunc, DataVar uintptr) {
 
 	xPrintRunPageSetupDialogAsync(ParentVar.GoPointer(), PageSetupVar.GoPointer(), SettingsVar.GoPointer(), glib.NewCallback(DoneCbVar), DataVar)
 
 }
 
-// `GtkPrintOperation` is the high-level, portable printing API.
+// High-level, portable printing API.
 //
 // It looks a bit different than other GTK dialogs such as the
 // `GtkFileChooser`, since some platforms don’t expose enough
@@ -517,7 +518,7 @@ var xPrintOperationRun func(uintptr, PrintOperationAction, uintptr, **glib.Error
 //						     error-&gt;message);
 //	   g_signal_connect (error_dialog, "response",
 //	                     G_CALLBACK (gtk_window_destroy), NULL);
-//	   gtk_widget_show (error_dialog);
+//	   gtk_window_present (GTK_WINDOW (error_dialog));
 //	   g_error_free (error);
 //	 }
 //

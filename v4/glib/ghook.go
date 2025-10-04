@@ -209,6 +209,15 @@ func HookInsertBefore(HookListVar *HookList, SiblingVar *Hook, HookVar *Hook) {
 
 }
 
+var xHookInsertSorted func(*HookList, *Hook, uintptr)
+
+// Inserts a #GHook into a #GHookList, sorted by the given function.
+func HookInsertSorted(HookListVar *HookList, HookVar *Hook, FuncVar *HookCompareFunc) {
+
+	xHookInsertSorted(HookListVar, HookVar, NewCallback(FuncVar))
+
+}
+
 var xHookPrepend func(*HookList, *Hook)
 
 // Prepends a #GHook on the start of a #GHookList.
@@ -239,6 +248,7 @@ func init() {
 	core.PuregoSafeRegister(&xHookDestroyLink, lib, "g_hook_destroy_link")
 	core.PuregoSafeRegister(&xHookFree, lib, "g_hook_free")
 	core.PuregoSafeRegister(&xHookInsertBefore, lib, "g_hook_insert_before")
+	core.PuregoSafeRegister(&xHookInsertSorted, lib, "g_hook_insert_sorted")
 	core.PuregoSafeRegister(&xHookPrepend, lib, "g_hook_prepend")
 	core.PuregoSafeRegister(&xHookUnref, lib, "g_hook_unref")
 

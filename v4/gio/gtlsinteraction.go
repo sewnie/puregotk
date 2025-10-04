@@ -46,25 +46,25 @@ func (x *TlsInteractionPrivate) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GTlsInteraction provides a mechanism for the TLS connection and database
+// `GTlsInteraction` provides a mechanism for the TLS connection and database
 // code to interact with the user. It can be used to ask the user for passwords.
 //
-// To use a #GTlsInteraction with a TLS connection use
-// g_tls_connection_set_interaction().
+// To use a `GTlsInteraction` with a TLS connection use
+// [method@Gio.TlsConnection.set_interaction].
 //
 // Callers should instantiate a derived class that implements the various
 // interaction methods to show the required dialogs.
 //
 // Callers should use the 'invoke' functions like
-// g_tls_interaction_invoke_ask_password() to run interaction methods. These
-// functions make sure that the interaction is invoked in the main loop
+// [method@Gio.TlsInteraction.invoke_ask_password] to run interaction methods.
+// These functions make sure that the interaction is invoked in the main loop
 // and not in the current thread, if the current thread is not running the
 // main loop.
 //
-// Derived classes can choose to implement whichever interactions methods they'd
+// Derived classes can choose to implement whichever interactions methods they’d
 // like to support by overriding those virtual methods in their class
 // initialization function. Any interactions not implemented will return
-// %G_TLS_INTERACTION_UNHANDLED. If a derived class implements an async method,
+// `G_TLS_INTERACTION_UNHANDLED`. If a derived class implements an async method,
 // it must also implement the corresponding finish method.
 type TlsInteraction struct {
 	gobject.Object

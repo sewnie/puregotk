@@ -23,7 +23,7 @@ type TraverseFunc func(uintptr, uintptr, uintptr) bool
 type TraverseNodeFunc func(*TreeNode, uintptr) bool
 
 // The GTree struct is an opaque data structure representing a
-// [balanced binary tree][glib-Balanced-Binary-Trees]. It should be
+// [balanced binary tree](data-structures.html#binary-trees). It should be
 // accessed only by using the following functions.
 type Tree struct {
 	_ structs.HostLayout

@@ -21,8 +21,8 @@ var xBusOwnName func(BusType, string, BusNameOwnerFlags, uintptr, uintptr, uintp
 
 // Starts acquiring @name on the bus specified by @bus_type and calls
 // @name_acquired_handler and @name_lost_handler when the name is
-// acquired respectively lost. Callbacks will be invoked in the
-// [thread-default main context][g-main-context-push-thread-default]
+// acquired respectively lost. Callbacks will be invoked in the thread-default
+// main context (see [method@GLib.MainContext.push_thread_default])
 // of the thread you are calling this function from.
 //
 // You are guaranteed that one of the @name_acquired_handler and @name_lost_handler
@@ -65,7 +65,7 @@ var xBusOwnName func(BusType, string, BusNameOwnerFlags, uintptr, uintptr, uintp
 // before @name is requested from the bus.
 //
 // This behavior makes it very simple to write applications that wants
-// to [own names][gdbus-owning-names] and export objects.
+// to [own names](dbus-name-owning.html#d-bus-name-owning) and export objects.
 // Simply register objects to be exported in @bus_acquired_handler and
 // unregister the objects (if any) in @name_lost_handler.
 func BusOwnName(BusTypeVar BusType, NameVar string, FlagsVar BusNameOwnerFlags, BusAcquiredHandlerVar *BusAcquiredCallback, NameAcquiredHandlerVar *BusNameAcquiredCallback, NameLostHandlerVar *BusNameLostCallback, UserDataVar uintptr, UserDataFreeFuncVar *glib.DestroyNotify) uint {

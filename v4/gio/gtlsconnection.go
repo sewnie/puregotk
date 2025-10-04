@@ -33,12 +33,31 @@ func (x *TlsConnectionPrivate) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GTlsConnection is the base TLS connection class type, which wraps
-// a #GIOStream and provides TLS encryption on top of it. Its
-// subclasses, #GTlsClientConnection and #GTlsServerConnection,
-// implement client-side and server-side TLS, respectively.
+var xTlsChannelBindingErrorQuark func() glib.Quark
+
+// Gets the TLS channel binding error quark.
+func TlsChannelBindingErrorQuark() glib.Quark {
+
+	cret := xTlsChannelBindingErrorQuark()
+	return cret
+}
+
+var xTlsErrorQuark func() glib.Quark
+
+// Gets the TLS error quark.
+func TlsErrorQuark() glib.Quark {
+
+	cret := xTlsErrorQuark()
+	return cret
+}
+
+// `GTlsConnection` is the base TLS connection class type, which wraps
+// a [class@Gio.IOStream] and provides TLS encryption on top of it. Its
+// subclasses, [iface@Gio.TlsClientConnection] and
+// [iface@Gio.TlsServerConnection], implement client-side and server-side TLS,
+// respectively.
 //
-// For DTLS (Datagram TLS) support, see #GDtlsConnection.
+// For DTLS (Datagram TLS) support, see [iface@Gio.DtlsConnection].
 type TlsConnection struct {
 	IOStream
 }
@@ -377,7 +396,7 @@ var xTlsConnectionSetDatabase func(uintptr, uintptr)
 // #GTlsClientConnection:validation-flags).
 //
 // There are nonintuitive security implications when using a non-default
-// database. See #GDtlsConnection:database for details.
+// database. See #GTlsConnection:database for details.
 func (x *TlsConnection) SetDatabase(DatabaseVar *TlsDatabase) {
 
 	xTlsConnectionSetDatabase(x.GoPointer(), DatabaseVar.GoPointer())
@@ -537,6 +556,9 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	core.PuregoSafeRegister(&xTlsChannelBindingErrorQuark, lib, "g_tls_channel_binding_error_quark")
+	core.PuregoSafeRegister(&xTlsErrorQuark, lib, "g_tls_error_quark")
 
 	core.PuregoSafeRegister(&xTlsConnectionGLibType, lib, "g_tls_connection_get_type")
 

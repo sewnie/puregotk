@@ -364,7 +364,7 @@ const (
 	//     expects a parameter of type (char **) and g_strdup()s the
 	//     returned pointer. The pointer must be freed with g_free()
 	GMarkupCollectStrdupValue MarkupCollectType = 2
-	// expects a parameter of type (gboolean *)
+	// expects a parameter of type (`gboolean *`)
 	//     and parses the attribute value as a boolean. Sets %FALSE if the
 	//     attribute isn't present. Valid boolean values consist of
 	//     (case-insensitive) "false", "f", "no", "n", "0" and "true", "t",
@@ -372,7 +372,7 @@ const (
 	GMarkupCollectBooleanValue MarkupCollectType = 3
 	// as with %G_MARKUP_COLLECT_BOOLEAN, but
 	//     in the case of a missing attribute a value is set that compares
-	//     equal to neither %FALSE nor %TRUE G_MARKUP_COLLECT_OPTIONAL is
+	//     equal to neither %FALSE nor %TRUE %G_MARKUP_COLLECT_OPTIONAL is
 	//     implied
 	GMarkupCollectTristateValue MarkupCollectType = 4
 	// can be bitwise ORed with the other fields.
@@ -386,6 +386,8 @@ type MarkupParseFlags int
 
 const (
 
+	// No special behaviour. Since: 2.74
+	GMarkupDefaultFlagsValue MarkupParseFlags = 0
 	// flag you should not use
 	GMarkupDoNotUseThisUnsupportedFlagValue MarkupParseFlags = 1
 	// When this flag is set, CDATA marked

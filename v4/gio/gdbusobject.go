@@ -22,9 +22,9 @@ func (x *DBusObjectIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// The #GDBusObject type is the base type for D-Bus objects on both
-// the service side (see #GDBusObjectSkeleton) and the client side
-// (see #GDBusObjectProxy). It is essentially just a container of
+// The `GDBusObject` type is the base type for D-Bus objects on both
+// the service side (see [class@Gio.DBusObjectSkeleton]) and the client side
+// (see [class@Gio.DBusObjectProxy]). It is essentially just a container of
 // interfaces.
 type DBusObject interface {
 	GoPointer() uintptr

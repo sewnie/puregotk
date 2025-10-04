@@ -22,8 +22,8 @@ func (x *LoadableIconIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// Extends the #GIcon interface and adds the ability to
-// load icons from streams.
+// `GLoadableIcon` extends the [iface@Gio.Icon] interface and adds the ability
+// to load icons from streams.
 type LoadableIcon interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)

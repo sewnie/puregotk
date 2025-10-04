@@ -12,7 +12,7 @@ import (
 // Specifies the type of the message handler function.
 type ScannerMsgFunc func(*Scanner, string, bool)
 
-// The data structure representing a lexical scanner.
+// `GScanner` provides a general-purpose lexical scanner.
 //
 // You should set @input_name after creating the scanner, since
 // it is used by the default message handler when displaying

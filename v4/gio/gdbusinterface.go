@@ -22,9 +22,11 @@ func (x *DBusInterfaceIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// The #GDBusInterface type is the base type for D-Bus interfaces both
-// on the service side (see #GDBusInterfaceSkeleton) and client side
-// (see #GDBusProxy).
+// Base type for D-Bus interfaces.
+//
+// The `GDBusInterface` type is the base type for D-Bus interfaces both
+// on the service side (see [class@Gio.DBusInterfaceSkeleton]) and client side
+// (see [class@Gio.DBusProxy]).
 type DBusInterface interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)

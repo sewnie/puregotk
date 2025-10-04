@@ -13,6 +13,40 @@ import (
 	"github.com/jwijenbergh/puregotk/v4/gobject/types"
 )
 
+// A notification callback used by [method@Gtk.TextBuffer.add_commit_notify].
+//
+// You may not modify the [class@Gtk.TextBuffer] from a
+// [callback@Gtk.TextBufferCommitNotify] callback and that is enforced
+// by the [class@Gtk.TextBuffer] API.
+//
+// [callback@Gtk.TextBufferCommitNotify] may be used to be notified about
+// changes to the underlying buffer right before-or-after the changes are
+// committed to the underlying B-Tree. This is useful if you want to observe
+// changes to the buffer without other signal handlers potentially modifying
+// state on the way to the default signal handler.
+//
+// When @flags is `GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT`, `position` is set to
+// the offset in characters from the start of the buffer where the insertion
+// will occur. `length` is set to the number of characters to be inserted.  You
+// may not yet retrieve the text until it has been inserted. You may access the
+// text from `GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT` using
+// [method@Gtk.TextBuffer.get_slice].
+//
+// When @flags is `GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT`, `position` is set to
+// offset in characters where the insertion occurred and `length` is set
+// to the number of characters inserted.
+//
+// When @flags is `GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE`, `position` is set to
+// offset in characters where the deletion will occur and `length` is set
+// to the number of characters that will be removed. You may still retrieve
+// the text from this handler using `position` and `length`.
+//
+// When @flags is `GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE`, `length` is set to
+// zero to denote that the delete-range has already been committed to the
+// underlying B-Tree. You may no longer retrieve the text that has been
+// deleted from the [class@Gtk.TextBuffer].
+type TextBufferCommitNotify func(uintptr, TextBufferNotifyFlags, uint, uint, uintptr)
+
 // The class structure for `GtkTextBuffer`.
 type TextBufferClass struct {
 	_ structs.HostLayout
@@ -71,6 +105,25 @@ func NewTextBuffer(TableVar *TextTagTable) *TextBuffer {
 	cls = &TextBuffer{}
 	cls.Ptr = cret
 	return cls
+}
+
+var xTextBufferAddCommitNotify func(uintptr, TextBufferNotifyFlags, uintptr, uintptr, uintptr) uint
+
+// Adds a [callback@Gtk.TextBufferCommitNotify] to be called when a change
+// is to be made to the [type@Gtk.TextBuffer].
+//
+// Functions are explicitly forbidden from making changes to the
+// [type@Gtk.TextBuffer] from this callback. It is intended for tracking
+// changes to the buffer only.
+//
+// It may be advantageous to use [callback@Gtk.TextBufferCommitNotify] over
+// connecting to the [signal@Gtk.TextBuffer::insert-text] or
+// [signal@Gtk.TextBuffer::delete-range] signals to avoid ordering issues with
+// other signal handlers which may further modify the [type@Gtk.TextBuffer].
+func (x *TextBuffer) AddCommitNotify(FlagsVar TextBufferNotifyFlags, CommitNotifyVar *TextBufferCommitNotify, UserDataVar uintptr, DestroyVar *glib.DestroyNotify) uint {
+
+	cret := xTextBufferAddCommitNotify(x.GoPointer(), FlagsVar, glib.NewCallback(CommitNotifyVar), UserDataVar, glib.NewCallback(DestroyVar))
+	return cret
 }
 
 var xTextBufferAddMark func(uintptr, uintptr, *TextIter)
@@ -1023,10 +1076,23 @@ func (x *TextBuffer) RemoveAllTags(StartVar *TextIter, EndVar *TextIter) {
 
 }
 
+var xTextBufferRemoveCommitNotify func(uintptr, uint)
+
+// Removes the `GtkTextBufferCommitNotify` handler previously registered
+// with [method@Gtk.TextBuffer.add_commit_notify].
+//
+// This may result in the `user_data_destroy` being called that was passed when registering
+// the commit notify functions.
+func (x *TextBuffer) RemoveCommitNotify(CommitNotifyHandlerVar uint) {
+
+	xTextBufferRemoveCommitNotify(x.GoPointer(), CommitNotifyHandlerVar)
+
+}
+
 var xTextBufferRemoveSelectionClipboard func(uintptr, uintptr)
 
 // Removes a `GdkClipboard` added with
-// gtk_text_buffer_add_selection_clipboard().
+// [method@Gtk.TextBuffer.add_selection_clipboard]
 func (x *TextBuffer) RemoveSelectionClipboard(ClipboardVar *gdk.Clipboard) {
 
 	xTextBufferRemoveSelectionClipboard(x.GoPointer(), ClipboardVar.GoPointer())
@@ -1116,7 +1182,7 @@ var xTextBufferSetModified func(uintptr, bool)
 // Whenever the buffer is saved to disk, call
 // `gtk_text_buffer_set_modified (@buffer, FALSE)`.
 // When the buffer is modified, it will automatically
-// toggled on the modified bit again. When the modified
+// toggle on the modified bit again. When the modified
 // bit flips, the buffer emits the
 // [signal@Gtk.TextBuffer::modified-changed] signal.
 func (x *TextBuffer) SetModified(SettingVar bool) {
@@ -1562,6 +1628,7 @@ func init() {
 
 	core.PuregoSafeRegister(&xNewTextBuffer, lib, "gtk_text_buffer_new")
 
+	core.PuregoSafeRegister(&xTextBufferAddCommitNotify, lib, "gtk_text_buffer_add_commit_notify")
 	core.PuregoSafeRegister(&xTextBufferAddMark, lib, "gtk_text_buffer_add_mark")
 	core.PuregoSafeRegister(&xTextBufferAddSelectionClipboard, lib, "gtk_text_buffer_add_selection_clipboard")
 	core.PuregoSafeRegister(&xTextBufferApplyTag, lib, "gtk_text_buffer_apply_tag")
@@ -1623,6 +1690,7 @@ func init() {
 	core.PuregoSafeRegister(&xTextBufferPlaceCursor, lib, "gtk_text_buffer_place_cursor")
 	core.PuregoSafeRegister(&xTextBufferRedo, lib, "gtk_text_buffer_redo")
 	core.PuregoSafeRegister(&xTextBufferRemoveAllTags, lib, "gtk_text_buffer_remove_all_tags")
+	core.PuregoSafeRegister(&xTextBufferRemoveCommitNotify, lib, "gtk_text_buffer_remove_commit_notify")
 	core.PuregoSafeRegister(&xTextBufferRemoveSelectionClipboard, lib, "gtk_text_buffer_remove_selection_clipboard")
 	core.PuregoSafeRegister(&xTextBufferRemoveTag, lib, "gtk_text_buffer_remove_tag")
 	core.PuregoSafeRegister(&xTextBufferRemoveTagByName, lib, "gtk_text_buffer_remove_tag_by_name")

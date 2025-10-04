@@ -25,87 +25,97 @@ func (x *FileIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GFile is a high level abstraction for manipulating files on a
-// virtual file system. #GFiles are lightweight, immutable objects
+// `GFile` is a high level abstraction for manipulating files on a
+// virtual file system. `GFile`s are lightweight, immutable objects
 // that do no I/O upon creation. It is necessary to understand that
-// #GFile objects do not represent files, merely an identifier for a
+// `GFile` objects do not represent files, merely an identifier for a
 // file. All file content I/O is implemented as streaming operations
-// (see #GInputStream and #GOutputStream).
+// (see [class@Gio.InputStream] and [class@Gio.OutputStream]).
 //
-// To construct a #GFile, you can use:
-// - g_file_new_for_path() if you have a path.
-// - g_file_new_for_uri() if you have a URI.
-// - g_file_new_for_commandline_arg() for a command line argument.
-// - g_file_new_tmp() to create a temporary file from a template.
-// - g_file_parse_name() from a UTF-8 string gotten from g_file_get_parse_name().
-// - g_file_new_build_filename() to create a file from path elements.
+// To construct a `GFile`, you can use:
 //
-// One way to think of a #GFile is as an abstraction of a pathname. For
+//   - [func@Gio.File.new_for_path] if you have a path.
+//   - [func@Gio.File.new_for_uri] if you have a URI.
+//   - [func@Gio.File.new_for_commandline_arg] or
+//     [func@Gio.File.new_for_commandline_arg_and_cwd] for a command line
+//     argument.
+//   - [func@Gio.File.new_tmp] to create a temporary file from a template.
+//   - [func@Gio.File.new_tmp_async] to asynchronously create a temporary file.
+//   - [func@Gio.File.new_tmp_dir_async] to asynchronously create a temporary
+//     directory.
+//   - [func@Gio.File.parse_name] from a UTF-8 string gotten from
+//     [method@Gio.File.get_parse_name].
+//   - [func@Gio.File.new_build_filename] or [func@Gio.File.new_build_filenamev]
+//     to create a file from path elements.
+//
+// One way to think of a `GFile` is as an abstraction of a pathname. For
 // normal files the system pathname is what is stored internally, but as
-// #GFiles are extensible it could also be something else that corresponds
+// `GFile`s are extensible it could also be something else that corresponds
 // to a pathname in a userspace implementation of a filesystem.
 //
-// #GFiles make up hierarchies of directories and files that correspond to
+// `GFile`s make up hierarchies of directories and files that correspond to
 // the files on a filesystem. You can move through the file system with
-// #GFile using g_file_get_parent() to get an identifier for the parent
-// directory, g_file_get_child() to get a child within a directory,
-// g_file_resolve_relative_path() to resolve a relative path between two
-// #GFiles. There can be multiple hierarchies, so you may not end up at
-// the same root if you repeatedly call g_file_get_parent() on two different
-// files.
+// `GFile` using [method@Gio.File.get_parent] to get an identifier for the
+// parent directory, [method@Gio.File.get_child] to get a child within a
+// directory, and [method@Gio.File.resolve_relative_path] to resolve a relative
+// path between two `GFile`s. There can be multiple hierarchies, so you may not
+// end up at the same root if you repeatedly call [method@Gio.File.get_parent]
+// on two different files.
 //
-// All #GFiles have a basename (get with g_file_get_basename()). These names
-// are byte strings that are used to identify the file on the filesystem
+// All `GFile`s have a basename (get with [method@Gio.File.get_basename]). These
+// names are byte strings that are used to identify the file on the filesystem
 // (relative to its parent directory) and there is no guarantees that they
 // have any particular charset encoding or even make any sense at all. If
 // you want to use filenames in a user interface you should use the display
 // name that you can get by requesting the
-// %G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME attribute with g_file_query_info().
-// This is guaranteed to be in UTF-8 and can be used in a user interface.
-// But always store the real basename or the #GFile to use to actually
-// access the file, because there is no way to go from a display name to
-// the actual name.
+// `G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME` attribute with
+// [method@Gio.File.query_info]. This is guaranteed to be in UTF-8 and can be
+// used in a user interface. But always store the real basename or the `GFile`
+// to use to actually access the file, because there is no way to go from a
+// display name to the actual name.
 //
-// Using #GFile as an identifier has the same weaknesses as using a path
+// Using `GFile` as an identifier has the same weaknesses as using a path
 // in that there may be multiple aliases for the same file. For instance,
-// hard or soft links may cause two different #GFiles to refer to the same
+// hard or soft links may cause two different `GFile`s to refer to the same
 // file. Other possible causes for aliases are: case insensitive filesystems,
 // short and long names on FAT/NTFS, or bind mounts in Linux. If you want to
-// check if two #GFiles point to the same file you can query for the
-// %G_FILE_ATTRIBUTE_ID_FILE attribute. Note that #GFile does some trivial
+// check if two `GFile`s point to the same file you can query for the
+// `G_FILE_ATTRIBUTE_ID_FILE` attribute. Note that `GFile` does some trivial
 // canonicalization of pathnames passed in, so that trivial differences in
 // the path string used at creation (duplicated slashes, slash at end of
-// path, "." or ".." path segments, etc) does not create different #GFiles.
+// path, `.` or `..` path segments, etc) does not create different `GFile`s.
 //
-// Many #GFile operations have both synchronous and asynchronous versions
+// Many `GFile` operations have both synchronous and asynchronous versions
 // to suit your application. Asynchronous versions of synchronous functions
-// simply have _async() appended to their function names. The asynchronous
-// I/O functions call a #GAsyncReadyCallback which is then used to finalize
-// the operation, producing a GAsyncResult which is then passed to the
-// function's matching _finish() operation.
+// simply have `_async()` appended to their function names. The asynchronous
+// I/O functions call a [callback@Gio.AsyncReadyCallback] which is then used to
+// finalize the operation, producing a [iface@Gio.AsyncResult] which is then
+// passed to the function’s matching `_finish()` operation.
 //
 // It is highly recommended to use asynchronous calls when running within a
 // shared main loop, such as in the main thread of an application. This avoids
 // I/O operations blocking other sources on the main loop from being dispatched.
 // Synchronous I/O operations should be performed from worker threads. See the
-// [introduction to asynchronous programming section][async-programming] for
-// more.
+// [introduction to asynchronous programming section](overview.html#asynchronous-programming)
+// for more.
 //
-// Some #GFile operations almost always take a noticeable amount of time, and
+// Some `GFile` operations almost always take a noticeable amount of time, and
 // so do not have synchronous analogs. Notable cases include:
-// - g_file_mount_mountable() to mount a mountable file.
-// - g_file_unmount_mountable_with_operation() to unmount a mountable file.
-// - g_file_eject_mountable_with_operation() to eject a mountable file.
 //
-// ## Entity Tags # {#gfile-etag}
+//   - [method@Gio.File.mount_mountable] to mount a mountable file.
+//   - [method@Gio.File.unmount_mountable_with_operation] to unmount a mountable
+//     file.
+//   - [method@Gio.File.eject_mountable_with_operation] to eject a mountable file.
 //
-// One notable feature of #GFiles are entity tags, or "etags" for
+// ## Entity Tags
+//
+// One notable feature of `GFile`s are entity tags, or ‘etags’ for
 // short. Entity tags are somewhat like a more abstract version of the
 // traditional mtime, and can be used to quickly determine if the file
 // has been modified from the version on the file system. See the
 // HTTP 1.1
 // [specification](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)
-// for HTTP Etag headers, which are a very similar concept.
+// for HTTP `ETag` headers, which are a very similar concept.
 type File interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
@@ -115,6 +125,7 @@ type File interface {
 	BuildAttributeListForCopy(FlagsVar FileCopyFlags, CancellableVar *Cancellable) string
 	Copy(DestinationVar File, FlagsVar FileCopyFlags, CancellableVar *Cancellable, ProgressCallbackVar *FileProgressCallback, ProgressCallbackDataVar uintptr) bool
 	CopyAsync(DestinationVar File, FlagsVar FileCopyFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackVar *FileProgressCallback, ProgressCallbackDataVar uintptr, CallbackVar *AsyncReadyCallback, UserDataVar uintptr)
+	CopyAsyncWithClosures(DestinationVar File, FlagsVar FileCopyFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackClosureVar *gobject.Closure, ReadyCallbackClosureVar *gobject.Closure)
 	CopyAttributes(DestinationVar File, FlagsVar FileCopyFlags, CancellableVar *Cancellable) bool
 	CopyFinish(ResVar AsyncResult) bool
 	Create(FlagsVar FileCreateFlags, CancellableVar *Cancellable) *FileOutputStream
@@ -165,6 +176,8 @@ type File interface {
 	MakeDirectoryFinish(ResultVar AsyncResult) bool
 	MakeDirectoryWithParents(CancellableVar *Cancellable) bool
 	MakeSymbolicLink(SymlinkValueVar string, CancellableVar *Cancellable) bool
+	MakeSymbolicLinkAsync(SymlinkValueVar string, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr)
+	MakeSymbolicLinkFinish(ResultVar AsyncResult) bool
 	MeasureDiskUsage(FlagsVar FileMeasureFlags, CancellableVar *Cancellable, ProgressCallbackVar *FileMeasureProgressCallback, ProgressDataVar uintptr, DiskUsageVar uint64, NumDirsVar uint64, NumFilesVar uint64) bool
 	MeasureDiskUsageAsync(FlagsVar FileMeasureFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackVar *FileMeasureProgressCallback, ProgressDataVar uintptr, CallbackVar *AsyncReadyCallback, UserDataVar uintptr)
 	MeasureDiskUsageFinish(ResultVar AsyncResult, DiskUsageVar uint64, NumDirsVar uint64, NumFilesVar uint64) bool
@@ -177,6 +190,7 @@ type File interface {
 	MountMountableFinish(ResultVar AsyncResult) *FileBase
 	Move(DestinationVar File, FlagsVar FileCopyFlags, CancellableVar *Cancellable, ProgressCallbackVar *FileProgressCallback, ProgressCallbackDataVar uintptr) bool
 	MoveAsync(DestinationVar File, FlagsVar FileCopyFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackVar *FileProgressCallback, ProgressCallbackDataVar uintptr, CallbackVar *AsyncReadyCallback, UserDataVar uintptr)
+	MoveAsyncWithClosures(DestinationVar File, FlagsVar FileCopyFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackClosureVar *gobject.Closure, ReadyCallbackClosureVar *gobject.Closure)
 	MoveFinish(ResultVar AsyncResult) bool
 	OpenReadwrite(CancellableVar *Cancellable) *FileIOStream
 	OpenReadwriteAsync(IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr)
@@ -412,6 +426,14 @@ func (x *FileBase) Copy(DestinationVar File, FlagsVar FileCopyFlags, Cancellable
 func (x *FileBase) CopyAsync(DestinationVar File, FlagsVar FileCopyFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackVar *FileProgressCallback, ProgressCallbackDataVar uintptr, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
 
 	XGFileCopyAsync(x.GoPointer(), DestinationVar.GoPointer(), FlagsVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(ProgressCallbackVar), ProgressCallbackDataVar, glib.NewCallback(CallbackVar), UserDataVar)
+
+}
+
+// Version of [method@Gio.File.copy_async] using closures instead of callbacks for
+// easier binding in other languages.
+func (x *FileBase) CopyAsyncWithClosures(DestinationVar File, FlagsVar FileCopyFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackClosureVar *gobject.Closure, ReadyCallbackClosureVar *gobject.Closure) {
+
+	XGFileCopyAsyncWithClosures(x.GoPointer(), DestinationVar.GoPointer(), FlagsVar, IoPriorityVar, CancellableVar.GoPointer(), ProgressCallbackClosureVar, ReadyCallbackClosureVar)
 
 }
 
@@ -1324,6 +1346,27 @@ func (x *FileBase) MakeSymbolicLink(SymlinkValueVar string, CancellableVar *Canc
 
 }
 
+// Asynchronously creates a symbolic link named @file which contains the
+// string @symlink_value.
+func (x *FileBase) MakeSymbolicLinkAsync(SymlinkValueVar string, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+
+	XGFileMakeSymbolicLinkAsync(x.GoPointer(), SymlinkValueVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
+
+}
+
+// Finishes an asynchronous symbolic link creation, started with
+// g_file_make_symbolic_link_async().
+func (x *FileBase) MakeSymbolicLinkFinish(ResultVar AsyncResult) (bool, error) {
+	var cerr *glib.Error
+
+	cret := XGFileMakeSymbolicLinkFinish(x.GoPointer(), ResultVar.GoPointer(), &cerr)
+	if cerr == nil {
+		return cret, nil
+	}
+	return cret, cerr
+
+}
+
 // Recursively measures the disk usage of @file.
 //
 // This is essentially an analog of the 'du' command, but it also
@@ -1589,6 +1632,14 @@ func (x *FileBase) MoveAsync(DestinationVar File, FlagsVar FileCopyFlags, IoPrio
 
 }
 
+// Version of [method@Gio.File.move_async] using closures instead of callbacks for
+// easier binding in other languages.
+func (x *FileBase) MoveAsyncWithClosures(DestinationVar File, FlagsVar FileCopyFlags, IoPriorityVar int, CancellableVar *Cancellable, ProgressCallbackClosureVar *gobject.Closure, ReadyCallbackClosureVar *gobject.Closure) {
+
+	XGFileMoveAsyncWithClosures(x.GoPointer(), DestinationVar.GoPointer(), FlagsVar, IoPriorityVar, CancellableVar.GoPointer(), ProgressCallbackClosureVar, ReadyCallbackClosureVar)
+
+}
+
 // Finishes an asynchronous file movement, started with
 // g_file_move_async().
 func (x *FileBase) MoveFinish(ResultVar AsyncResult) (bool, error) {
@@ -1763,8 +1814,11 @@ func (x *FileBase) QueryDefaultHandlerFinish(ResultVar AsyncResult) (*AppInfoBas
 
 }
 
-// Utility function to check if a particular file exists. This is
-// implemented using g_file_query_info() and as such does blocking I/O.
+// Utility function to check if a particular file exists.
+//
+// The fallback implementation of this API is using [method@Gio.File.query_info]
+// and therefore may do blocking I/O. To asynchronously query the existence
+// of a file, use [method@Gio.File.query_info_async].
 //
 // Note that in many cases it is [racy to first check for file existence](https://en.wikipedia.org/wiki/Time_of_check_to_time_of_use)
 // and then execute something based on the outcome of that, because the
@@ -2624,8 +2678,8 @@ func (x *FileBase) StopMountableFinish(ResultVar AsyncResult) (bool, error) {
 
 }
 
-// Checks if @file supports
-// [thread-default contexts][g-main-context-push-thread-default-context].
+// Checks if @file supports thread-default main contexts
+// (see [method@GLib.MainContext.push_thread_default])
 // If this returns %FALSE, you cannot perform asynchronous operations on
 // @file in a thread that has a thread-default context.
 func (x *FileBase) SupportsThreadContexts() bool {
@@ -2636,10 +2690,13 @@ func (x *FileBase) SupportsThreadContexts() bool {
 
 // Sends @file to the "Trashcan", if possible. This is similar to
 // deleting it, but the user can recover it before emptying the trashcan.
-// Not all file systems support trashing, so this call can return the
+// Trashing is disabled for system mounts by default (see
+// g_unix_mount_entry_is_system_internal()), so this call can return the
 // %G_IO_ERROR_NOT_SUPPORTED error. Since GLib 2.66, the `x-gvfs-notrash` unix
-// mount option can be used to disable g_file_trash() support for certain
+// mount option can be used to disable g_file_trash() support for particular
 // mounts, the %G_IO_ERROR_NOT_SUPPORTED error will be returned in that case.
+// Since 2.82, the `x-gvfs-trash` unix mount option can be used to enable
+// g_file_trash() support for particular system mounts.
 //
 // If @cancellable is not %NULL, then the operation can be cancelled by
 // triggering the cancellable object from another thread. If the operation
@@ -2742,6 +2799,7 @@ var XGFileAppendToFinish func(uintptr, uintptr, **glib.Error) uintptr
 var XGFileBuildAttributeListForCopy func(uintptr, FileCopyFlags, uintptr, **glib.Error) string
 var XGFileCopy func(uintptr, uintptr, FileCopyFlags, uintptr, uintptr, uintptr, **glib.Error) bool
 var XGFileCopyAsync func(uintptr, uintptr, FileCopyFlags, int, uintptr, uintptr, uintptr, uintptr, uintptr)
+var XGFileCopyAsyncWithClosures func(uintptr, uintptr, FileCopyFlags, int, uintptr, *gobject.Closure, *gobject.Closure)
 var XGFileCopyAttributes func(uintptr, uintptr, FileCopyFlags, uintptr, **glib.Error) bool
 var XGFileCopyFinish func(uintptr, uintptr, **glib.Error) bool
 var XGFileCreate func(uintptr, FileCreateFlags, uintptr, **glib.Error) uintptr
@@ -2792,6 +2850,8 @@ var XGFileMakeDirectoryAsync func(uintptr, int, uintptr, uintptr, uintptr)
 var XGFileMakeDirectoryFinish func(uintptr, uintptr, **glib.Error) bool
 var XGFileMakeDirectoryWithParents func(uintptr, uintptr, **glib.Error) bool
 var XGFileMakeSymbolicLink func(uintptr, string, uintptr, **glib.Error) bool
+var XGFileMakeSymbolicLinkAsync func(uintptr, string, int, uintptr, uintptr, uintptr)
+var XGFileMakeSymbolicLinkFinish func(uintptr, uintptr, **glib.Error) bool
 var XGFileMeasureDiskUsage func(uintptr, FileMeasureFlags, uintptr, uintptr, uintptr, uint64, uint64, uint64, **glib.Error) bool
 var XGFileMeasureDiskUsageAsync func(uintptr, FileMeasureFlags, int, uintptr, uintptr, uintptr, uintptr, uintptr)
 var XGFileMeasureDiskUsageFinish func(uintptr, uintptr, uint64, uint64, uint64, **glib.Error) bool
@@ -2804,6 +2864,7 @@ var XGFileMountMountable func(uintptr, MountMountFlags, uintptr, uintptr, uintpt
 var XGFileMountMountableFinish func(uintptr, uintptr, **glib.Error) uintptr
 var XGFileMove func(uintptr, uintptr, FileCopyFlags, uintptr, uintptr, uintptr, **glib.Error) bool
 var XGFileMoveAsync func(uintptr, uintptr, FileCopyFlags, int, uintptr, uintptr, uintptr, uintptr, uintptr)
+var XGFileMoveAsyncWithClosures func(uintptr, uintptr, FileCopyFlags, int, uintptr, *gobject.Closure, *gobject.Closure)
 var XGFileMoveFinish func(uintptr, uintptr, **glib.Error) bool
 var XGFileOpenReadwrite func(uintptr, uintptr, **glib.Error) uintptr
 var XGFileOpenReadwriteAsync func(uintptr, int, uintptr, uintptr, uintptr)
@@ -2863,6 +2924,26 @@ var XGFileUnmountMountable func(uintptr, MountUnmountFlags, uintptr, uintptr, ui
 var XGFileUnmountMountableFinish func(uintptr, uintptr, **glib.Error) bool
 var XGFileUnmountMountableWithOperation func(uintptr, MountUnmountFlags, uintptr, uintptr, uintptr, uintptr)
 var XGFileUnmountMountableWithOperationFinish func(uintptr, uintptr, **glib.Error) bool
+
+var xFileNewBuildFilenamev func([]string) uintptr
+
+// Constructs a #GFile from a vector of elements using the correct
+// separator for filenames.
+//
+// Using this function is equivalent to calling g_build_filenamev(),
+// followed by g_file_new_for_path() on the result.
+func FileNewBuildFilenamev(ArgsVar []string) *FileBase {
+	var cls *FileBase
+
+	cret := xFileNewBuildFilenamev(ArgsVar)
+
+	if cret == 0 {
+		return nil
+	}
+	cls = &FileBase{}
+	cls.Ptr = cret
+	return cls
+}
 
 var xFileNewForCommandlineArg func(string) uintptr
 
@@ -2986,6 +3067,78 @@ func FileNewTmp(TmplVar string, IostreamVar **FileIOStream) (*FileBase, error) {
 
 }
 
+var xFileNewTmpAsync func(string, int, uintptr, uintptr, uintptr)
+
+// Asynchronously opens a file in the preferred directory for temporary files
+//
+//	(as returned by g_get_tmp_dir()) as g_file_new_tmp().
+//
+// @tmpl should be a string in the GLib file name encoding
+// containing a sequence of six 'X' characters, and containing no
+// directory components. If it is %NULL, a default template is used.
+func FileNewTmpAsync(TmplVar string, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+
+	xFileNewTmpAsync(TmplVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
+
+}
+
+var xFileNewTmpDirAsync func(string, int, uintptr, uintptr, uintptr)
+
+// Asynchronously creates a directory in the preferred directory for
+// temporary files (as returned by g_get_tmp_dir()) as g_dir_make_tmp().
+//
+// @tmpl should be a string in the GLib file name encoding
+// containing a sequence of six 'X' characters, and containing no
+// directory components. If it is %NULL, a default template is used.
+func FileNewTmpDirAsync(TmplVar string, IoPriorityVar int, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+
+	xFileNewTmpDirAsync(TmplVar, IoPriorityVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
+
+}
+
+var xFileNewTmpDirFinish func(uintptr, **glib.Error) uintptr
+
+// Finishes a temporary directory creation started by
+// g_file_new_tmp_dir_async().
+func FileNewTmpDirFinish(ResultVar AsyncResult) (*FileBase, error) {
+	var cls *FileBase
+	var cerr *glib.Error
+
+	cret := xFileNewTmpDirFinish(ResultVar.GoPointer(), &cerr)
+
+	if cret == 0 {
+		return nil, cerr
+	}
+	cls = &FileBase{}
+	cls.Ptr = cret
+	if cerr == nil {
+		return cls, nil
+	}
+	return cls, cerr
+
+}
+
+var xFileNewTmpFinish func(uintptr, *uintptr, **glib.Error) uintptr
+
+// Finishes a temporary file creation started by g_file_new_tmp_async().
+func FileNewTmpFinish(ResultVar AsyncResult, IostreamVar **FileIOStream) (*FileBase, error) {
+	var cls *FileBase
+	var cerr *glib.Error
+
+	cret := xFileNewTmpFinish(ResultVar.GoPointer(), gobject.ConvertPtr(IostreamVar), &cerr)
+
+	if cret == 0 {
+		return nil, cerr
+	}
+	cls = &FileBase{}
+	cls.Ptr = cret
+	if cerr == nil {
+		return cls, nil
+	}
+	return cls, cerr
+
+}
+
 var xFileParseName func(string) uintptr
 
 // Constructs a #GFile with the given @parse_name (i.e. something
@@ -3011,11 +3164,16 @@ func init() {
 		panic(err)
 	}
 
+	core.PuregoSafeRegister(&xFileNewBuildFilenamev, lib, "g_file_new_build_filenamev")
 	core.PuregoSafeRegister(&xFileNewForCommandlineArg, lib, "g_file_new_for_commandline_arg")
 	core.PuregoSafeRegister(&xFileNewForCommandlineArgAndCwd, lib, "g_file_new_for_commandline_arg_and_cwd")
 	core.PuregoSafeRegister(&xFileNewForPath, lib, "g_file_new_for_path")
 	core.PuregoSafeRegister(&xFileNewForUri, lib, "g_file_new_for_uri")
 	core.PuregoSafeRegister(&xFileNewTmp, lib, "g_file_new_tmp")
+	core.PuregoSafeRegister(&xFileNewTmpAsync, lib, "g_file_new_tmp_async")
+	core.PuregoSafeRegister(&xFileNewTmpDirAsync, lib, "g_file_new_tmp_dir_async")
+	core.PuregoSafeRegister(&xFileNewTmpDirFinish, lib, "g_file_new_tmp_dir_finish")
+	core.PuregoSafeRegister(&xFileNewTmpFinish, lib, "g_file_new_tmp_finish")
 	core.PuregoSafeRegister(&xFileParseName, lib, "g_file_parse_name")
 
 	core.PuregoSafeRegister(&xFileGLibType, lib, "g_file_get_type")
@@ -3026,6 +3184,7 @@ func init() {
 	core.PuregoSafeRegister(&XGFileBuildAttributeListForCopy, lib, "g_file_build_attribute_list_for_copy")
 	core.PuregoSafeRegister(&XGFileCopy, lib, "g_file_copy")
 	core.PuregoSafeRegister(&XGFileCopyAsync, lib, "g_file_copy_async")
+	core.PuregoSafeRegister(&XGFileCopyAsyncWithClosures, lib, "g_file_copy_async_with_closures")
 	core.PuregoSafeRegister(&XGFileCopyAttributes, lib, "g_file_copy_attributes")
 	core.PuregoSafeRegister(&XGFileCopyFinish, lib, "g_file_copy_finish")
 	core.PuregoSafeRegister(&XGFileCreate, lib, "g_file_create")
@@ -3076,6 +3235,8 @@ func init() {
 	core.PuregoSafeRegister(&XGFileMakeDirectoryFinish, lib, "g_file_make_directory_finish")
 	core.PuregoSafeRegister(&XGFileMakeDirectoryWithParents, lib, "g_file_make_directory_with_parents")
 	core.PuregoSafeRegister(&XGFileMakeSymbolicLink, lib, "g_file_make_symbolic_link")
+	core.PuregoSafeRegister(&XGFileMakeSymbolicLinkAsync, lib, "g_file_make_symbolic_link_async")
+	core.PuregoSafeRegister(&XGFileMakeSymbolicLinkFinish, lib, "g_file_make_symbolic_link_finish")
 	core.PuregoSafeRegister(&XGFileMeasureDiskUsage, lib, "g_file_measure_disk_usage")
 	core.PuregoSafeRegister(&XGFileMeasureDiskUsageAsync, lib, "g_file_measure_disk_usage_async")
 	core.PuregoSafeRegister(&XGFileMeasureDiskUsageFinish, lib, "g_file_measure_disk_usage_finish")
@@ -3088,6 +3249,7 @@ func init() {
 	core.PuregoSafeRegister(&XGFileMountMountableFinish, lib, "g_file_mount_mountable_finish")
 	core.PuregoSafeRegister(&XGFileMove, lib, "g_file_move")
 	core.PuregoSafeRegister(&XGFileMoveAsync, lib, "g_file_move_async")
+	core.PuregoSafeRegister(&XGFileMoveAsyncWithClosures, lib, "g_file_move_async_with_closures")
 	core.PuregoSafeRegister(&XGFileMoveFinish, lib, "g_file_move_finish")
 	core.PuregoSafeRegister(&XGFileOpenReadwrite, lib, "g_file_open_readwrite")
 	core.PuregoSafeRegister(&XGFileOpenReadwriteAsync, lib, "g_file_open_readwrite_async")

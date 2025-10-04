@@ -46,7 +46,7 @@ func (x *CClosure) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// A #GClosure represents a callback supplied by the programmer.
+// A `GClosure` represents a callback supplied by the programmer.
 //
 // It will generally comprise a function of some kind and a marshaller
 // used to call it. It is the responsibility of the marshaller to

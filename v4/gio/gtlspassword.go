@@ -33,7 +33,8 @@ func (x *TlsPasswordPrivate) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// Holds a password used in TLS.
+// An abstract interface representing a password used in TLS. Often used in
+// user interaction such as unlocking a key storage token.
 type TlsPassword struct {
 	gobject.Object
 }

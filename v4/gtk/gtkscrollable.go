@@ -21,7 +21,7 @@ func (x *ScrollableInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// `GtkScrollable` is an interface for widgets with native scrolling ability.
+// An interface for widgets with native scrolling ability.
 //
 // To implement this interface you should override the
 // [property@Gtk.Scrollable:hadjustment] and

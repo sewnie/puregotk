@@ -22,13 +22,13 @@ func (x *DBusObjectManagerIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// The #GDBusObjectManager type is the base type for service- and
+// The `GDBusObjectManager` type is the base type for service- and
 // client-side implementations of the standardized
-// [org.freedesktop.DBus.ObjectManager](http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager)
+// [`org.freedesktop.DBus.ObjectManager`](http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager)
 // interface.
 //
-// See #GDBusObjectManagerClient for the client-side implementation
-// and #GDBusObjectManagerServer for the service-side implementation.
+// See [class@Gio.DBusObjectManagerClient] for the client-side implementation
+// and [class@Gio.DBusObjectManagerServer] for the service-side implementation.
 type DBusObjectManager interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)

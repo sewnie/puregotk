@@ -37,10 +37,15 @@ func (x *PollableOutputStreamInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GPollableOutputStream is implemented by #GOutputStreams that
+// `GPollableOutputStream` is implemented by [class@Gio.OutputStream]s that
 // can be polled for readiness to write. This can be used when
 // interfacing with a non-GIO API that expects
 // UNIX-file-descriptor-style asynchronous I/O rather than GIO-style.
+//
+// Some classes may implement `GPollableOutputStream` but have only certain
+// instances of that class be pollable. If [method@Gio.PollableOutputStream.can_poll]
+// returns false, then the behavior of other `GPollableOutputStream` methods is
+// undefined.
 type PollableOutputStream interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
@@ -93,6 +98,9 @@ func (x *PollableOutputStreamBase) CanPoll() bool {
 // the stream may not actually be writable even after the source
 // triggers, so you should use g_pollable_output_stream_write_nonblocking()
 // rather than g_output_stream_write() from the callback.
+//
+// The behaviour of this method is undefined if
+// g_pollable_output_stream_can_poll() returns %FALSE for @stream.
 func (x *PollableOutputStreamBase) CreateSource(CancellableVar *Cancellable) *glib.Source {
 
 	cret := XGPollableOutputStreamCreateSource(x.GoPointer(), CancellableVar.GoPointer())
@@ -107,6 +115,9 @@ func (x *PollableOutputStreamBase) CreateSource(CancellableVar *Cancellable) *gl
 // non-blocking behavior, you should always use
 // g_pollable_output_stream_write_nonblocking(), which will return a
 // %G_IO_ERROR_WOULD_BLOCK error rather than blocking.
+//
+// The behaviour of this method is undefined if
+// g_pollable_output_stream_can_poll() returns %FALSE for @stream.
 func (x *PollableOutputStreamBase) IsWritable() bool {
 
 	cret := XGPollableOutputStreamIsWritable(x.GoPointer())
@@ -128,6 +139,9 @@ func (x *PollableOutputStreamBase) IsWritable() bool {
 // Also note that if %G_IO_ERROR_WOULD_BLOCK is returned some underlying
 // transports like D/TLS require that you re-send the same @buffer and
 // @count in the next write call.
+//
+// The behaviour of this method is undefined if
+// g_pollable_output_stream_can_poll() returns %FALSE for @stream.
 func (x *PollableOutputStreamBase) WriteNonblocking(BufferVar []byte, CountVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 
@@ -155,6 +169,9 @@ func (x *PollableOutputStreamBase) WriteNonblocking(BufferVar []byte, CountVar u
 // Also note that if %G_POLLABLE_RETURN_WOULD_BLOCK is returned some underlying
 // transports like D/TLS require that you re-send the same @vectors and
 // @n_vectors in the next write call.
+//
+// The behaviour of this method is undefined if
+// g_pollable_output_stream_can_poll() returns %FALSE for @stream.
 func (x *PollableOutputStreamBase) WritevNonblocking(VectorsVar []OutputVector, NVectorsVar uint, BytesWrittenVar uint, CancellableVar *Cancellable) (PollableReturn, error) {
 	var cerr *glib.Error
 

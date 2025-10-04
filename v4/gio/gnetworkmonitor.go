@@ -23,7 +23,7 @@ func (x *NetworkMonitorInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GNetworkMonitor provides an easy-to-use cross-platform API
+// `GNetworkMonitor` provides an easy-to-use cross-platform API
 // for monitoring network connectivity. On Linux, the available
 // implementations are based on the kernel's netlink interface and
 // on NetworkManager.
@@ -169,7 +169,7 @@ var XGNetworkMonitorGetNetworkMetered func(uintptr) bool
 
 const (
 	// Extension point for network status monitoring functionality.
-	// See [Extending GIO][extending-gio].
+	// See [Extending GIO](overview.html#extending-gio).
 	NETWORK_MONITOR_EXTENSION_POINT_NAME string = "gio-network-monitor"
 )
 

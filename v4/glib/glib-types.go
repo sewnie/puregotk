@@ -7,8 +7,6 @@ import (
 	"github.com/jwijenbergh/puregotk/v4/gobject/types"
 )
 
-type Type = types.GType
-
 var xStrvGetType func() types.GType
 
 func StrvGetType() types.GType {

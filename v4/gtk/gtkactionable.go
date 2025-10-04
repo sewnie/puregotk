@@ -22,8 +22,7 @@ func (x *ActionableInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// The `GtkActionable` interface provides a convenient way of asscociating
-// widgets with actions.
+// Provides a way to associate widgets with actions.
 //
 // It primarily consists of two properties: [property@Gtk.Actionable:action-name]
 // and [property@Gtk.Actionable:action-target]. There are also some convenience

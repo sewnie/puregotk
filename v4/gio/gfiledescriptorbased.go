@@ -21,12 +21,14 @@ func (x *FileDescriptorBasedIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GFileDescriptorBased is implemented by streams (implementations of
-// #GInputStream or #GOutputStream) that are based on file descriptors.
+// `GFileDescriptorBased` is an interface for file descriptor based IO.
+//
+// It is implemented by streams (implementations of [class@Gio.InputStream] or
+// [class@Gio.OutputStream]) that are based on file descriptors.
 //
 // Note that `&lt;gio/gfiledescriptorbased.h&gt;` belongs to the UNIX-specific
 // GIO interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
-// file when using it.
+// file or the `GioUnix-2.0` GIR namespace when using it.
 type FileDescriptorBased interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)

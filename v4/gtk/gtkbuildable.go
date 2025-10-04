@@ -10,8 +10,7 @@ import (
 	"github.com/jwijenbergh/puregotk/v4/gobject/types"
 )
 
-// The `GtkBuildableIface` interface contains methods that are
-// necessary to allow `GtkBuilder` to construct an object from
+// Contains methods to let `GtkBuilder` construct an object from
 // a `GtkBuilder` UI definition.
 type BuildableIface struct {
 	_ structs.HostLayout
@@ -23,7 +22,9 @@ func (x *BuildableIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// An opaque context struct for `GtkBuildableParser`.
+// Provides context for parsing GtkBuilder UI files.
+//
+// `GtkBuildableParseContext` is an opaque struct.
 type BuildableParseContext struct {
 	_ structs.HostLayout
 }
@@ -145,16 +146,15 @@ func (x *BuildableParser) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// `GtkBuildable` allows objects to extend and customize their deserialization
-// from ui files.
+// Allows objects to extend and customize deserialization from ui files.
 //
-// The interface includes methods for setting names and properties of objects,
-// parsing custom tags and constructing child objects.
+// The `GtkBuildable` interface includes methods for setting names and
+// properties of objects, parsing custom tags and constructing child objects.
 //
-// The `GtkBuildable` interface is implemented by all widgets and
-// many of the non-widget objects that are provided by GTK. The
-// main user of this interface is [class@Gtk.Builder]. There should be
-// very little need for applications to call any of these functions directly.
+// It is implemented by all widgets and many of the non-widget objects that are
+// provided by GTK. The main user of this interface is [class@Gtk.Builder].
+// There should be very little need for applications to call any of these
+// functions directly.
 //
 // An object only needs to implement this interface if it needs to extend the
 // `GtkBuilder` XML format or run any extra routines at deserialization time.
@@ -188,7 +188,7 @@ func (x *BuildableBase) SetGoPointer(ptr uintptr) {
 // Gets the ID of the @buildable object.
 //
 // `GtkBuilder` sets the name based on the ID attribute
-// of the &lt;object&gt; tag used to construct the @buildable.
+// of the `&lt;object&gt;` tag used to construct the @buildable.
 func (x *BuildableBase) GetBuildableId() string {
 
 	cret := XGtkBuildableGetBuildableId(x.GoPointer())

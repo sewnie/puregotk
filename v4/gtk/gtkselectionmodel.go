@@ -32,7 +32,7 @@ func (x *SelectionModelInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// `GtkSelectionModel` is an interface that add support for selection to list models.
+// An interface that adds support for selection to list models.
 //
 // This support is then used by widgets using list models to add the ability
 // to select and unselect various items.
@@ -160,7 +160,7 @@ func (x *SelectionModelBase) SelectRange(PositionVar uint, NItemsVar uint, Unsel
 
 // Helper function for implementations of `GtkSelectionModel`.
 //
-// Call this when a the selection changes to emit the
+// Call this when the selection changes to emit the
 // [signal@Gtk.SelectionModel::selection-changed] signal.
 func (x *SelectionModelBase) SelectionChanged(PositionVar uint, NItemsVar uint) {
 

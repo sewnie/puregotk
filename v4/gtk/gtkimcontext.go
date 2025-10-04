@@ -24,7 +24,7 @@ func (x *IMContextClass) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// `GtkIMContext` defines the interface for GTK input methods.
+// The interface for GTK input methods.
 //
 // `GtkIMContext` is used by GTK text input widgets like `GtkText`
 // to map from key events to Unicode character strings.
@@ -69,6 +69,19 @@ func IMContextNewFromInternalPtr(ptr uintptr) *IMContext {
 	return cls
 }
 
+var xIMContextActivateOsk func(uintptr, uintptr) bool
+
+// Requests the platform to show an on-screen keyboard for user input.
+//
+// This method will return %TRUE if this request was actually performed
+// to the platform, other environmental factors may result in an on-screen
+// keyboard effectively not showing up.
+func (x *IMContext) ActivateOsk(EventVar *gdk.Event) bool {
+
+	cret := xIMContextActivateOsk(x.GoPointer(), EventVar.GoPointer())
+	return cret
+}
+
 var xIMContextDeleteSurrounding func(uintptr, int, int) bool
 
 // Asks the widget that the input context is attached to delete
@@ -86,7 +99,7 @@ var xIMContextDeleteSurrounding func(uintptr, int, int) bool
 // have deleted all the characters that were requested to be deleted.
 //
 // This function is used by an input method that wants to make
-// subsitutions in the existing text in response to new input.
+// substitutions in the existing text in response to new input.
 // It is not useful for applications.
 func (x *IMContext) DeleteSurrounding(OffsetVar int, NCharsVar int) bool {
 
@@ -436,6 +449,7 @@ func init() {
 
 	core.PuregoSafeRegister(&xIMContextGLibType, lib, "gtk_im_context_get_type")
 
+	core.PuregoSafeRegister(&xIMContextActivateOsk, lib, "gtk_im_context_activate_osk")
 	core.PuregoSafeRegister(&xIMContextDeleteSurrounding, lib, "gtk_im_context_delete_surrounding")
 	core.PuregoSafeRegister(&xIMContextFilterKey, lib, "gtk_im_context_filter_key")
 	core.PuregoSafeRegister(&xIMContextFilterKeypress, lib, "gtk_im_context_filter_keypress")

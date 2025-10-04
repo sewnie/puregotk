@@ -15,9 +15,42 @@ import (
 // on a #GIOChannel is satisfied.
 type IOFunc func(*IOChannel, IOCondition, uintptr) bool
 
-// A data structure representing an IO Channel. The fields should be
-// considered private and should only be accessed with the following
-// functions.
+// The `GIOChannel` data type aims to provide a portable method for
+// using file descriptors, pipes, and sockets, and integrating them
+// into the main event loop (see [struct@GLib.MainContext]). Currently,
+// full support is available on UNIX platforms; support for Windows
+// is only partially complete.
+//
+// To create a new `GIOChannel` on UNIX systems use
+// [ctor@GLib.IOChannel.unix_new]. This works for plain file descriptors,
+// pipes and sockets. Alternatively, a channel can be created for a
+// file in a system independent manner using [ctor@GLib.IOChannel.new_file].
+//
+// Once a `GIOChannel` has been created, it can be used in a generic
+// manner with the functions [method@GLib.IOChannel.read_chars],
+// [method@GLib.IOChannel.write_chars], [method@GLib.IOChannel.seek_position],
+// and [method@GLib.IOChannel.shutdown].
+//
+// To add a `GIOChannel` to the main event loop, use [func@GLib.io_add_watch] or
+// [func@GLib.io_add_watch_full]. Here you specify which events you are
+// interested in on the `GIOChannel`, and provide a function to be called
+// whenever these events occur.
+//
+// `GIOChannel` instances are created with an initial reference count of 1.
+// [method@GLib.IOChannel.ref] and [method@GLib.IOChannel.unref] can be used to
+// increment or decrement the reference count respectively. When the
+// reference count falls to 0, the `GIOChannel` is freed. (Though it
+// isn’t closed automatically, unless it was created using
+// [ctor@GLib.IOChannel.new_file].) Using [func@GLib.io_add_watch] or
+// [func@GLib.io_add_watch_full] increments a channel’s reference count.
+//
+// The new functions [method@GLib.IOChannel.read_chars],
+// [method@GLib.IOChannel.read_line], [method@GLib.IOChannel.read_line_string],
+// [method@GLib.IOChannel.read_to_end], [method@GLib.IOChannel.write_chars],
+// [method@GLib.IOChannel.seek_position], and [method@GLib.IOChannel.flush]
+// should not be mixed with the deprecated functions
+// [method@GLib.IOChannel.read], [method@GLib.IOChannel.write], and
+// [method@GLib.IOChannel.seek] on the same channel.
 type IOChannel struct {
 	_ structs.HostLayout
 
@@ -218,7 +251,8 @@ var xIOChannelGetLineTerm func(uintptr, int) string
 
 // This returns the string that #GIOChannel uses to determine
 // where in the file a line break occurs. A value of %NULL
-// indicates autodetection.
+// indicates autodetection. Since 2.84, the return value is always
+// nul-terminated.
 func (x *IOChannel) GetLineTerm(LengthVar int) string {
 
 	cret := xIOChannelGetLineTerm(x.GoPointer(), LengthVar)
@@ -569,6 +603,33 @@ const (
 	WIN32_MSG_HANDLE int = 19981206
 )
 
+// A bitwise combination representing a condition to watch for on an
+// event source.
+type IOCondition int
+
+var xIOConditionGLibType func() types.GType
+
+func IOConditionGLibType() types.GType {
+	return xIOConditionGLibType()
+}
+
+const (
+
+	// There is data to read.
+	GIoInValue IOCondition = 1
+	// Data can be written (without blocking).
+	GIoOutValue IOCondition = 4
+	// There is urgent data to read.
+	GIoPriValue IOCondition = 2
+	// Error condition.
+	GIoErrValue IOCondition = 8
+	// Hung up (the connection has been broken, usually for
+	//            pipes and sockets).
+	GIoHupValue IOCondition = 16
+	// Invalid request. The file descriptor is not open.
+	GIoNvalValue IOCondition = 32
+)
+
 // Specifies properties of a #GIOChannel. Some of the flags can only be
 // read with g_io_channel_get_flags(), but not changed with
 // g_io_channel_set_flags().
@@ -576,6 +637,8 @@ type IOFlags int
 
 const (
 
+	// no special flags set. Since: 2.74
+	GIoFlagNoneValue IOFlags = 0
 	// turns on append mode, corresponds to %O_APPEND
 	//     (see the documentation of the UNIX open() syscall)
 	GIoFlagAppendValue IOFlags = 1
@@ -737,6 +800,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	core.PuregoSafeRegister(&xIOConditionGLibType, lib, "g_io_condition_get_type")
 
 	core.PuregoSafeRegister(&xIoAddWatch, lib, "g_io_add_watch")
 	core.PuregoSafeRegister(&xIoAddWatchFull, lib, "g_io_add_watch_full")

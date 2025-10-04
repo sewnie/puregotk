@@ -21,7 +21,7 @@ type ParamSpecClass struct {
 
 	ValueType types.GType
 
-	Dummy [4]uintptr
+	Dummy [3]uintptr
 }
 
 func (x *ParamSpecClass) GoPointer() uintptr {
@@ -39,6 +39,15 @@ type ParamSpecPool struct {
 
 func (x *ParamSpecPool) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
+}
+
+var xParamSpecPoolFree func(uintptr)
+
+// Frees the resources allocated by a #GParamSpecPool.
+func (x *ParamSpecPool) Free() {
+
+	xParamSpecPoolFree(x.GoPointer())
+
 }
 
 var xParamSpecPoolInsert func(uintptr, uintptr, types.GType)
@@ -137,6 +146,12 @@ const (
 	PARAM_MASK int = 255
 	// #GParamFlags value alias for %G_PARAM_STATIC_NAME | %G_PARAM_STATIC_NICK | %G_PARAM_STATIC_BLURB.
 	//
+	// It is recommended to use this for all properties by default, as it allows for
+	// internal performance improvements in GObject.
+	//
+	// It is very rare that a property would have a dynamically constructed name,
+	// nickname or blurb.
+	//
 	// Since 2.13.0
 	PARAM_STATIC_STRINGS int = 224
 	// Minimum shift count to be used for user defined flags, to be stored in
@@ -158,9 +173,11 @@ const (
 	GParamWritableValue ParamFlags = 2
 	// alias for %G_PARAM_READABLE | %G_PARAM_WRITABLE
 	GParamReadwriteValue ParamFlags = 3
-	// the parameter will be set upon object construction
+	// the parameter will be set upon object construction.
+	//   See [vfunc@Object.constructed] for more details
 	GParamConstructValue ParamFlags = 4
-	// the parameter can only be set upon object construction
+	// the parameter can only be set upon object construction.
+	//   See [vfunc@Object.constructed] for more details
 	GParamConstructOnlyValue ParamFlags = 8
 	// upon parameter conversion (see g_param_value_convert())
 	//  strict validation is not required
@@ -232,6 +249,16 @@ func ParamValueDefaults(PspecVar *ParamSpec, ValueVar *Value) bool {
 	return cret
 }
 
+var xParamValueIsValid func(uintptr, *Value) bool
+
+// Return whether the contents of @value comply with the specifications
+// set out by @pspec.
+func ParamValueIsValid(PspecVar *ParamSpec, ValueVar *Value) bool {
+
+	cret := xParamValueIsValid(PspecVar.GoPointer(), ValueVar)
+	return cret
+}
+
 var xParamValueSetDefault func(uintptr, *Value)
 
 // Sets @value to its default value as specified in @pspec.
@@ -266,17 +293,16 @@ func ParamValuesCmp(PspecVar *ParamSpec, Value1Var *Value, Value2Var *Value) int
 	return cret
 }
 
-// #GParamSpec is an object structure that encapsulates the metadata
-// required to specify parameters, such as e.g. #GObject properties.
+// `GParamSpec` encapsulates the metadata required to specify parameters, such as `GObject` properties.
 //
-// ## Parameter names # {#canonical-parameter-names}
+// ## Parameter names
 //
 // A property name consists of one or more segments consisting of ASCII letters
 // and digits, separated by either the `-` or `_` character. The first
 // character of a property name must be a letter. These are the same rules as
-// for signal naming (see g_signal_new()).
+// for signal naming (see [func@GObject.signal_new]).
 //
-// When creating and looking up a #GParamSpec, either separator can be
+// When creating and looking up a `GParamSpec`, either separator can be
 // used, but they cannot be mixed. Using `-` is considerably more
 // efficient, and is the ‘canonical form’. Using `_` is discouraged.
 type ParamSpec struct {
@@ -487,15 +513,16 @@ var xParamSpecInternal func(types.GType, string, string, string, ParamFlags) uin
 
 // Creates a new #GParamSpec instance.
 //
-// See [canonical parameter names][canonical-parameter-names] for details of
-// the rules for @name. Names which violate these rules lead to undefined
-// behaviour.
+// See [canonical parameter names][class@GObject.ParamSpec#parameter-names]
+// for details of the rules for @name. Names which violate these rules lead
+// to undefined behaviour.
 //
-// Beyond the name, #GParamSpecs have two more descriptive
-// strings associated with them, the @nick, which should be suitable
-// for use as a label for the property in a property editor, and the
-// @blurb, which should be a somewhat longer description, suitable for
-// e.g. a tooltip. The @nick and @blurb should ideally be localized.
+// Beyond the name, #GParamSpecs have two more descriptive strings, the
+// @nick and @blurb, which may be used as a localized label and description.
+// For GTK and related libraries these are considered deprecated and may be
+// omitted, while for other libraries such as GStreamer and its plugins they
+// are essential. When in doubt, follow the conventions used in the
+// surrounding code and supporting libraries.
 func ParamSpecInternal(ParamTypeVar types.GType, NameVar string, NickVar string, BlurbVar string, FlagsVar ParamFlags) *ParamSpec {
 	var cls *ParamSpec
 
@@ -516,8 +543,8 @@ var xParamSpecIsValidName func(string) bool
 // dynamically-generated properties which need to be validated at run-time
 // before actually trying to create them.
 //
-// See [canonical parameter names][canonical-parameter-names] for details of
-// the rules for valid names.
+// See [canonical parameter names][class@GObject.ParamSpec#parameter-names]
+// for details of the rules for valid names.
 func ParamSpecIsValidName(NameVar string) bool {
 
 	cret := xParamSpecIsValidName(NameVar)
@@ -533,10 +560,12 @@ func init() {
 	core.PuregoSafeRegister(&xParamTypeRegisterStatic, lib, "g_param_type_register_static")
 	core.PuregoSafeRegister(&xParamValueConvert, lib, "g_param_value_convert")
 	core.PuregoSafeRegister(&xParamValueDefaults, lib, "g_param_value_defaults")
+	core.PuregoSafeRegister(&xParamValueIsValid, lib, "g_param_value_is_valid")
 	core.PuregoSafeRegister(&xParamValueSetDefault, lib, "g_param_value_set_default")
 	core.PuregoSafeRegister(&xParamValueValidate, lib, "g_param_value_validate")
 	core.PuregoSafeRegister(&xParamValuesCmp, lib, "g_param_values_cmp")
 
+	core.PuregoSafeRegister(&xParamSpecPoolFree, lib, "g_param_spec_pool_free")
 	core.PuregoSafeRegister(&xParamSpecPoolInsert, lib, "g_param_spec_pool_insert")
 	core.PuregoSafeRegister(&xParamSpecPoolList, lib, "g_param_spec_pool_list")
 	core.PuregoSafeRegister(&xParamSpecPoolListOwned, lib, "g_param_spec_pool_list_owned")

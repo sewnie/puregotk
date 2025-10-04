@@ -88,6 +88,11 @@ var xAtomicRcBoxReleaseFull func(uintptr, uintptr)
 // If the reference was the last one, it will call @clear_func
 // to clear the contents of @mem_block, and then will free the
 // resources allocated for @mem_block.
+//
+// Note that implementing weak references via @clear_func is not thread-safe:
+// clearing a pointer to the memory from the callback can race with another
+// thread trying to access it as @mem_block already has a reference count of 0
+// when the callback is called and will be freed.
 func AtomicRcBoxReleaseFull(MemBlockVar uintptr, ClearFuncVar *DestroyNotify) {
 
 	xAtomicRcBoxReleaseFull(MemBlockVar, NewCallback(ClearFuncVar))

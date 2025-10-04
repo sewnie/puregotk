@@ -23,19 +23,20 @@ func (x *SocketAddressEnumeratorClass) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GSocketAddressEnumerator is an enumerator type for #GSocketAddress
-// instances. It is returned by enumeration functions such as
-// g_socket_connectable_enumerate(), which returns a #GSocketAddressEnumerator
-// to list each #GSocketAddress which could be used to connect to that
-// #GSocketConnectable.
+// `GSocketAddressEnumerator` is an enumerator type for
+// [class@Gio.SocketAddress] instances. It is returned by enumeration functions
+// such as [method@Gio.SocketConnectable.enumerate], which returns a
+// `GSocketAddressEnumerator` to list each [class@Gio.SocketAddress] which could
+// be used to connect to that [iface@Gio.SocketConnectable].
 //
 // Enumeration is typically a blocking operation, so the asynchronous methods
-// g_socket_address_enumerator_next_async() and
-// g_socket_address_enumerator_next_finish() should be used where possible.
+// [method@Gio.SocketAddressEnumerator.next_async] and
+// [method@Gio.SocketAddressEnumerator.next_finish] should be used where
+// possible.
 //
-// Each #GSocketAddressEnumerator can only be enumerated once. Once
-// g_socket_address_enumerator_next() has returned %NULL, further
-// enumeration with that #GSocketAddressEnumerator is not possible, and it can
+// Each `GSocketAddressEnumerator` can only be enumerated once. Once
+// [method@Gio.SocketAddressEnumerator.next] has returned `NULL`, further
+// enumeration with that `GSocketAddressEnumerator` is not possible, and it can
 // be unreffed.
 type SocketAddressEnumerator struct {
 	gobject.Object
@@ -64,7 +65,7 @@ var xSocketAddressEnumeratorNext func(uintptr, uintptr, **glib.Error) uintptr
 // If @enumerator is expected to yield addresses, but for some reason
 // is unable to (eg, because of a DNS error), then the first call to
 // g_socket_address_enumerator_next() will return an appropriate error
-// in *@error. However, if the first call to
+// in `*error`. However, if the first call to
 // g_socket_address_enumerator_next() succeeds, then any further
 // internal errors (other than @cancellable being triggered) will be
 // ignored.

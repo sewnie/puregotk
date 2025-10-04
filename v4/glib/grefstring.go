@@ -24,6 +24,20 @@ func RefStringAcquire(StrVar string) string {
 	return cret
 }
 
+var xRefStringEqual func(string, string) bool
+
+// Compares two ref-counted strings for byte-by-byte equality.
+//
+// It can be passed to [func@GLib.HashTable.new] as the key equality function,
+// and behaves exactly the same as [func@GLib.str_equal] (or `strcmp()`), but
+// can return slightly faster as it can check the string lengths before checking
+// all the bytes.
+func RefStringEqual(Str1Var string, Str2Var string) bool {
+
+	cret := xRefStringEqual(Str1Var, Str2Var)
+	return cret
+}
+
 var xRefStringLength func(string) uint
 
 // Retrieves the length of @str.
@@ -87,6 +101,7 @@ func init() {
 	}
 
 	core.PuregoSafeRegister(&xRefStringAcquire, lib, "g_ref_string_acquire")
+	core.PuregoSafeRegister(&xRefStringEqual, lib, "g_ref_string_equal")
 	core.PuregoSafeRegister(&xRefStringLength, lib, "g_ref_string_length")
 	core.PuregoSafeRegister(&xRefStringNew, lib, "g_ref_string_new")
 	core.PuregoSafeRegister(&xRefStringNewIntern, lib, "g_ref_string_new_intern")

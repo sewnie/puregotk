@@ -22,46 +22,53 @@ func (x *VolumeIface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// The #GVolume interface represents user-visible objects that can be
-// mounted. Note, when porting from GnomeVFS, #GVolume is the moral
-// equivalent of #GnomeVFSDrive.
+// The `GVolume` interface represents user-visible objects that can be
+// mounted. For example, a file system partition on a USB flash drive, or an
+// optical disc inserted into a disc drive.
 //
-// Mounting a #GVolume instance is an asynchronous operation. For more
-// information about asynchronous operations, see #GAsyncResult and
-// #GTask. To mount a #GVolume, first call g_volume_mount() with (at
-// least) the #GVolume instance, optionally a #GMountOperation object
-// and a #GAsyncReadyCallback.
+// If a `GVolume` is currently mounted, the corresponding [iface@Gio.Mount] can
+// be retrieved using [method@Gio.Volume.get_mount].
 //
-// Typically, one will only want to pass %NULL for the
-// #GMountOperation if automounting all volumes when a desktop session
-// starts since it's not desirable to put up a lot of dialogs asking
+// Mounting a `GVolume` instance is an asynchronous operation. For more
+// information about asynchronous operations, see [iface@Gio.AsyncResult] and
+// [class@Gio.Task]. To mount a `GVolume`, first call [method@Gio.Volume.mount]
+// with (at least) the `GVolume` instance, optionally a
+// [class@Gio.MountOperation] object and a [type@Gio.AsyncReadyCallback].
+//
+// Typically, one will only want to pass `NULL` for the
+// [class@Gio.MountOperation] if automounting all volumes when a desktop session
+// starts since it’s not desirable to put up a lot of dialogs asking
 // for credentials.
 //
 // The callback will be fired when the operation has resolved (either
-// with success or failure), and a #GAsyncResult instance will be
+// with success or failure), and a [iface@Gio.AsyncResult] instance will be
 // passed to the callback.  That callback should then call
-// g_volume_mount_finish() with the #GVolume instance and the
-// #GAsyncResult data to see if the operation was completed
-// successfully.  If an @error is present when g_volume_mount_finish()
-// is called, then it will be filled with any error information.
+// [method@Gio.Volume.mount_finish] with the `GVolume` instance and the
+// [iface@Gio.AsyncResult] data to see if the operation was completed
+// successfully.  If a [type@GLib.Error] is present when
+// [method@Gio.Volume.mount_finish] is called, then it will be filled with any
+// error information.
 //
-// ## Volume Identifiers # {#volume-identifier}
+// Note, when [porting from GnomeVFS](migrating-gnome-vfs.html),
+// `GVolume` is the moral equivalent of `GnomeVFSDrive`.
+//
+// ## Volume Identifiers
 //
 // It is sometimes necessary to directly access the underlying
 // operating system object behind a volume (e.g. for passing a volume
-// to an application via the commandline). For this purpose, GIO
-// allows to obtain an 'identifier' for the volume. There can be
+// to an application via the command line). For this purpose, GIO
+// allows to obtain an ‘identifier’ for the volume. There can be
 // different kinds of identifiers, such as Hal UDIs, filesystem labels,
 // traditional Unix devices (e.g. `/dev/sda2`), UUIDs. GIO uses predefined
 // strings as names for the different kinds of identifiers:
-// %G_VOLUME_IDENTIFIER_KIND_UUID, %G_VOLUME_IDENTIFIER_KIND_LABEL, etc.
-// Use g_volume_get_identifier() to obtain an identifier for a volume.
+// `G_VOLUME_IDENTIFIER_KIND_UUID`, `G_VOLUME_IDENTIFIER_KIND_LABEL`, etc.
+// Use [method@Gio.Volume.get_identifier] to obtain an identifier for a volume.
 //
-// Note that %G_VOLUME_IDENTIFIER_KIND_HAL_UDI will only be available
-// when the gvfs hal volume monitor is in use. Other volume monitors
-// will generally be able to provide the %G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE
+// Note that `G_VOLUME_IDENTIFIER_KIND_HAL_UDI` will only be available
+// when the GVFS hal volume monitor is in use. Other volume monitors
+// will generally be able to provide the `G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE`
 // identifier, which can be used to obtain a hal device by means of
-// libhal_manager_find_device_string_match().
+// `libhal_manager_find_device_string_match()`.
 type Volume interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
@@ -165,7 +172,7 @@ func (x *VolumeBase) EjectWithOperationFinish(ResultVar AsyncResult) (bool, erro
 
 }
 
-// Gets the kinds of [identifiers][volume-identifier] that @volume has.
+// Gets the kinds of [identifiers](#volume-identifiers) that @volume has.
 // Use g_volume_get_identifier() to obtain the identifiers themselves.
 func (x *VolumeBase) EnumerateIdentifiers() []string {
 
@@ -245,7 +252,7 @@ func (x *VolumeBase) GetIcon() *IconBase {
 }
 
 // Gets the identifier of the given kind for @volume.
-// See the [introduction][volume-identifier] for more
+// See the [introduction](#volume-identifiers) for more
 // information about volume identifiers.
 func (x *VolumeBase) GetIdentifier(KindVar string) string {
 

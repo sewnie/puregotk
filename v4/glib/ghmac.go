@@ -7,38 +7,42 @@ import (
 
 	"github.com/jwijenbergh/purego"
 	"github.com/jwijenbergh/puregotk/internal/core"
+	"github.com/jwijenbergh/puregotk/v4/gobject/types"
 )
 
-// An opaque structure representing a HMAC operation.
-// To create a new GHmac, use g_hmac_new(). To free
-// a GHmac, use g_hmac_unref().
 type Hmac struct {
 	_ structs.HostLayout
+}
+
+var xHmacGLibType func() types.GType
+
+func HmacGLibType() types.GType {
+	return xHmacGLibType()
 }
 
 func (x *Hmac) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
+var xNewHmac func(ChecksumType, byte, uint) *Hmac
+
+func NewHmac(DigestTypeVar ChecksumType, KeyVar byte, KeyLenVar uint) *Hmac {
+
+	cret := xNewHmac(DigestTypeVar, KeyVar, KeyLenVar)
+	return cret
+}
+
 var xHmacCopy func(uintptr) *Hmac
 
-// Copies a #GHmac. If @hmac has been closed, by calling
-// g_hmac_get_string() or g_hmac_get_digest(), the copied
-// HMAC will be closed as well.
 func (x *Hmac) Copy() *Hmac {
 
 	cret := xHmacCopy(x.GoPointer())
 	return cret
 }
 
-var xHmacGetDigest func(uintptr, []byte, uint)
+var xHmacGetDigest func(uintptr, byte, uint)
 
-// Gets the digest from @checksum as a raw binary array and places it
-// into @buffer. The size of the digest depends on the type of checksum.
-//
-// Once this function has been called, the #GHmac is closed and can
-// no longer be updated with g_checksum_update().
-func (x *Hmac) GetDigest(BufferVar []byte, DigestLenVar uint) {
+func (x *Hmac) GetDigest(BufferVar byte, DigestLenVar uint) {
 
 	xHmacGetDigest(x.GoPointer(), BufferVar, DigestLenVar)
 
@@ -46,12 +50,6 @@ func (x *Hmac) GetDigest(BufferVar []byte, DigestLenVar uint) {
 
 var xHmacGetString func(uintptr) string
 
-// Gets the HMAC as a hexadecimal string.
-//
-// Once this function has been called the #GHmac can no longer be
-// updated with g_hmac_update().
-//
-// The hexadecimal characters will be lower case.
 func (x *Hmac) GetString() string {
 
 	cret := xHmacGetString(x.GoPointer())
@@ -60,9 +58,6 @@ func (x *Hmac) GetString() string {
 
 var xHmacRef func(uintptr) *Hmac
 
-// Atomically increments the reference count of @hmac by one.
-//
-// This function is MT-safe and may be called from any thread.
 func (x *Hmac) Ref() *Hmac {
 
 	cret := xHmacRef(x.GoPointer())
@@ -71,25 +66,15 @@ func (x *Hmac) Ref() *Hmac {
 
 var xHmacUnref func(uintptr)
 
-// Atomically decrements the reference count of @hmac by one.
-//
-// If the reference count drops to 0, all keys and values will be
-// destroyed, and all memory allocated by the hash table is released.
-// This function is MT-safe and may be called from any thread.
-// Frees the memory allocated for @hmac.
 func (x *Hmac) Unref() {
 
 	xHmacUnref(x.GoPointer())
 
 }
 
-var xHmacUpdate func(uintptr, []byte, int)
+var xHmacUpdate func(uintptr, byte, int)
 
-// Feeds @data into an existing #GHmac.
-//
-// The HMAC must still be open, that is g_hmac_get_string() or
-// g_hmac_get_digest() must not have been called on @hmac.
-func (x *Hmac) Update(DataVar []byte, LengthVar int) {
+func (x *Hmac) Update(DataVar byte, LengthVar int) {
 
 	xHmacUpdate(x.GoPointer(), DataVar, LengthVar)
 
@@ -141,6 +126,10 @@ func init() {
 	core.PuregoSafeRegister(&xComputeHmacForBytes, lib, "g_compute_hmac_for_bytes")
 	core.PuregoSafeRegister(&xComputeHmacForData, lib, "g_compute_hmac_for_data")
 	core.PuregoSafeRegister(&xComputeHmacForString, lib, "g_compute_hmac_for_string")
+
+	core.PuregoSafeRegister(&xHmacGLibType, lib, "g_hmac_get_type")
+
+	core.PuregoSafeRegister(&xNewHmac, lib, "g_hmac_new")
 
 	core.PuregoSafeRegister(&xHmacCopy, lib, "g_hmac_copy")
 	core.PuregoSafeRegister(&xHmacGetDigest, lib, "g_hmac_get_digest")

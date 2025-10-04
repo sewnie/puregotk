@@ -29,11 +29,11 @@ func (x *MemoryInputStreamPrivate) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GMemoryInputStream is a class for using arbitrary
+// `GMemoryInputStream` is a class for using arbitrary
 // memory chunks as input for GIO streaming input operations.
 //
-// As of GLib 2.34, #GMemoryInputStream implements
-// #GPollableInputStream.
+// As of GLib 2.34, `GMemoryInputStream` implements
+// [iface@Gio.PollableInputStream].
 type MemoryInputStream struct {
 	InputStream
 }
@@ -148,6 +148,9 @@ func (x *MemoryInputStream) CanPoll() bool {
 // the stream may not actually be readable even after the source
 // triggers, so you should use g_pollable_input_stream_read_nonblocking()
 // rather than g_input_stream_read() from the callback.
+//
+// The behaviour of this method is undefined if
+// g_pollable_input_stream_can_poll() returns %FALSE for @stream.
 func (x *MemoryInputStream) CreateSource(CancellableVar *Cancellable) *glib.Source {
 
 	cret := XGPollableInputStreamCreateSource(x.GoPointer(), CancellableVar.GoPointer())
@@ -162,6 +165,9 @@ func (x *MemoryInputStream) CreateSource(CancellableVar *Cancellable) *glib.Sour
 // non-blocking behavior, you should always use
 // g_pollable_input_stream_read_nonblocking(), which will return a
 // %G_IO_ERROR_WOULD_BLOCK error rather than blocking.
+//
+// The behaviour of this method is undefined if
+// g_pollable_input_stream_can_poll() returns %FALSE for @stream.
 func (x *MemoryInputStream) IsReadable() bool {
 
 	cret := XGPollableInputStreamIsReadable(x.GoPointer())
@@ -179,6 +185,9 @@ func (x *MemoryInputStream) IsReadable() bool {
 // if @cancellable has already been cancelled when you call, which
 // may happen if you call this method after a source triggers due
 // to having been cancelled.
+//
+// The behaviour of this method is undefined if
+// g_pollable_input_stream_can_poll() returns %FALSE for @stream.
 func (x *MemoryInputStream) ReadNonblocking(BufferVar []byte, CountVar uint, CancellableVar *Cancellable) (int, error) {
 	var cerr *glib.Error
 

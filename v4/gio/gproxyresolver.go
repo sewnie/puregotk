@@ -23,13 +23,14 @@ func (x *ProxyResolverInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GProxyResolver provides synchronous and asynchronous network proxy
-// resolution. #GProxyResolver is used within #GSocketClient through
-// the method g_socket_connectable_proxy_enumerate().
+// `GProxyResolver` provides synchronous and asynchronous network proxy
+// resolution. `GProxyResolver` is used within [class@Gio.SocketClient] through
+// the method [method@Gio.SocketConnectable.proxy_enumerate].
 //
-// Implementations of #GProxyResolver based on libproxy and GNOME settings can
-// be found in glib-networking. GIO comes with an implementation for use inside
-// Flatpak portals.
+// Implementations of `GProxyResolver` based on
+// [libproxy](https://github.com/libproxy/libproxy) and GNOME settings can be
+// found in [glib-networking](https://gitlab.gnome.org/GNOME/glib-networking).
+// GIO comes with an implementation for use inside Flatpak portals.
 type ProxyResolver interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
@@ -71,8 +72,8 @@ func (x *ProxyResolverBase) IsSupported() bool {
 
 // Looks into the system proxy configuration to determine what proxy,
 // if any, to use to connect to @uri. The returned proxy URIs are of
-// the form `&lt;protocol&gt;://[user[:password]@]host:port` or
-// `direct://`, where &lt;protocol&gt; could be http, rtsp, socks
+// the form `&lt;protocol&gt;://[user[:password]@]host[:port]` or
+// `direct://`, where `&lt;protocol&gt;` could be http, rtsp, socks
 // or other proxying protocol.
 //
 // If you don't know what network protocol is being used on the
@@ -124,7 +125,7 @@ var XGProxyResolverLookupFinish func(uintptr, uintptr, **glib.Error) []string
 
 const (
 	// Extension point for proxy resolving functionality.
-	// See [Extending GIO][extending-gio].
+	// See [Extending GIO](overview.html#extending-gio).
 	PROXY_RESOLVER_EXTENSION_POINT_NAME string = "gio-proxy-resolver"
 )
 

@@ -11,7 +11,7 @@ import (
 	"github.com/jwijenbergh/puregotk/v4/gobject/types"
 )
 
-// The virtual function table for #GAction.
+// The virtual function table for [type@Gio.Action].
 type ActionInterface struct {
 	_ structs.HostLayout
 
@@ -22,35 +22,35 @@ func (x *ActionInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GAction represents a single named action.
+// `GAction` represents a single named action.
 //
 // The main interface to an action is that it can be activated with
-// g_action_activate().  This results in the 'activate' signal being
-// emitted.  An activation has a #GVariant parameter (which may be
-// %NULL).  The correct type for the parameter is determined by a static
+// [method@Gio.Action.activate]. This results in the 'activate' signal being
+// emitted. An activation has a `GVariant` parameter (which may be
+// `NULL`). The correct type for the parameter is determined by a static
 // parameter type (which is given at construction time).
 //
 // An action may optionally have a state, in which case the state may be
-// set with g_action_change_state().  This call takes a #GVariant.  The
+// set with [method@Gio.Action.change_state]. This call takes a [type@GLib.Variant]. The
 // correct type for the state is determined by a static state type
 // (which is given at construction time).
 //
 // The state may have a hint associated with it, specifying its valid
 // range.
 //
-// #GAction is merely the interface to the concept of an action, as
+// `GAction` is merely the interface to the concept of an action, as
 // described above.  Various implementations of actions exist, including
-// #GSimpleAction.
+// [class@Gio.SimpleAction].
 //
 // In all cases, the implementing class is responsible for storing the
-// name of the action, the parameter type, the enabled state, the
-// optional state type and the state and emitting the appropriate
-// signals when these change.  The implementor is responsible for filtering
-// calls to g_action_activate() and g_action_change_state() for type
-// safety and for the state being enabled.
+// name of the action, the parameter type, the enabled state, the optional
+// state type and the state and emitting the appropriate signals when these
+// change. The implementor is responsible for filtering calls to
+// [method@Gio.Action.activate] and [method@Gio.Action.change_state]
+// for type safety and for the state being enabled.
 //
-// Probably the only useful thing to do with a #GAction is to put it
-// inside of a #GSimpleActionGroup.
+// Probably the only useful thing to do with a `GAction` is to put it
+// inside of a [class@Gio.SimpleActionGroup].
 type Action interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
@@ -89,9 +89,9 @@ func (x *ActionBase) SetGoPointer(ptr uintptr) {
 //
 // @parameter must be the correct type of parameter for the action (ie:
 // the parameter type given at construction time).  If the parameter
-// type was %NULL then @parameter must also be %NULL.
+// type was `NULL` then @parameter must also be `NULL`.
 //
-// If the @parameter GVariant is floating, it is consumed.
+// If the @parameter [type@GLib.Variant] is floating, it is consumed.
 func (x *ActionBase) Activate(ParameterVar *glib.Variant) {
 
 	XGActionActivate(x.GoPointer(), ParameterVar)
@@ -101,13 +101,13 @@ func (x *ActionBase) Activate(ParameterVar *glib.Variant) {
 // Request for the state of @action to be changed to @value.
 //
 // The action must be stateful and @value must be of the correct type.
-// See g_action_get_state_type().
+// See [method@Gio.Action.get_state_type].
 //
 // This call merely requests a change.  The action may refuse to change
 // its state or may change its state to something other than @value.
-// See g_action_get_state_hint().
+// See [method@Gio.Action.get_state_hint].
 //
-// If the @value GVariant is floating, it is consumed.
+// If the @value [type@GLib.Variant] is floating, it is consumed.
 func (x *ActionBase) ChangeState(ValueVar *glib.Variant) {
 
 	XGActionChangeState(x.GoPointer(), ValueVar)
@@ -134,11 +134,12 @@ func (x *ActionBase) GetName() string {
 // Queries the type of the parameter that must be given when activating
 // @action.
 //
-// When activating the action using g_action_activate(), the #GVariant
-// given to that function must be of the type returned by this function.
+// When activating the action using [method@Gio.Action.activate], the
+// [type@GLib.Variant] given to that function must be of the type returned by
+// this function.
 //
-// In the case that this function returns %NULL, you must not give any
-// #GVariant, but %NULL instead.
+// In the case that this function returns `NULL`, you must not give any
+// [type@GLib.Variant], but `NULL` instead.
 func (x *ActionBase) GetParameterType() *glib.VariantType {
 
 	cret := XGActionGetParameterType(x.GoPointer())
@@ -147,12 +148,12 @@ func (x *ActionBase) GetParameterType() *glib.VariantType {
 
 // Queries the current state of @action.
 //
-// If the action is not stateful then %NULL will be returned.  If the
+// If the action is not stateful then `NULL` will be returned.  If the
 // action is stateful then the type of the return value is the type
-// given by g_action_get_state_type().
+// given by [method@Gio.Action.get_state_type].
 //
-// The return value (if non-%NULL) should be freed with
-// g_variant_unref() when it is no longer required.
+// The return value (if non-`NULL`) should be freed with
+// [method@GLib.Variant.unref] when it is no longer required.
 func (x *ActionBase) GetState() *glib.Variant {
 
 	cret := XGActionGetState(x.GoPointer())
@@ -162,12 +163,12 @@ func (x *ActionBase) GetState() *glib.Variant {
 // Requests a hint about the valid range of values for the state of
 // @action.
 //
-// If %NULL is returned it either means that the action is not stateful
+// If `NULL` is returned it either means that the action is not stateful
 // or that there is no hint about the valid range of values for the
 // state of the action.
 //
-// If a #GVariant array is returned then each item in the array is a
-// possible value for the state.  If a #GVariant pair (ie: two-tuple) is
+// If a [type@GLib.Variant] array is returned then each item in the array is a
+// possible value for the state.  If a [type@GLib.Variant] pair (ie: two-tuple) is
 // returned then the tuple specifies the inclusive lower and upper bound
 // of valid values for the state.
 //
@@ -175,8 +176,8 @@ func (x *ActionBase) GetState() *glib.Variant {
 // have a state value outside of the hinted range and setting a value
 // within the range may fail.
 //
-// The return value (if non-%NULL) should be freed with
-// g_variant_unref() when it is no longer required.
+// The return value (if non-`NULL`) should be freed with
+// [method@GLib.Variant.unref] when it is no longer required.
 func (x *ActionBase) GetStateHint() *glib.Variant {
 
 	cret := XGActionGetStateHint(x.GoPointer())
@@ -186,15 +187,15 @@ func (x *ActionBase) GetStateHint() *glib.Variant {
 // Queries the type of the state of @action.
 //
 // If the action is stateful (e.g. created with
-// g_simple_action_new_stateful()) then this function returns the
-// #GVariantType of the state.  This is the type of the initial value
-// given as the state. All calls to g_action_change_state() must give a
-// #GVariant of this type and g_action_get_state() will return a
-// #GVariant of the same type.
+// [ctor@Gio.SimpleAction.new_stateful]) then this function returns the
+// [type@GLib.VariantType] of the state.  This is the type of the initial value
+// given as the state. All calls to [method@Gio.Action.change_state] must give a
+// [type@GLib.Variant] of this type and [method@Gio.Action.get_state] will return a
+// [type@GLib.Variant] of the same type.
 //
-// If the action is not stateful (e.g. created with g_simple_action_new())
-// then this function will return %NULL. In that case, g_action_get_state()
-// will return %NULL and you must not call g_action_change_state().
+// If the action is not stateful (e.g. created with [ctor@Gio.SimpleAction.new])
+// then this function will return `NULL`. In that case, [method@Gio.Action.get_state]
+// will return `NULL` and you must not call [method@Gio.Action.change_state].
 func (x *ActionBase) GetStateType() *glib.VariantType {
 
 	cret := XGActionGetStateType(x.GoPointer())
@@ -215,10 +216,10 @@ var xActionNameIsValid func(string) bool
 // Checks if @action_name is valid.
 //
 // @action_name is valid if it consists only of alphanumeric characters,
-// plus '-' and '.'.  The empty string is not a valid action name.
+// plus `-` and `.`.  The empty string is not a valid action name.
 //
-// It is an error to call this function with a non-utf8 @action_name.
-// @action_name must not be %NULL.
+// It is an error to call this function with a non-UTF-8 @action_name.
+// @action_name must not be `NULL`.
 func ActionNameIsValid(ActionNameVar string) bool {
 
 	cret := xActionNameIsValid(ActionNameVar)
@@ -234,23 +235,29 @@ var xActionParseDetailedName func(string, string, **glib.Variant, **glib.Error) 
 //
 // The first format is used to represent an action name with no target
 // value and consists of just an action name containing no whitespace
-// nor the characters ':', '(' or ')'.  For example: "app.action".
+// nor the characters `:`, `(` or `)`.  For example: `app.action`.
 //
 // The second format is used to represent an action with a target value
-// that is a non-empty string consisting only of alphanumerics, plus '-'
-// and '.'.  In that case, the action name and target value are
-// separated by a double colon ("::").  For example:
-// "app.action::target".
+// that is a non-empty string consisting only of alphanumerics, plus `-`
+// and `.`.  In that case, the action name and target value are
+// separated by a double colon (`::`).  For example:
+// `app.action::target`.
 //
 // The third format is used to represent an action with any type of
 // target value, including strings.  The target value follows the action
-// name, surrounded in parens.  For example: "app.action(42)".  The
-// target value is parsed using g_variant_parse().  If a tuple-typed
+// name, surrounded in parens.  For example: `app.action(42)`.  The
+// target value is parsed using [func@GLib.Variant.parse].  If a tuple-typed
 // value is desired, it must be specified in the same way, resulting in
-// two sets of parens, for example: "app.action((1,2,3))".  A string
-// target can be specified this way as well: "app.action('target')".
-// For strings, this third format must be used if * target value is
-// empty or contains characters other than alphanumerics, '-' and '.'.
+// two sets of parens, for example: `app.action((1,2,3))`.  A string
+// target can be specified this way as well: `app.action('target')`.
+// For strings, this third format must be used if target value is
+// empty or contains characters other than alphanumerics, `-` and `.`.
+//
+// If this function returns `TRUE`, a non-`NULL` value is guaranteed to be returned
+// in @action_name (if a pointer is passed in). A `NULL` value may still be
+// returned in @target_value, as the @detailed_name may not contain a target.
+//
+// If returned, the [type@GLib.Variant] in @target_value is guaranteed to not be floating.
 func ActionParseDetailedName(DetailedNameVar string, ActionNameVar string, TargetValueVar **glib.Variant) (bool, error) {
 	var cerr *glib.Error
 
@@ -268,7 +275,7 @@ var xActionPrintDetailedName func(string, *glib.Variant) string
 //
 // It is an error to call this function with an invalid action name.
 //
-// This function is the opposite of g_action_parse_detailed_name().
+// This function is the opposite of [func@Gio.Action.parse_detailed_name].
 // It will produce a string that can be parsed back to the @action_name
 // and @target_value by that function.
 //

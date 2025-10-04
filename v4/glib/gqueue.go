@@ -10,7 +10,7 @@ import (
 )
 
 // Contains the public fields of a
-// [Queue][glib-Double-ended-Queues].
+// [Queue](data-structures.html#double-ended-queues).
 type Queue struct {
 	_ structs.HostLayout
 

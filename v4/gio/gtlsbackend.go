@@ -22,7 +22,9 @@ func (x *TlsBackendInterface) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// TLS (Transport Layer Security, aka SSL) and DTLS backend.
+// TLS (Transport Layer Security, aka SSL) and DTLS backend. This is an
+// internal type used to coordinate the different classes implemented
+// by a TLS backend.
 type TlsBackend interface {
 	GoPointer() uintptr
 	SetGoPointer(uintptr)
@@ -158,7 +160,7 @@ var XGTlsBackendSupportsTls func(uintptr) bool
 
 const (
 	// Extension point for TLS functionality via #GTlsBackend.
-	// See [Extending GIO][extending-gio].
+	// See [Extending GIO](overview.html#extending-gio).
 	TLS_BACKEND_EXTENSION_POINT_NAME string = "gio-tls-backend"
 )
 

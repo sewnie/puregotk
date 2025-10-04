@@ -21,8 +21,7 @@ func (x *TextChildAnchorClass) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// A `GtkTextChildAnchor` is a spot in a `GtkTextBuffer` where child widgets can
-// be “anchored”.
+// Marks a spot in a `GtkTextBuffer` where child widgets can be “anchored”.
 //
 // The anchor can have multiple widgets anchored, to allow for multiple views.
 type TextChildAnchor struct {

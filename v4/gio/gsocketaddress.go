@@ -22,9 +22,10 @@ func (x *SocketAddressClass) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GSocketAddress is the equivalent of struct sockaddr in the BSD
-// sockets API. This is an abstract class; use #GInetSocketAddress
-// for internet sockets, or #GUnixSocketAddress for UNIX domain sockets.
+// `GSocketAddress` is the equivalent of
+// [`struct sockaddr`](man:sockaddr(3type)) and its subtypes in the BSD sockets
+// API. This is an abstract class; use [class@Gio.InetSocketAddress] for
+// internet sockets, or [class@Gio.UnixSocketAddress] for UNIX domain sockets.
 type SocketAddress struct {
 	gobject.Object
 }

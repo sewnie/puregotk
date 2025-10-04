@@ -464,7 +464,8 @@ func (x *CellRenderer) ConnectEditingCanceled(cb *func(CellRenderer)) uint32 {
 // continue to use the same kind of widget for editing in future
 // releases, therefore you should check the type of @editable
 // before doing any specific setup, as in the following example:
-// |[&lt;!-- language="C" --&gt;
+//
+// ```c
 // static void
 // text_editing_started (GtkCellRenderer *cell,
 //
@@ -483,7 +484,7 @@ func (x *CellRenderer) ConnectEditingCanceled(cb *func(CellRenderer)) uint32 {
 //	    }
 //	}
 //
-// ]|
+// ```
 func (x *CellRenderer) ConnectEditingStarted(cb *func(CellRenderer, uintptr, string)) uint32 {
 	cbPtr := uintptr(unsafe.Pointer(cb))
 	if cbRefPtr, ok := glib.GetCallback(cbPtr); ok {

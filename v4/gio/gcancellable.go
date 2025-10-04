@@ -30,7 +30,9 @@ func (x *CancellablePrivate) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// GCancellable is a thread-safe operation cancellation stack used
+// `GCancellable` allows operations to be cancelled.
+//
+// `GCancellable` is a thread-safe operation cancellation stack used
 // throughout GIO to allow for cancellation of synchronous and
 // asynchronous operations.
 type Cancellable struct {
@@ -102,9 +104,11 @@ var xCancellableConnect func(uintptr, uintptr, uintptr, uintptr) uint32
 // signal. Also handles the race condition that may happen
 // if the cancellable is cancelled right before connecting.
 //
-// @callback is called at most once, either directly at the
-// time of the connect if @cancellable is already cancelled,
-// or when @cancellable is cancelled in some thread.
+// @callback is called exactly once each time @cancellable is cancelled,
+// either directly at the time of the connect if @cancellable is already
+// cancelled, or when @cancellable is cancelled in some thread.
+// In case the cancellable is reset via [method@Gio.Cancellable.reset]
+// then the callback can be called again if the @cancellable is cancelled.
 //
 // @data_destroy_func will be called when the handler is
 // disconnected, or immediately if the cancellable is already

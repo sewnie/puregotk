@@ -41,32 +41,39 @@ func (x *AppLaunchContextPrivate) GoPointer() uintptr {
 	return uintptr(unsafe.Pointer(x))
 }
 
-// #GAppInfo and #GAppLaunchContext are used for describing and launching
+// Information about an installed application and methods to launch
+// it (with file arguments).
+//
+// `GAppInfo` and `GAppLaunchContext` are used for describing and launching
 // applications installed on the system.
 //
 // As of GLib 2.20, URIs will always be converted to POSIX paths
-// (using g_file_get_path()) when using g_app_info_launch() even if
-// the application requested an URI and not a POSIX path. For example
-// for a desktop-file based application with Exec key `totem
-// %U` and a single URI, `sftp://foo/file.avi`, then
-// `/home/user/.gvfs/sftp on foo/file.avi` will be passed. This will
-// only work if a set of suitable GIO extensions (such as gvfs 2.26
-// compiled with FUSE support), is available and operational; if this
-// is not the case, the URI will be passed unmodified to the application.
-// Some URIs, such as `mailto:`, of course cannot be mapped to a POSIX
-// path (in gvfs there's no FUSE mount for it); such URIs will be
-// passed unmodified to the application.
+// (using [method@Gio.File.get_path]) when using [method@Gio.AppInfo.launch]
+// even if the application requested an URI and not a POSIX path. For example
+// for a desktop-file based application with the following Exec key:
 //
-// Specifically for gvfs 2.26 and later, the POSIX URI will be mapped
-// back to the GIO URI in the #GFile constructors (since gvfs
-// implements the #GVfs extension point). As such, if the application
-// needs to examine the URI, it needs to use g_file_get_uri() or
-// similar on #GFile. In other words, an application cannot assume
-// that the URI passed to e.g. g_file_new_for_commandline_arg() is
-// equal to the result of g_file_get_uri(). The following snippet
+// ```
+// Exec=totem %U
+// ```
+//
+// and a single URI, `sftp://foo/file.avi`, then
+// `/home/user/.gvfs/sftp on foo/file.avi` will be passed. This will only work
+// if a set of suitable GIO extensions (such as GVfs 2.26 compiled with FUSE
+// support), is available and operational; if this is not the case, the URI
+// will be passed unmodified to the application. Some URIs, such as `mailto:`,
+// of course cannot be mapped to a POSIX path (in GVfs there’s no FUSE mount
+// for it); such URIs will be passed unmodified to the application.
+//
+// Specifically for GVfs 2.26 and later, the POSIX URI will be mapped
+// back to the GIO URI in the [iface@Gio.File] constructors (since GVfs
+// implements the GVfs extension point). As such, if the application
+// needs to examine the URI, it needs to use [method@Gio.File.get_uri]
+// or similar on [iface@Gio.File]. In other words, an application cannot
+// assume that the URI passed to e.g. [func@Gio.File.new_for_commandline_arg]
+// is equal to the result of [method@Gio.File.get_uri]. The following snippet
 // illustrates this:
 //
-// |[
+// ```c
 // GFile *f;
 // char *uri;
 //
@@ -83,11 +90,11 @@ func (x *AppLaunchContextPrivate) GoPointer() uintptr {
 //	}
 //
 // g_object_unref (file);
-// ]|
+// ```
 //
 // This code will work when both `cdda://sr0/Track 1.wav` and
 // `/home/user/.gvfs/cdda on sr0/Track 1.wav` is passed to the
-// application. It should be noted that it's generally not safe
+// application. It should be noted that it’s generally not safe
 // for applications to rely on the format of a particular URIs.
 // Different launcher applications (e.g. file managers) may have
 // different ideas of what a given URI means.
@@ -155,8 +162,8 @@ func (x *AppInfoBase) AddSupportsType(ContentTypeVar string) (bool, error) {
 
 }
 
-// Obtains the information whether the #GAppInfo can be deleted.
-// See g_app_info_delete().
+// Obtains the information whether the [iface@Gio.AppInfo] can be deleted.
+// See [method@Gio.AppInfo.delete].
 func (x *AppInfoBase) CanDelete() bool {
 
 	cret := XGAppInfoCanDelete(x.GoPointer())
@@ -170,18 +177,18 @@ func (x *AppInfoBase) CanRemoveSupportsType() bool {
 	return cret
 }
 
-// Tries to delete a #GAppInfo.
+// Tries to delete a [iface@Gio.AppInfo].
 //
 // On some platforms, there may be a difference between user-defined
-// #GAppInfos which can be deleted, and system-wide ones which cannot.
-// See g_app_info_can_delete().
+// [iface@Gio.AppInfo]s which can be deleted, and system-wide ones which cannot.
+// See [method@Gio.AppInfo.can_delete].
 func (x *AppInfoBase) Delete() bool {
 
 	cret := XGAppInfoDelete(x.GoPointer())
 	return cret
 }
 
-// Creates a duplicate of a #GAppInfo.
+// Creates a duplicate of a [iface@Gio.AppInfo].
 func (x *AppInfoBase) Dup() *AppInfoBase {
 	var cls *AppInfoBase
 
@@ -195,11 +202,11 @@ func (x *AppInfoBase) Dup() *AppInfoBase {
 	return cls
 }
 
-// Checks if two #GAppInfos are equal.
+// Checks if two [iface@Gio.AppInfo]s are equal.
 //
-// Note that the check *may not* compare each individual
-// field, and only does an identity check. In case detecting changes in the
-// contents is needed, program code must additionally compare relevant fields.
+// Note that the check *may not* compare each individual field, and only does
+// an identity check. In case detecting changes in the contents is needed,
+// program code must additionally compare relevant fields.
 func (x *AppInfoBase) Equal(Appinfo2Var AppInfo) bool {
 
 	cret := XGAppInfoEqual(x.GoPointer(), Appinfo2Var.GoPointer())
@@ -229,7 +236,11 @@ func (x *AppInfoBase) GetDisplayName() string {
 	return cret
 }
 
-// Gets the executable's name for the installed application.
+// Gets the executable’s name for the installed application.
+//
+// This is intended to be used for debugging or labelling what program is going
+// to be run. To launch the executable, use [method@Gio.AppInfo.launch] and related
+// functions, rather than spawning the return value from this function.
 func (x *AppInfoBase) GetExecutable() string {
 
 	cret := XGAppInfoGetExecutable(x.GoPointer())
@@ -251,13 +262,12 @@ func (x *AppInfoBase) GetIcon() *IconBase {
 	return cls
 }
 
-// Gets the ID of an application. An id is a string that
-// identifies the application. The exact format of the id is
-// platform dependent. For instance, on Unix this is the
-// desktop file id from the xdg menu specification.
+// Gets the ID of an application. An id is a string that identifies the
+// application. The exact format of the id is platform dependent. For instance,
+// on Unix this is the desktop file id from the xdg menu specification.
 //
-// Note that the returned ID may be %NULL, depending on how
-// the @appinfo has been constructed.
+// Note that the returned ID may be `NULL`, depending on how the @appinfo has
+// been constructed.
 func (x *AppInfoBase) GetId() string {
 
 	cret := XGAppInfoGetId(x.GoPointer())
@@ -273,9 +283,10 @@ func (x *AppInfoBase) GetName() string {
 
 // Retrieves the list of content types that @app_info claims to support.
 // If this information is not provided by the environment, this function
-// will return %NULL.
+// will return `NULL`.
+//
 // This function does not take in consideration associations added with
-// g_app_info_add_supports_type(), but only those exported directly by
+// [method@Gio.AppInfo.add_supports_type], but only those exported directly by
 // the application.
 func (x *AppInfoBase) GetSupportedTypes() []string {
 
@@ -288,7 +299,7 @@ func (x *AppInfoBase) GetSupportedTypes() []string {
 // about the details of the launcher (like what screen it is on).
 // On error, @error will be set accordingly.
 //
-// To launch the application without arguments pass a %NULL @files list.
+// To launch the application without arguments pass a `NULL` @files list.
 //
 // Note that even if the launch is successful the application launched
 // can fail to start if it runs into problems during startup. There is
@@ -297,19 +308,19 @@ func (x *AppInfoBase) GetSupportedTypes() []string {
 // Some URIs can be changed when passed through a GFile (for instance
 // unsupported URIs with strange formats like mailto:), so if you have
 // a textual URI you want to pass in as argument, consider using
-// g_app_info_launch_uris() instead.
+// [method@Gio.AppInfo.launch_uris] instead.
 //
 // The launched application inherits the environment of the launching
-// process, but it can be modified with g_app_launch_context_setenv()
-// and g_app_launch_context_unsetenv().
+// process, but it can be modified with [method@Gio.AppLaunchContext.setenv]
+// and [method@Gio.AppLaunchContext.unsetenv].
 //
 // On UNIX, this function sets the `GIO_LAUNCHED_DESKTOP_FILE`
 // environment variable with the path of the launched desktop file and
 // `GIO_LAUNCHED_DESKTOP_FILE_PID` to the process id of the launched
 // process. This can be used to ignore `GIO_LAUNCHED_DESKTOP_FILE`,
-// should it be inherited by further processes. The `DISPLAY` and
-// `DESKTOP_STARTUP_ID` environment variables are also set, based
-// on information provided in @context.
+// should it be inherited by further processes. The `DISPLAY`,
+// `XDG_ACTIVATION_TOKEN` and `DESKTOP_STARTUP_ID` environment
+// variables are also set, based on information provided in @context.
 func (x *AppInfoBase) Launch(FilesVar *glib.List, ContextVar *AppLaunchContext) (bool, error) {
 	var cerr *glib.Error
 
@@ -324,9 +335,11 @@ func (x *AppInfoBase) Launch(FilesVar *glib.List, ContextVar *AppLaunchContext) 
 // Launches the application. This passes the @uris to the launched application
 // as arguments, using the optional @context to get information
 // about the details of the launcher (like what screen it is on).
-// On error, @error will be set accordingly.
+// On error, @error will be set accordingly. If the application only supports
+// one URI per invocation as part of their command-line, multiple instances
+// of the application will be spawned.
 //
-// To launch the application without arguments pass a %NULL @uris list.
+// To launch the application without arguments pass a `NULL` @uris list.
 //
 // Note that even if the launch is successful the application launched
 // can fail to start if it runs into problems during startup. There is
@@ -342,19 +355,19 @@ func (x *AppInfoBase) LaunchUris(UrisVar *glib.List, ContextVar *AppLaunchContex
 
 }
 
-// Async version of g_app_info_launch_uris().
+// Async version of [method@Gio.AppInfo.launch_uris].
 //
 // The @callback is invoked immediately after the application launch, but it
 // waits for activation in case of D-Bus–activated applications and also provides
 // extended error information for sandboxed applications, see notes for
-// g_app_info_launch_default_for_uri_async().
+// [func@Gio.AppInfo.launch_default_for_uri_async].
 func (x *AppInfoBase) LaunchUrisAsync(UrisVar *glib.List, ContextVar *AppLaunchContext, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
 
 	XGAppInfoLaunchUrisAsync(x.GoPointer(), UrisVar, ContextVar.GoPointer(), CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
 
 }
 
-// Finishes a g_app_info_launch_uris_async() operation.
+// Finishes a [method@Gio.AppInfo.launch_uris_async] operation.
 func (x *AppInfoBase) LaunchUrisFinish(ResultVar AsyncResult) (bool, error) {
 	var cerr *glib.Error
 
@@ -402,9 +415,9 @@ func (x *AppInfoBase) SetAsDefaultForType(ContentTypeVar string) (bool, error) {
 
 }
 
-// Sets the application as the last used application for a given type.
-// This will make the application appear as first in the list returned
-// by g_app_info_get_recommended_for_type(), regardless of the default
+// Sets the application as the last used application for a given type. This
+// will make the application appear as first in the list returned by
+// [func@Gio.AppInfo.get_recommended_for_type], regardless of the default
 // application for that content type.
 func (x *AppInfoBase) SetAsLastUsedForType(ContentTypeVar string) (bool, error) {
 	var cerr *glib.Error
@@ -467,13 +480,15 @@ var XGAppInfoSupportsUris func(uintptr) bool
 
 var xAppInfoCreateFromCommandline func(string, string, AppInfoCreateFlags, **glib.Error) uintptr
 
-// Creates a new #GAppInfo from the given information.
+// Creates a new [iface@Gio.AppInfo] from the given information.
 //
-// Note that for @commandline, the quoting rules of the Exec key of the
+// Note that for @commandline, the quoting rules of the `Exec` key of the
 // [freedesktop.org Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec)
 // are applied. For example, if the @commandline contains
 // percent-encoded URIs, the percent-character must be doubled in order to prevent it from
-// being swallowed by Exec key unquoting. See the specification for exact quoting rules.
+// being swallowed by `Exec` key unquoting. See
+// [the specification](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s07.html)
+// for exact quoting rules.
 func AppInfoCreateFromCommandline(CommandlineVar string, ApplicationNameVar string, FlagsVar AppInfoCreateFlags) (*AppInfoBase, error) {
 	var cls *AppInfoBase
 	var cerr *glib.Error
@@ -498,10 +513,15 @@ var xAppInfoGetAll func() *glib.List
 // on this system.
 //
 // For desktop files, this includes applications that have
-// `NoDisplay=true` set or are excluded from display by means
-// of `OnlyShowIn` or `NotShowIn`. See g_app_info_should_show().
-// The returned list does not include applications which have
-// the `Hidden` key set.
+// [`NoDisplay=true`](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html#key-nodisplay)
+// set or are excluded from display by means of
+// [`OnlyShowIn`](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html#key-onlyshowin)
+// or [`NotShowIn`](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html#key-notshowin).
+// See [method@Gio.AppInfo.should_show].
+//
+// The returned list does not include applications which have the
+// [`Hidden` key](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html#key-hidden)
+// set.
 func AppInfoGetAll() *glib.List {
 
 	cret := xAppInfoGetAll()
@@ -510,10 +530,10 @@ func AppInfoGetAll() *glib.List {
 
 var xAppInfoGetAllForType func(string) *glib.List
 
-// Gets a list of all #GAppInfos for a given content type,
-// including the recommended and fallback #GAppInfos. See
-// g_app_info_get_recommended_for_type() and
-// g_app_info_get_fallback_for_type().
+// Gets a list of all [iface@Gio.AppInfo]s for a given content type,
+// including the recommended and fallback [iface@Gio.AppInfo]s. See
+// [func@Gio.AppInfo.get_recommended_for_type] and
+// [func@Gio.AppInfo.get_fallback_for_type].
 func AppInfoGetAllForType(ContentTypeVar string) *glib.List {
 
 	cret := xAppInfoGetAllForType(ContentTypeVar)
@@ -522,7 +542,7 @@ func AppInfoGetAllForType(ContentTypeVar string) *glib.List {
 
 var xAppInfoGetDefaultForType func(string, bool) uintptr
 
-// Gets the default #GAppInfo for a given content type.
+// Gets the default [iface@Gio.AppInfo] for a given content type.
 func AppInfoGetDefaultForType(ContentTypeVar string, MustSupportUrisVar bool) *AppInfoBase {
 	var cls *AppInfoBase
 
@@ -536,12 +556,47 @@ func AppInfoGetDefaultForType(ContentTypeVar string, MustSupportUrisVar bool) *A
 	return cls
 }
 
+var xAppInfoGetDefaultForTypeAsync func(string, bool, uintptr, uintptr, uintptr)
+
+// Asynchronously gets the default [iface@Gio.AppInfo] for a given content
+// type.
+func AppInfoGetDefaultForTypeAsync(ContentTypeVar string, MustSupportUrisVar bool, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+
+	xAppInfoGetDefaultForTypeAsync(ContentTypeVar, MustSupportUrisVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
+
+}
+
+var xAppInfoGetDefaultForTypeFinish func(uintptr, **glib.Error) uintptr
+
+// Finishes a default [iface@Gio.AppInfo] lookup started by
+// [func@Gio.AppInfo.get_default_for_type_async].
+//
+// If no #[iface@Gio.AppInfo] is found, then @error will be set to
+// [error@Gio.IOErrorEnum.NOT_FOUND].
+func AppInfoGetDefaultForTypeFinish(ResultVar AsyncResult) (*AppInfoBase, error) {
+	var cls *AppInfoBase
+	var cerr *glib.Error
+
+	cret := xAppInfoGetDefaultForTypeFinish(ResultVar.GoPointer(), &cerr)
+
+	if cret == 0 {
+		return nil, cerr
+	}
+	cls = &AppInfoBase{}
+	cls.Ptr = cret
+	if cerr == nil {
+		return cls, nil
+	}
+	return cls, cerr
+
+}
+
 var xAppInfoGetDefaultForUriScheme func(string) uintptr
 
-// Gets the default application for handling URIs with
-// the given URI scheme. A URI scheme is the initial part
-// of the URI, up to but not including the ':', e.g. "http",
-// "ftp" or "sip".
+// Gets the default application for handling URIs with the given URI scheme.
+//
+// A URI scheme is the initial part of the URI, up to but not including the `:`.
+// For example, `http`, `ftp` or `sip`.
 func AppInfoGetDefaultForUriScheme(UriSchemeVar string) *AppInfoBase {
 	var cls *AppInfoBase
 
@@ -555,11 +610,48 @@ func AppInfoGetDefaultForUriScheme(UriSchemeVar string) *AppInfoBase {
 	return cls
 }
 
+var xAppInfoGetDefaultForUriSchemeAsync func(string, uintptr, uintptr, uintptr)
+
+// Asynchronously gets the default application for handling URIs with
+// the given URI scheme. A URI scheme is the initial part
+// of the URI, up to but not including the `:`, e.g. `http`,
+// `ftp` or `sip`.
+func AppInfoGetDefaultForUriSchemeAsync(UriSchemeVar string, CancellableVar *Cancellable, CallbackVar *AsyncReadyCallback, UserDataVar uintptr) {
+
+	xAppInfoGetDefaultForUriSchemeAsync(UriSchemeVar, CancellableVar.GoPointer(), glib.NewCallback(CallbackVar), UserDataVar)
+
+}
+
+var xAppInfoGetDefaultForUriSchemeFinish func(uintptr, **glib.Error) uintptr
+
+// Finishes a default [iface@Gio.AppInfo] lookup started by
+// [func@Gio.AppInfo.get_default_for_uri_scheme_async].
+//
+// If no [iface@Gio.AppInfo] is found, then @error will be set to
+// [error@Gio.IOErrorEnum.NOT_FOUND].
+func AppInfoGetDefaultForUriSchemeFinish(ResultVar AsyncResult) (*AppInfoBase, error) {
+	var cls *AppInfoBase
+	var cerr *glib.Error
+
+	cret := xAppInfoGetDefaultForUriSchemeFinish(ResultVar.GoPointer(), &cerr)
+
+	if cret == 0 {
+		return nil, cerr
+	}
+	cls = &AppInfoBase{}
+	cls.Ptr = cret
+	if cerr == nil {
+		return cls, nil
+	}
+	return cls, cerr
+
+}
+
 var xAppInfoGetFallbackForType func(string) *glib.List
 
-// Gets a list of fallback #GAppInfos for a given content type, i.e.
-// those applications which claim to support the given content type
-// by MIME type subclassing and not directly.
+// Gets a list of fallback [iface@Gio.AppInfo]s for a given content type, i.e.
+// those applications which claim to support the given content type by MIME
+// type subclassing and not directly.
 func AppInfoGetFallbackForType(ContentTypeVar string) *glib.List {
 
 	cret := xAppInfoGetFallbackForType(ContentTypeVar)
@@ -568,12 +660,13 @@ func AppInfoGetFallbackForType(ContentTypeVar string) *glib.List {
 
 var xAppInfoGetRecommendedForType func(string) *glib.List
 
-// Gets a list of recommended #GAppInfos for a given content type, i.e.
-// those applications which claim to support the given content type exactly,
-// and not by MIME type subclassing.
+// Gets a list of recommended [iface@Gio.AppInfo]s for a given content type,
+// i.e. those applications which claim to support the given content type
+// exactly, and not by MIME type subclassing.
+//
 // Note that the first application of the list is the last used one, i.e.
-// the last one for which g_app_info_set_as_last_used_for_type() has been
-// called.
+// the last one for which [method@Gio.AppInfo.set_as_last_used_for_type] has
+// been called.
 func AppInfoGetRecommendedForType(ContentTypeVar string) *glib.List {
 
 	cret := xAppInfoGetRecommendedForType(ContentTypeVar)
@@ -582,14 +675,13 @@ func AppInfoGetRecommendedForType(ContentTypeVar string) *glib.List {
 
 var xAppInfoLaunchDefaultForUri func(string, uintptr, **glib.Error) bool
 
-// Utility function that launches the default application
-// registered to handle the specified uri. Synchronous I/O
-// is done on the uri to detect the type of the file if
-// required.
+// Utility function that launches the default application registered to handle
+// the specified uri. Synchronous I/O is done on the uri to detect the type of
+// the file if required.
 //
-// The D-Bus–activated applications don't have to be started if your application
+// The D-Bus–activated applications don’t have to be started if your application
 // terminates too soon after this function. To prevent this, use
-// g_app_info_launch_default_for_uri_async() instead.
+// [func@Gio.AppInfo.launch_default_for_uri_async] instead.
 func AppInfoLaunchDefaultForUri(UriVar string, ContextVar *AppLaunchContext) (bool, error) {
 	var cerr *glib.Error
 
@@ -603,12 +695,11 @@ func AppInfoLaunchDefaultForUri(UriVar string, ContextVar *AppLaunchContext) (bo
 
 var xAppInfoLaunchDefaultForUriAsync func(string, uintptr, uintptr, uintptr, uintptr)
 
-// Async version of g_app_info_launch_default_for_uri().
+// Async version of [func@Gio.AppInfo.launch_default_for_uri].
 //
-// This version is useful if you are interested in receiving
-// error information in the case where the application is
-// sandboxed and the portal may present an application chooser
-// dialog to the user.
+// This version is useful if you are interested in receiving error information
+// in the case where the application is sandboxed and the portal may present an
+// application chooser dialog to the user.
 //
 // This is also useful if you want to be sure that the D-Bus–activated
 // applications are really started before termination and if you are interested
@@ -636,14 +727,129 @@ func AppInfoLaunchDefaultForUriFinish(ResultVar AsyncResult) (bool, error) {
 var xAppInfoResetTypeAssociations func(string)
 
 // Removes all changes to the type associations done by
-// g_app_info_set_as_default_for_type(),
-// g_app_info_set_as_default_for_extension(),
-// g_app_info_add_supports_type() or
-// g_app_info_remove_supports_type().
+// [method@Gio.AppInfo.set_as_default_for_type],
+// [method@Gio.AppInfo.set_as_default_for_extension],
+// [method@Gio.AppInfo.add_supports_type] or
+// [method@Gio.AppInfo.remove_supports_type].
 func AppInfoResetTypeAssociations(ContentTypeVar string) {
 
 	xAppInfoResetTypeAssociations(ContentTypeVar)
 
+}
+
+// `GAppInfoMonitor` monitors application information for changes.
+//
+// `GAppInfoMonitor` is a very simple object used for monitoring the app
+// info database for changes (newly installed or removed applications).
+//
+// Call [func@Gio.AppInfoMonitor.get] to get a `GAppInfoMonitor` and connect
+// to the [signal@Gio.AppInfoMonitor::changed] signal. The signal will be emitted once when
+// the app info database changes, and will not be emitted again until after the
+// next call to [func@Gio.AppInfo.get_all] or another `g_app_info_*()` function.
+// This is because monitoring the app info database for changes is expensive.
+//
+// The following functions will re-arm the [signal@Gio.AppInfoMonitor::changed]
+// signal so it can be emitted again:
+//
+//   - [func@Gio.AppInfo.get_all]
+//   - [func@Gio.AppInfo.get_all_for_type]
+//   - [func@Gio.AppInfo.get_default_for_type]
+//   - [func@Gio.AppInfo.get_fallback_for_type]
+//   - [func@Gio.AppInfo.get_recommended_for_type]
+//   - [`g_desktop_app_info_get_implementations()`](../gio-unix/type_func.DesktopAppInfo.get_implementation.html)
+//   - [`g_desktop_app_info_new()`](../gio-unix/ctor.DesktopAppInfo.new.html)
+//   - [`g_desktop_app_info_new_from_filename()`](../gio-unix/ctor.DesktopAppInfo.new_from_filename.html)
+//   - [`g_desktop_app_info_new_from_keyfile()`](../gio-unix/ctor.DesktopAppInfo.new_from_keyfile.html)
+//   - [`g_desktop_app_info_search()`](../gio-unix/type_func.DesktopAppInfo.search.html)
+//
+// The latter functions are available if using
+// [`GDesktopAppInfo`](../gio-unix/class.DesktopAppInfo.html) from
+// `gio-unix-2.0.pc` (GIR namespace `GioUnix-2.0`).
+//
+// In the usual case, applications should try to make note of the change
+// (doing things like invalidating caches) but not act on it. In
+// particular, applications should avoid making calls to `GAppInfo` APIs
+// in response to the change signal, deferring these until the time that
+// the updated data is actually required. The exception to this case is when
+// application information is actually being displayed on the screen
+// (for example, during a search or when the list of all applications is shown).
+// The reason for this is that changes to the list of installed applications
+// often come in groups (like during system updates) and rescanning the list
+// on every change is pointless and expensive.
+type AppInfoMonitor struct {
+	gobject.Object
+}
+
+var xAppInfoMonitorGLibType func() types.GType
+
+func AppInfoMonitorGLibType() types.GType {
+	return xAppInfoMonitorGLibType()
+}
+
+func AppInfoMonitorNewFromInternalPtr(ptr uintptr) *AppInfoMonitor {
+	cls := &AppInfoMonitor{}
+	cls.Ptr = ptr
+	return cls
+}
+
+func (c *AppInfoMonitor) GoPointer() uintptr {
+	if c == nil {
+		return 0
+	}
+	return c.Ptr
+}
+
+func (c *AppInfoMonitor) SetGoPointer(ptr uintptr) {
+	c.Ptr = ptr
+}
+
+// Signal emitted when the app info database changes, when applications are
+// installed or removed.
+func (x *AppInfoMonitor) ConnectChanged(cb *func(AppInfoMonitor)) uint32 {
+	cbPtr := uintptr(unsafe.Pointer(cb))
+	if cbRefPtr, ok := glib.GetCallback(cbPtr); ok {
+		return gobject.SignalConnect(x.GoPointer(), "changed", cbRefPtr)
+	}
+
+	fcb := func(clsPtr uintptr) {
+		fa := AppInfoMonitor{}
+		fa.Ptr = clsPtr
+		cbFn := *cb
+
+		cbFn(fa)
+
+	}
+	cbRefPtr := purego.NewCallback(fcb)
+	glib.SaveCallback(cbPtr, cbRefPtr)
+	return gobject.SignalConnect(x.GoPointer(), "changed", cbRefPtr)
+}
+
+var xAppInfoMonitorGet func() uintptr
+
+// Gets the #GAppInfoMonitor for the current thread-default main
+// context.
+//
+// The #GAppInfoMonitor will emit a “changed” signal in the
+// thread-default main context whenever the list of installed
+// applications (as reported by g_app_info_get_all()) may have changed.
+//
+// The #GAppInfoMonitor::changed signal will only be emitted once until
+// g_app_info_get_all() (or another `g_app_info_*()` function) is called. Doing
+// so will re-arm the signal ready to notify about the next change.
+//
+// You must only call g_object_unref() on the return value from under
+// the same main context as you created it.
+func AppInfoMonitorGet() *AppInfoMonitor {
+	var cls *AppInfoMonitor
+
+	cret := xAppInfoMonitorGet()
+
+	if cret == 0 {
+		return nil
+	}
+	cls = &AppInfoMonitor{}
+	cls.Ptr = cret
+	return cls
 }
 
 // Integrating the launch with the launching application. This is used to
@@ -668,7 +874,8 @@ func AppLaunchContextNewFromInternalPtr(ptr uintptr) *AppLaunchContext {
 var xNewAppLaunchContext func() uintptr
 
 // Creates a new application launch context. This is not normally used,
-// instead you instantiate a subclass of this, such as #GdkAppLaunchContext.
+// instead you instantiate a subclass of this, such as
+// [`GdkAppLaunchContext`](https://docs.gtk.org/gdk4/class.AppLaunchContext.html).
 func NewAppLaunchContext() *AppLaunchContext {
 	var cls *AppLaunchContext
 
@@ -697,7 +904,7 @@ var xAppLaunchContextGetEnvironment func(uintptr) []string
 
 // Gets the complete environment variable list to be passed to
 // the child process when @context is used to launch an application.
-// This is a %NULL-terminated array of strings, where each string has
+// This is a `NULL`-terminated array of strings, where each string has
 // the form `KEY=VALUE`.
 func (x *AppLaunchContext) GetEnvironment() []string {
 
@@ -708,10 +915,20 @@ func (x *AppLaunchContext) GetEnvironment() []string {
 var xAppLaunchContextGetStartupNotifyId func(uintptr, uintptr, *glib.List) string
 
 // Initiates startup notification for the application and returns the
-// `DESKTOP_STARTUP_ID` for the launched operation, if supported.
+// `XDG_ACTIVATION_TOKEN` or `DESKTOP_STARTUP_ID` for the launched operation,
+// if supported.
 //
-// Startup notification IDs are defined in the
-// [FreeDesktop.Org Startup Notifications standard](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt).
+// The returned token may be referred to equivalently as an ‘activation token’
+// (using Wayland terminology) or a ‘startup sequence ID’ (using X11 terminology).
+// The two [are interoperable](https://gitlab.freedesktop.org/wayland/wayland-protocols/-/blob/main/staging/xdg-activation/x11-interoperation.rst).
+//
+// Activation tokens are defined in the [XDG Activation Protocol](https://wayland.app/protocols/xdg-activation-v1),
+// and startup notification IDs are defined in the
+// [freedesktop.org Startup Notification Protocol](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt).
+//
+// Support for the XDG Activation Protocol was added in GLib 2.76.
+// Since GLib 2.82 @info and @files can be `NULL`. If that’s not supported by the backend,
+// the returned token will be `NULL`.
 func (x *AppLaunchContext) GetStartupNotifyId(InfoVar AppInfo, FilesVar *glib.List) string {
 
 	cret := xAppLaunchContextGetStartupNotifyId(x.GoPointer(), InfoVar.GoPointer(), FilesVar)
@@ -721,7 +938,8 @@ func (x *AppLaunchContext) GetStartupNotifyId(InfoVar AppInfo, FilesVar *glib.Li
 var xAppLaunchContextLaunchFailed func(uintptr, string)
 
 // Called when an application has failed to launch, so that it can cancel
-// the application startup notification started in g_app_launch_context_get_startup_notify_id().
+// the application startup notification started in
+// [method@Gio.AppLaunchContext.get_startup_notify_id].
 func (x *AppLaunchContext) LaunchFailed(StartupNotifyIdVar string) {
 
 	xAppLaunchContextLaunchFailed(x.GoPointer(), StartupNotifyIdVar)
@@ -730,8 +948,8 @@ func (x *AppLaunchContext) LaunchFailed(StartupNotifyIdVar string) {
 
 var xAppLaunchContextSetenv func(uintptr, string, string)
 
-// Arranges for @variable to be set to @value in the child's
-// environment when @context is used to launch an application.
+// Arranges for @variable to be set to @value in the child’s environment when
+// @context is used to launch an application.
 func (x *AppLaunchContext) Setenv(VariableVar string, ValueVar string) {
 
 	xAppLaunchContextSetenv(x.GoPointer(), VariableVar, ValueVar)
@@ -740,8 +958,8 @@ func (x *AppLaunchContext) Setenv(VariableVar string, ValueVar string) {
 
 var xAppLaunchContextUnsetenv func(uintptr, string)
 
-// Arranges for @variable to be unset in the child's environment
-// when @context is used to launch an application.
+// Arranges for @variable to be unset in the child’s environment when @context
+// is used to launch an application.
 func (x *AppLaunchContext) Unsetenv(VariableVar string) {
 
 	xAppLaunchContextUnsetenv(x.GoPointer(), VariableVar)
@@ -759,9 +977,13 @@ func (c *AppLaunchContext) SetGoPointer(ptr uintptr) {
 	c.Ptr = ptr
 }
 
-// The #GAppLaunchContext::launch-failed signal is emitted when a #GAppInfo launch
-// fails. The startup notification id is provided, so that the launcher
-// can cancel the startup notification.
+// The [signal@Gio.AppLaunchContext::launch-failed] signal is emitted when a
+// [iface@Gio.AppInfo] launch fails. The startup notification id is provided,
+// so that the launcher can cancel the startup notification.
+//
+// Because a launch operation may involve spawning multiple instances of the
+// target application, you should expect this signal to be emitted multiple
+// times, one for each spawned instance.
 func (x *AppLaunchContext) ConnectLaunchFailed(cb *func(AppLaunchContext, string)) uint32 {
 	cbPtr := uintptr(unsafe.Pointer(cb))
 	if cbRefPtr, ok := glib.GetCallback(cbPtr); ok {
@@ -781,11 +1003,11 @@ func (x *AppLaunchContext) ConnectLaunchFailed(cb *func(AppLaunchContext, string
 	return gobject.SignalConnect(x.GoPointer(), "launch-failed", cbRefPtr)
 }
 
-// The #GAppLaunchContext::launch-started signal is emitted when a #GAppInfo is
-// about to be launched. If non-null the @platform_data is an
-// GVariant dictionary mapping strings to variants (ie `a{sv}`), which
-// contains additional, platform-specific data about this launch. On
-// UNIX, at least the `startup-notification-id` keys will be
+// The [signal@Gio.AppLaunchContext::launch-started] signal is emitted when a
+// [iface@Gio.AppInfo] is about to be launched. If non-null the
+// @platform_data is an GVariant dictionary mapping strings to variants
+// (ie `a{sv}`), which contains additional, platform-specific data about this
+// launch. On UNIX, at least the `startup-notification-id` keys will be
 // present.
 //
 // The value of the `startup-notification-id` key (type `s`) is a startup
@@ -793,8 +1015,13 @@ func (x *AppLaunchContext) ConnectLaunchFailed(cb *func(AppLaunchContext, string
 // specification](https://specifications.freedesktop.org/startup-notification-spec/startup-notification-0.1.txt).
 // It allows tracking the progress of the launchee through startup.
 //
-// It is guaranteed that this signal is followed by either a #GAppLaunchContext::launched or
-// #GAppLaunchContext::launch-failed signal.
+// It is guaranteed that this signal is followed by either a
+// [signal@Gio.AppLaunchContext::launched] or
+// [signal@Gio.AppLaunchContext::launch-failed] signal.
+//
+// Because a launch operation may involve spawning multiple instances of the
+// target application, you should expect this signal to be emitted multiple
+// times, one for each spawned instance.
 func (x *AppLaunchContext) ConnectLaunchStarted(cb *func(AppLaunchContext, uintptr, uintptr)) uint32 {
 	cbPtr := uintptr(unsafe.Pointer(cb))
 	if cbRefPtr, ok := glib.GetCallback(cbPtr); ok {
@@ -814,15 +1041,27 @@ func (x *AppLaunchContext) ConnectLaunchStarted(cb *func(AppLaunchContext, uintp
 	return gobject.SignalConnect(x.GoPointer(), "launch-started", cbRefPtr)
 }
 
-// The #GAppLaunchContext::launched signal is emitted when a #GAppInfo is successfully
-// launched. The @platform_data is an GVariant dictionary mapping
+// The [signal@Gio.AppLaunchContext::launched] signal is emitted when a
+// [iface@Gio.AppInfo] is successfully launched.
+//
+// Because a launch operation may involve spawning multiple instances of the
+// target application, you should expect this signal to be emitted multiple
+// times, one time for each spawned instance.
+//
+// The @platform_data is an GVariant dictionary mapping
 // strings to variants (ie `a{sv}`), which contains additional,
 // platform-specific data about this launch. On UNIX, at least the
 // `pid` and `startup-notification-id` keys will be present.
 //
-// Since 2.72 the `pid` may be 0 if the process id wasn't known (for
+// Since 2.72 the `pid` may be 0 if the process id wasn’t known (for
 // example if the process was launched via D-Bus). The `pid` may not be
 // set at all in subsequent releases.
+//
+// On Windows, `pid` is guaranteed to be valid only for the duration of the
+// [signal@Gio.AppLaunchContext::launched] signal emission; after the signal
+// is emitted, GLib will call [func@GLib.spawn_close_pid]. If you need to
+// keep the [alias@GLib.Pid] after the signal has been emitted, then you can
+// duplicate `pid` using `DuplicateHandle()`.
 func (x *AppLaunchContext) ConnectLaunched(cb *func(AppLaunchContext, uintptr, uintptr)) uint32 {
 	cbPtr := uintptr(unsafe.Pointer(cb))
 	if cbRefPtr, ok := glib.GetCallback(cbPtr); ok {
@@ -852,13 +1091,21 @@ func init() {
 	core.PuregoSafeRegister(&xAppInfoGetAll, lib, "g_app_info_get_all")
 	core.PuregoSafeRegister(&xAppInfoGetAllForType, lib, "g_app_info_get_all_for_type")
 	core.PuregoSafeRegister(&xAppInfoGetDefaultForType, lib, "g_app_info_get_default_for_type")
+	core.PuregoSafeRegister(&xAppInfoGetDefaultForTypeAsync, lib, "g_app_info_get_default_for_type_async")
+	core.PuregoSafeRegister(&xAppInfoGetDefaultForTypeFinish, lib, "g_app_info_get_default_for_type_finish")
 	core.PuregoSafeRegister(&xAppInfoGetDefaultForUriScheme, lib, "g_app_info_get_default_for_uri_scheme")
+	core.PuregoSafeRegister(&xAppInfoGetDefaultForUriSchemeAsync, lib, "g_app_info_get_default_for_uri_scheme_async")
+	core.PuregoSafeRegister(&xAppInfoGetDefaultForUriSchemeFinish, lib, "g_app_info_get_default_for_uri_scheme_finish")
 	core.PuregoSafeRegister(&xAppInfoGetFallbackForType, lib, "g_app_info_get_fallback_for_type")
 	core.PuregoSafeRegister(&xAppInfoGetRecommendedForType, lib, "g_app_info_get_recommended_for_type")
 	core.PuregoSafeRegister(&xAppInfoLaunchDefaultForUri, lib, "g_app_info_launch_default_for_uri")
 	core.PuregoSafeRegister(&xAppInfoLaunchDefaultForUriAsync, lib, "g_app_info_launch_default_for_uri_async")
 	core.PuregoSafeRegister(&xAppInfoLaunchDefaultForUriFinish, lib, "g_app_info_launch_default_for_uri_finish")
 	core.PuregoSafeRegister(&xAppInfoResetTypeAssociations, lib, "g_app_info_reset_type_associations")
+
+	core.PuregoSafeRegister(&xAppInfoMonitorGLibType, lib, "g_app_info_monitor_get_type")
+
+	core.PuregoSafeRegister(&xAppInfoMonitorGet, lib, "g_app_info_monitor_get")
 
 	core.PuregoSafeRegister(&xAppLaunchContextGLibType, lib, "g_app_launch_context_get_type")
 

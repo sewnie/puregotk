@@ -72,7 +72,7 @@ const (
 	SorterOrderTotalValue SorterOrder = 2
 )
 
-// `GtkSorter` is an object to describe sorting criteria.
+// Describes sorting criteria for a [class@Gtk.SortListModel].
 //
 // Its primary user is [class@Gtk.SortListModel]
 //
@@ -120,7 +120,7 @@ var xSorterChanged func(uintptr, SorterChange)
 // update the sort order without a full resorting. Refer to
 // the [enum@Gtk.SorterChange] documentation for details.
 //
-// This function is intended for implementors of `GtkSorter`
+// This function is intended for implementers of `GtkSorter`
 // subclasses and should not be called from other functions.
 func (x *Sorter) Changed(ChangeVar SorterChange) {
 
